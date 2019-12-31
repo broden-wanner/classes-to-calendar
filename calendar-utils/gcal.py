@@ -14,8 +14,7 @@ SCOPES = ['https://www.googleapis.com/auth/calendar']
 
 def get_service():
     """
-    Shows basic usage of the Google Calendar API.
-    Prints the start and name of the next 10 events on the user's calendar.
+    Authenticates the user and returns the service object used to make events, calendars, etc.
     """
     creds = None
     # The file token.pickle stores the user's access and refresh tokens, and is
@@ -29,11 +28,10 @@ def get_service():
         if creds and creds.expired and creds.refresh_token:
             creds.refresh(Request())
         else:
-            flow = InstalledAppFlow.from_client_secrets_file(
-                'gcal-files/credentials.json', SCOPES)
+            flow = InstalledAppFlow.from_client_secrets_file('gcal-files/credentials.json', SCOPES)
             creds = flow.run_local_server(port=0)
         # Save the credentials for the next run
-        with open('token.pickle', 'wb') as token:
+        with open('gcal-files/token.pickle', 'wb') as token:
             pickle.dump(creds, token)
 
     service = build('calendar', 'v3', credentials=creds)

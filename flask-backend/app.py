@@ -11,11 +11,18 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 app = Flask(__name__)
 
 # Function to check the file extension
+
+
 def allowed_file(filename):
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
-# Route to get classes
+
+@app.route('/')
+def index():
+    return render_template('index.html', token='yeet')
+
+
 @app.route('/api/classes', methods=['GET'])
 def upload_page():
     classes = generate_umn_classes('ocr/images/calendar.png')
@@ -46,6 +53,7 @@ def upload_page():
 #                                    img_src=UPLOAD_FOLDER + file.filename)
 #     elif request.method == 'GET':
 #         return render_template('upload.html')
+
 
 if __name__ == '__main__':
     app.run(debug=True)
