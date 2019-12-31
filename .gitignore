@@ -1,0 +1,7 @@
+.vscode
+
+### Python ignores ###
+__pycache__
+*.pyc
+venv/
+env/
