@@ -1,15 +1,20 @@
 import datetime
 import pickle
 import os.path
+import datetime
 from googleapiclient.discovery import build
 from google_auth_oauthlib.flow import InstalledAppFlow
 from google.auth.transport.requests import Request
 
-# If modifying these scopes, delete the file token.pickle.
-SCOPES = ['https://www.googleapis.com/auth/calendar.readonly']
+from calocr import generate_umn_classes
 
-def main():
-    """Shows basic usage of the Google Calendar API.
+# If modifying these scopes, delete the file token.pickle.
+SCOPES = ['https://www.googleapis.com/auth/calendar']
+
+
+def get_service():
+    """
+    Shows basic usage of the Google Calendar API.
     Prints the start and name of the next 10 events on the user's calendar.
     """
     creds = None
@@ -32,20 +37,25 @@ def main():
             pickle.dump(creds, token)
 
     service = build('calendar', 'v3', credentials=creds)
+    return service
 
-    # Call the Calendar API
-    now = datetime.datetime.utcnow().isoformat() + 'Z' # 'Z' indicates UTC time
-    print('Getting the upcoming 10 events')
-    events_result = service.events().list(calendarId='primary', timeMin=now,
-                                          maxResults=10, singleEvents=True,
-                                          orderBy='startTime').execute()
-    events = events_result.get('items', [])
 
-    if not events:
-        print('No upcoming events found.')
-    for event in events:
-        start = event['start'].get('dateTime', event['start'].get('date'))
-        print(start, event['summary'])
+service = get_service()
+classes = generate_umn_classes(img_path='example-images/calendar.png',
+                               start_date=datetime.date(year=2020, month=1, day=21),
+                               end_date=datetime.date(year=2020, month=5, day=4))
 
-if __name__ == '__main__':
-    main()
+# Make a new calendar for the classes
+calendar = {
+    'summary': 'Class Schedule',
+    'timeZone': 'America/Chicago'
+}
+created_calendar = service.calendars().insert(body=calendar).execute()
+print('[INFO] Created calendar')
+
+# Insert each class as an event on the newly created calendar
+for cl in classes:
+    event = service.events().insert(calendarId=created_calendar['id'], body=cl.to_gcal_event()).execute()
+    print(f'[INFO] Created {cl.name}')
+
+print('[INFO] Finished creating events')
