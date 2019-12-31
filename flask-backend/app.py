@@ -1,6 +1,6 @@
 import os
 from flask import Flask, render_template, request, jsonify
-from calocr import generate_umn_classes
+# from calocr import generate_umn_classes
 
 # Define a folder to store and later serve the images
 UPLOAD_FOLDER = '/static/uploads/'
@@ -10,10 +10,9 @@ ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
 
 app = Flask(__name__)
 
-# Function to check the file extension
-
 
 def allowed_file(filename):
+    """ Checks the allowed file extensions """
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
