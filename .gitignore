@@ -1,7 +1,12 @@
-.vscode
-
 ### Python ignores ###
 __pycache__
 *.pyc
 venv/
 env/
+
+### Other ignores ###
+.vscode
+credentials.json
+*.pickle
+example-images/
+gcal-files/

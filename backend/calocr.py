@@ -7,9 +7,16 @@ import pytesseract
 import re
 import json
 from pytesseract import Output
-from preprocess import black_and_white_image
 
 DAYS_OF_WEEK = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
+
+def black_and_white_image(input_image_path, dithering=True):
+    color_image = Image.open(input_image_path)
+    if dithering:
+        bw = color_image.convert('1')  
+    else:
+        bw = color_image.convert('1', dither=Image.NONE)
+    return bw
 
 class UMNClass:
     """
