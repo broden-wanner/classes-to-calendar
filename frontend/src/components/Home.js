@@ -5,35 +5,14 @@ import Container from '@material-ui/core/Container';
 import Typography from '@material-ui/core/Typography';
 import Grid from '@material-ui/core/Grid';
 import Button from '@material-ui/core/Button';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
-  icon: {
-    marginRight: theme.spacing(2)
-  },
-  heroContent: {
+  homeContent: {
     padding: theme.spacing(8, 0, 6)
   },
-  heroButtons: {
+  homeButtons: {
     marginTop: theme.spacing(4)
-  },
-  cardGrid: {
-    paddingTop: theme.spacing(8),
-    paddingBottom: theme.spacing(8)
-  },
-  card: {
-    height: '100%',
-    display: 'flex',
-    flexDirection: 'column'
-  },
-  cardMedia: {
-    paddingTop: '56.25%' // 16:9
-  },
-  cardContent: {
-    flexGrow: 1
-  },
-  footer: {
-    backgroundColor: theme.palette.background.paper,
-    padding: theme.spacing(6)
   }
 }));
 
@@ -42,7 +21,7 @@ export default function Home() {
 
   return (
     <React.Fragment>
-      <div className={classes.heroContent}>
+      <div className={classes.homeContent}>
         <Container maxWidth="sm">
           <Typography
             component="h1"
@@ -63,11 +42,16 @@ export default function Home() {
             the creator, etc. Make it short and sweet, but not too short so
             folks don&apos;t simply skip over it entirely.
           </Typography>
-          <div className={classes.heroButtons}>
+          <div className={classes.homeButtons}>
             <Grid container spacing={2} justify="center">
               <Grid item>
-                <Button variant="contained" color="primary">
-                  Main call to action
+                <Button
+                  variant="contained"
+                  color="primary"
+                  component={Link}
+                  to="/upload"
+                >
+                  Upload class schedule image
                 </Button>
               </Grid>
             </Grid>

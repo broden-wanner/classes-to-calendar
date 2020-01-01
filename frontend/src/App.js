@@ -1,13 +1,11 @@
 import React from 'react';
-
 import CssBaseline from '@material-ui/core/CssBaseline';
-
 import Navbar from './components/Navbar';
-
-import './App.css';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 import Home from './components/Home';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core';
+import Upload from './components/Upload';
 
 const appTheme = createMuiTheme({
   palette: {
@@ -43,8 +41,11 @@ function App() {
       <CssBaseline />
       <ThemeProvider theme={appTheme}>
         <div className={classes.background}>
-          <Navbar></Navbar>
-          <Home></Home>
+          <Router>
+            <Navbar></Navbar>
+            <Route exact path="/" component={Home} />
+            <Route exact path="/upload" component={Upload} />
+          </Router>
         </div>
       </ThemeProvider>
     </React.Fragment>

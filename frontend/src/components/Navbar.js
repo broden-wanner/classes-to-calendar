@@ -4,6 +4,7 @@ import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
 import Typography from '@material-ui/core/Typography';
 import { makeStyles } from '@material-ui/styles';
+import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   title: {
@@ -18,10 +19,17 @@ function Navbar() {
     <React.Fragment>
       <AppBar position="relative">
         <Toolbar>
-          <Typography variant="h6" className={classes.title}>
+          <Typography variant="h5" className={classes.title}>
             Classes to Calendar
           </Typography>
-          <Button color="inherit">Upload Class Calendar</Button>
+          <Button
+            variant="outlined"
+            color="inherit"
+            component={Link}
+            to="/upload"
+          >
+            Upload Class Calendar
+          </Button>
         </Toolbar>
       </AppBar>
     </React.Fragment>
