@@ -14,25 +14,24 @@ const useStyles = makeStyles(theme => ({
 
 function Navbar() {
   const classes = useStyles();
+  const router = useRou;
 
   return (
-    <React.Fragment>
-      <AppBar position="relative">
-        <Toolbar>
-          <Typography variant="h5" className={classes.title}>
-            Classes to Calendar
-          </Typography>
-          <Button
-            variant="outlined"
-            color="inherit"
-            component={Link}
-            to="/upload"
-          >
-            Upload Class Calendar
-          </Button>
-        </Toolbar>
-      </AppBar>
-    </React.Fragment>
+    <AppBar position="fixed">
+      <Toolbar>
+        <Typography variant="h5" className={classes.title}>
+          Classes to Calendar
+        </Typography>
+        <Button
+          variant="outlined"
+          color="inherit"
+          component={Link}
+          to="/upload"
+        >
+          Upload Class Calendar
+        </Button>
+      </Toolbar>
+    </AppBar>
   );
 }
 

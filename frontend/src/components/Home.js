@@ -9,7 +9,10 @@ import { Link } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   homeContent: {
-    padding: theme.spacing(8, 0, 6)
+    padding: theme.spacing(8, 0, 6),
+    display: 'flex',
+    alignItems: 'center',
+    height: '100%'
   },
   homeButtons: {
     marginTop: theme.spacing(4)
@@ -30,7 +33,7 @@ export default function Home() {
             color="textPrimary"
             gutterBottom
           >
-            Album layout
+            Classes to Calendar
           </Typography>
           <Typography
             variant="h5"
@@ -38,9 +41,8 @@ export default function Home() {
             color="textSecondary"
             paragraph
           >
-            Something short and leading about the collection below—its contents,
-            the creator, etc. Make it short and sweet, but not too short so
-            folks don&apos;t simply skip over it entirely.
+            An online app that takes an screenshot of your class schedule and
+            enters it in Google Calendar.
           </Typography>
           <div className={classes.homeButtons}>
             <Grid container spacing={2} justify="center">
