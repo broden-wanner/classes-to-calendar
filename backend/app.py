@@ -8,20 +8,16 @@ try:
 except ImportError:
     import Image
 
-# Define a folder to store and later serve the images
-UPLOAD_FOLDER = '/static/uploads/'
-
-# Allow files of a specific type
-ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
-
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
 def allowed_file(filename):
     """ Checks the allowed file extensions """
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
+
 
 #### Regular routes ####
 
