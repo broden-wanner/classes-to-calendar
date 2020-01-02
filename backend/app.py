@@ -51,7 +51,6 @@ def upload_endpoint():
         classes = [c.serialize() for c in classes]
         # Return the json response of the classes in an array
         return jsonify(classes)
-
     else:
         return jsonify(exception='File type not allowed')
 

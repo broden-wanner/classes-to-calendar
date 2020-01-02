@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import CssBaseline from '@material-ui/core/CssBaseline';
 import Navbar from './components/Navbar';
 import { BrowserRouter as Router, Route } from 'react-router-dom';
@@ -6,6 +6,7 @@ import Home from './components/Home';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core';
 import Upload from './components/Upload';
+import Toast from './components/Toast';
 
 const appTheme = createMuiTheme({
   palette: {
@@ -35,6 +36,22 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const classes = useStyles();
+  const [toastOpen, setToastOpen] = useState(false);
+  const [toastMessage, setToastMessage] = useState('');
+  const [toastVariant, setToastVariant] = useState('error');
+
+  const handleToastClose = (event, reason) => {
+    if (reason === 'clickaway') {
+      return;
+    }
+    setToastOpen(false);
+  };
+
+  const handleToastOpen = (message, variant) => {
+    setToastOpen(true);
+    setToastMessage(message);
+    setToastVariant(variant);
+  };
 
   return (
     <React.Fragment>
@@ -44,7 +61,15 @@ function App() {
           <Router>
             <Navbar></Navbar>
             <Route exact path="/" component={Home} />
-            <Route exact path="/upload" component={Upload} />
+            <Route exact path="/upload">
+              <Upload openToast={handleToastOpen} />
+            </Route>
+            <Toast
+              open={toastOpen}
+              handleClose={handleToastClose}
+              message={toastMessage}
+              variant={toastVariant}
+            />
           </Router>
         </div>
       </ThemeProvider>
