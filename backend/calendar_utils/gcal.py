@@ -1,3 +1,7 @@
+try:
+    from PIL import Image
+except ImportError:
+    import Image
 import datetime
 import pickle
 import os.path
@@ -39,7 +43,7 @@ def get_service():
 
 
 service = get_service()
-classes = generate_umn_classes(img_path='example-images/calendar.png',
+classes = generate_umn_classes(img=Image.open('example-images/calendar.png'),
                                start_date=datetime.date(year=2020, month=1, day=21),
                                end_date=datetime.date(year=2020, month=5, day=4))
 

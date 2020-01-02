@@ -92,7 +92,7 @@ class UMNClass:
 
     def set_class_dates(self, start_date, end_date):
         """
-        Assigns the dates on the class. End date will not be adjusted since google 
+        Assigns the dates on the class. End date will not be adjusted since google
         calendar handles the offset issues.
         """
         assert isinstance(start_date, datetime.date)
@@ -113,6 +113,23 @@ class UMNClass:
         self.start_date = start_date + datetime.timedelta(days=offset)
         # Set every class on this end date because gcal will handle the offset
         self.end_date = end_date
+
+    def serialize(self):
+        """
+        Turns the class into a serializable dictionary for json conversion
+        """
+        return {
+            'name': self.name,
+            'dept': self.dept,
+            'course_num': self.course_num,
+            'section': self.section,
+            'location': self.location,
+            'start_time': self.start_time.isoformat(),
+            'end_time': self.end_time.isoformat(),
+            'start_date': self.start_date.isoformat(),
+            'end_date': self.end_date.isoformat(),
+            'days_of_week': ", ".join(self.days_of_week)
+        }
 
     def to_gcal_event(self):
         """
@@ -163,40 +180,39 @@ def is_room_num(text):
     return any([re.match(regex, text) for regex in room_regexes])
 
 
-def black_and_white_image(input_image_path, dithering=True):
+def black_and_white_image(input_image, dithering=True):
     """ Helper function to change an image to black and white without saving """
-    color_image = Image.open(input_image_path)
     if dithering:
-        bw = color_image.convert('1')
+        bw = input_image.convert('1')
     else:
-        bw = color_image.convert('1', dither=Image.NONE)
+        bw = input_image.convert('1', dither=Image.NONE)
     return bw
 
 
-def ocr_png_to_str_list(path):
+def ocr_png_to_str_list(input_image):
     """
     Uses pytesseract to scan an image with ocr and extract the calendar information.
     Changes the extracted strings into a list and returns it.
     The image must be converted to black and white in order to get all text.
     """
     # Change the image to black and white
-    img = black_and_white_image(path, False)
+    input_image = black_and_white_image(input_image, False)
     # Extract the data frame of the image with tesseract
-    df = pytesseract.image_to_data(img, output_type=Output.DATAFRAME)
+    df = pytesseract.image_to_data(input_image, output_type=Output.DATAFRAME)
     # Remove rows with null entries in text
     df = df.dropna()
     # Change to list of strings
     return [s for s in df['text'].tolist() if not s.isspace()]
 
 
-def generate_umn_classes(img_path, start_date=None, end_date=None):
+def generate_umn_classes(img, start_date=None, end_date=None):
     """
-    Calls the ocr function on the image specified by img_path and gets the
+    Calls the ocr function on the image specified by img and gets the
     extracted text. Then parses the list of strings to form the classes on the
     calendar. Returns a list of all the extracted classes in the UMNClass object.
     """
     # Get the list of strings from the image
-    text = ocr_png_to_str_list(img_path)
+    text = ocr_png_to_str_list(img)
     c = None
     cur_day_of_week = ''
     classes = set()
@@ -273,7 +289,8 @@ def generate_umn_classes(img_path, start_date=None, end_date=None):
 
 
 if __name__ == '__main__':
-    classes = generate_umn_classes('example-images/calendar.png', start_date=datetime.date(year=2020, month=1, day=21),
+    classes = generate_umn_classes(img=Image.open('example-images/calendar.png'),
+                                   start_date=datetime.date(year=2020, month=1, day=21),
                                    end_date=datetime.date(year=2020, month=5, day=4))
     for c in classes:
         print(c)

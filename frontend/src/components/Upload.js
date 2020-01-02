@@ -37,7 +37,7 @@ export class Upload extends Component {
    * Uploades the image to the api endpoint
    */
   handleUpload = () => {
-    let url = 'YOUR URL HERE';
+    let url = 'http://localhost:5000/api/upload';
     let formData = new FormData();
 
     formData.append('file', this.state.selectedImage);
@@ -48,8 +48,8 @@ export class Upload extends Component {
           'Content-Type': 'multipart/form-data'
         }
       })
-      .then(() => {
-        console.log('Image upload success');
+      .then(response => {
+        console.log('Image upload success: ', response);
       })
       .catch(error => {
         console.error('Error with image upload', error);
