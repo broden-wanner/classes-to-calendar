@@ -7,6 +7,7 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core';
 import Upload from './components/Upload';
 import Toast from './components/Toast';
+import ClassesPage from './components/ClassesPage';
 
 const appTheme = createMuiTheme({
   palette: {
@@ -27,6 +28,7 @@ const appTheme = createMuiTheme({
 
 const useStyles = makeStyles(theme => ({
   background: {
+    display: 'flex',
     height: '100vh',
     width: '100vw',
     background: 'url("gopher.jpg") no-repeat center center fixed',
@@ -36,9 +38,15 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const classes = useStyles();
+  const [extractedClasses, setExtractedClasses] = useState({});
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastVariant, setToastVariant] = useState('error');
+
+  const handleExtractedClasses = data => {
+    setExtractedClasses(data);
+    console.log(data);
+  };
 
   const handleToastClose = (event, reason) => {
     if (reason === 'clickaway') {
@@ -60,9 +68,14 @@ function App() {
         <div className={classes.background}>
           <Router>
             <Navbar></Navbar>
-            <Route exact path="/" component={Home} />
+            <Route exact path="/">
+              <Home />
+            </Route>
             <Route exact path="/upload">
-              <Upload openToast={handleToastOpen} />
+              <Upload openToast={handleToastOpen} handleClasses={handleExtractedClasses} />
+            </Route>
+            <Route exact path="/classes">
+              <ClassesPage />
             </Route>
             <Toast
               open={toastOpen}

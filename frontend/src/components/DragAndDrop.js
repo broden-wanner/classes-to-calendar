@@ -13,7 +13,7 @@ const styles = {
     position: 'relative',
     border: '2px dashed #ccc',
     width: '100%',
-    minHeight: '300px',
+    minHeight: '400px',
     padding: '20px'
   },
   uploadInfo: {
@@ -24,7 +24,7 @@ const styles = {
     width: '100%'
   },
   previewImage: {
-    maxHeight: '300px'
+    maxHeight: '400px'
   },
   input: {
     display: 'none'
