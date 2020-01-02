@@ -1,25 +1,30 @@
 import React, { Component } from 'react';
-import { Card, CardContent, Button, CardActions } from '@material-ui/core';
+import { Card, CardContent, Button, CardActions, Typography } from '@material-ui/core';
+import CircularProgress from '@material-ui/core/CircularProgress';
+import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
+import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 
 const styles = {
+  cardStyle: {
+    padding: '20px'
+  },
   dropzoneArea: {
+    display: 'flex',
     position: 'relative',
     border: '2px dashed #ccc',
     width: '100%',
+    minHeight: '300px',
     padding: '20px'
   },
-  overlay: {
-    border: 'dashed grey 4px',
-    backgroundColor: 'rgba(255,255,255,.8)',
-    position: 'absolute',
-    top: 0,
-    left: 0,
-    width: '100%',
-    height: '100%',
-    zIndex: 9999
-  },
-  dropzone: {
+  uploadInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    justifyContent: 'center',
     width: '100%'
+  },
+  previewImage: {
+    maxHeight: '300px'
   },
   input: {
     display: 'none'
@@ -31,7 +36,8 @@ const styles = {
 
 export class DragAndDrop extends Component {
   state = {
-    dragging: false
+    dragging: false,
+    userHasSelectedImage: false
   };
   dragCounter = 0;
   dropRef = React.createRef();
@@ -62,14 +68,32 @@ export class DragAndDrop extends Component {
     this.setState({ dragging: false });
   };
 
+  /**
+   * Handles the selection of an image by drag and drop
+   */
   handleDrop = e => {
     e.preventDefault();
     e.stopPropagation();
     this.setState({ dragging: false });
     // Check to ensure there are files being dragged
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
-      this.props.handleDrop(e.dataTransfer.files);
+      this.setState({ userHasSelectedImage: true });
+      // Pass the image to the parent
+      this.props.handleImageSelect(e.dataTransfer.files[0]);
       e.dataTransfer.clearData();
+      this.dragCounter = 0;
+    }
+  };
+
+  /**
+   * Handles the selecting of an image using the input
+   */
+  handleImageSelect = e => {
+    this.setState({ dragging: false });
+    if (e.target.files && e.target.files.length > 0) {
+      this.setState({ userHasSelectedImage: true });
+      // Pass the image to the parent
+      this.props.handleImageSelect(e.target.files[0]);
       this.dragCounter = 0;
     }
   };
@@ -92,18 +116,45 @@ export class DragAndDrop extends Component {
   }
 
   render() {
+    const upload = (
+      <React.Fragment>
+        <CloudUploadOutlinedIcon style={{ fontSize: 80 }} color="action"></CloudUploadOutlinedIcon>
+        <Typography component="h4" variant="h4" color="textSecondary">
+          Drag and drop screenshot here
+        </Typography>
+      </React.Fragment>
+    );
+
+    const drop = (
+      <React.Fragment>
+        <AddPhotoAlternateIcon style={{ fontSize: 80 }} color="action"></AddPhotoAlternateIcon>
+        <Typography component="h4" variant="h4" color="textSecondary">
+          Add image
+        </Typography>
+      </React.Fragment>
+    );
+
+    const imagePreview = (
+      <React.Fragment>
+        {this.props.selectedImageLoaded ? (
+          <img style={styles.previewImage} src={this.props.selectedImageSrc} alt="Uploaded" />
+        ) : (
+          <CircularProgress />
+        )}
+      </React.Fragment>
+    );
+
     return (
-      <Card variante="outlined">
+      <Card variante="outlined" style={styles.cardStyle}>
         <CardContent>
           <div ref={this.dropRef} style={styles.dropzoneArea}>
-            {this.state.dragging && (
-              <div style={styles.overlay}>
-                <div style={styles.dropzone}>
-                  <div>drop here :)</div>
-                </div>
-              </div>
-            )}
-            {this.props.children}
+            <div style={styles.uploadInfo}>
+              {!this.state.userHasSelectedImage
+                ? !this.state.dragging
+                  ? upload
+                  : drop
+                : imagePreview}
+            </div>
           </div>
         </CardContent>
         <CardActions style={styles.buttonContainer}>
@@ -112,13 +163,19 @@ export class DragAndDrop extends Component {
             style={styles.input}
             id="image-upload"
             type="file"
+            onChange={this.handleImageSelect}
           />
           <label htmlFor="image-upload">
             <Button variant="contained" color="primary" component="span">
               Browse
             </Button>
           </label>
-          <Button variant="contained" color="primary">
+          <Button
+            variant="contained"
+            color="primary"
+            disabled={!this.props.selectedImageSrc}
+            onClick={this.props.handleUpload}
+          >
             Upload
           </Button>
         </CardActions>

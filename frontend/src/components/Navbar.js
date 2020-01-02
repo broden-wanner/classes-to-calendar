@@ -14,7 +14,6 @@ const useStyles = makeStyles(theme => ({
 
 function Navbar() {
   const classes = useStyles();
-  const router = useRou;
 
   return (
     <AppBar position="fixed">
