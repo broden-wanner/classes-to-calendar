@@ -6,34 +6,31 @@ import axios from 'axios';
 import DragAndDrop from './DragAndDrop';
 import { Container, makeStyles, CircularProgress, fade } from '@material-ui/core';
 
-const useStyles = makeStyles(theme => {
-  console.log(theme);
-  return {
-    uploadContent: {
-      display: 'flex',
-      width: '100%',
-      justifyContent: 'center',
-      alignItems: 'center'
-    },
-    uploadContainer: {
-      position: 'relative',
-      padding: 0
-    },
-    loadingOverlay: {
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
-      position: 'absolute',
-      top: 0,
-      left: 0,
-      zIndex: 9999,
-      width: '100%',
-      height: '100%',
-      borderRadius: '4px',
-      backgroundColor: fade(theme.palette.grey[900], 0.4)
-    }
-  };
-});
+const useStyles = makeStyles(theme => ({
+  uploadContent: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
+  },
+  uploadContainer: {
+    position: 'relative',
+    padding: 0
+  },
+  loadingOverlay: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    position: 'absolute',
+    top: 0,
+    left: 0,
+    zIndex: 9999,
+    width: '100%',
+    height: '100%',
+    borderRadius: '4px',
+    backgroundColor: fade(theme.palette.grey[900], 0.4)
+  }
+}));
 
 function Upload(props) {
   const classes = useStyles();

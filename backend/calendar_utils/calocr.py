@@ -116,7 +116,8 @@ class UMNClass:
 
     def serialize(self):
         """
-        Turns the class into a serializable dictionary for json conversion
+        Turns the class into a serializable dictionary for json conversion. Generates a
+        unique id based on the department, course number, and section
         """
         return {
             'name': self.name,
@@ -128,7 +129,8 @@ class UMNClass:
             'end_time': self.end_time.isoformat(),
             'start_date': self.start_date.isoformat(),
             'end_date': self.end_date.isoformat(),
-            'days_of_week': ", ".join(self.days_of_week)
+            'days_of_week': ", ".join(self.days_of_week),
+            'id': f'{self.dept}{self.course_num}{self.section}'
         }
 
     def to_gcal_event(self):

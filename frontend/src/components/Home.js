@@ -12,7 +12,7 @@ const useStyles = makeStyles(theme => ({
     padding: theme.spacing(8, 0, 6),
     display: 'flex',
     alignItems: 'center',
-    height: '100%'
+    width: '100%'
   },
   homeButtons: {
     marginTop: theme.spacing(4)
@@ -26,33 +26,17 @@ export default function Home() {
     <React.Fragment>
       <div className={classes.homeContent}>
         <Container maxWidth="sm">
-          <Typography
-            component="h1"
-            variant="h2"
-            align="center"
-            color="textPrimary"
-            gutterBottom
-          >
+          <Typography component="h1" variant="h2" align="center" color="textPrimary" gutterBottom>
             Classes to Calendar
           </Typography>
-          <Typography
-            variant="h5"
-            align="center"
-            color="textSecondary"
-            paragraph
-          >
-            An online app that takes an screenshot of your class schedule and
-            enters it in Google Calendar.
+          <Typography variant="h5" align="center" color="textSecondary" paragraph>
+            An online app that takes an screenshot of your class schedule and enters it in Google
+            Calendar.
           </Typography>
           <div className={classes.homeButtons}>
             <Grid container spacing={2} justify="center">
               <Grid item>
-                <Button
-                  variant="contained"
-                  color="primary"
-                  component={Link}
-                  to="/upload"
-                >
+                <Button variant="contained" color="primary" component={Link} to="/upload">
                   Upload class schedule image
                 </Button>
               </Grid>

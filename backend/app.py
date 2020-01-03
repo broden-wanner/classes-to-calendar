@@ -1,5 +1,6 @@
 import os
 import datetime
+import json
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from calendar_utils.calocr import generate_umn_classes
@@ -48,9 +49,10 @@ def upload_endpoint():
                                        start_date=datetime.date(year=2020, month=1, day=21),
                                        end_date=datetime.date(year=2020, month=5, day=4))
         # Change each class into a json serializeable dictionary
+        classes.sort(key=lambda c: c.name)
         classes = [c.serialize() for c in classes]
         # Return the json response of the classes in an array
-        return jsonify(classes)
+        return json.dumps(classes)
     else:
         return jsonify(exception='File type not allowed')
 
