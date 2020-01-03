@@ -6,8 +6,8 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core';
 
 import Navbar from './components/Navbar';
-import Home from './components/Home';
-import Upload from './components/Upload';
+import HomePage from './components/HomePage';
+import UploadPage from './components/UploadPage';
 import Toast from './components/Toast';
 import ClassesPage from './components/ClassesPage';
 
@@ -253,10 +253,10 @@ function App() {
           <Router>
             <Navbar></Navbar>
             <Route exact path="/">
-              <Home />
+              <HomePage />
             </Route>
             <Route exact path="/upload">
-              <Upload openToast={handleToastOpen} handleClasses={handleExtractedClasses} />
+              <UploadPage openToast={handleToastOpen} handleClasses={handleExtractedClasses} />
             </Route>
             <ClassesRequiredRoute exact path="/classes">
               <ClassesPage

@@ -37,7 +37,7 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-function Upload(props) {
+function UploadPage(props) {
   const classes = useStyles();
   const history = useHistory();
   const [selectedImage, setSelectedImage] = useState(null);
@@ -120,9 +120,9 @@ function Upload(props) {
   );
 }
 
-Upload.propTypes = {
+UploadPage.propTypes = {
   openToast: PropTypes.func.isRequired,
   handleClasses: PropTypes.func.isRequired
 };
 
-export default Upload;
+export default UploadPage;
