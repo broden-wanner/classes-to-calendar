@@ -4,14 +4,15 @@ import PropTypes from 'prop-types';
 import axios from 'axios';
 
 import DragAndDrop from './DragAndDrop';
-import { Container, makeStyles, CircularProgress, fade } from '@material-ui/core';
+import { Container, makeStyles, CircularProgress, Typography, fade } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({
   uploadContent: {
     display: 'flex',
     width: '100%',
     justifyContent: 'center',
-    alignItems: 'center'
+    alignItems: 'center',
+    flexDirection: 'column'
   },
   uploadContainer: {
     position: 'relative',
@@ -29,6 +30,10 @@ const useStyles = makeStyles(theme => ({
     height: '100%',
     borderRadius: '4px',
     backgroundColor: fade(theme.palette.grey[900], 0.4)
+  },
+  header: {
+    color: theme.palette.grey[50],
+    marginBottom: theme.spacing(2)
   }
 }));
 
@@ -64,12 +69,13 @@ function Upload(props) {
    * Uploades the image to the api endpoint
    */
   const handleUpload = () => {
-    let url = 'http://localhost:5000/api/upload';
+    let url = `${process.env.REACT_APP_API_ENDPOINT}/api/upload`;
 
     // Added the file to the form data for submission
     let formData = new FormData();
     formData.append('file', selectedImage);
 
+    // Make the post request with the image
     setUploadStatus('uploading');
     axios
       .post(url, formData, {
@@ -92,6 +98,11 @@ function Upload(props) {
 
   return (
     <div className={classes.uploadContent}>
+      <Container className={classes.header}>
+        <Typography variant="h2" align="center" component="h1" color="inherit">
+          Upload Schedule
+        </Typography>
+      </Container>
       <Container maxWidth="sm" className={classes.uploadContainer}>
         <DragAndDrop
           handleImageSelect={handleImageSelect}

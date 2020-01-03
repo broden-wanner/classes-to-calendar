@@ -262,6 +262,7 @@ function App() {
               <ClassesPage
                 extractedClasses={extractedClasses}
                 handleClassChange={handleClassChange}
+                openToast={handleToastOpen}
               />
             </ClassesRequiredRoute>
             <Toast

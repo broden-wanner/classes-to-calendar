@@ -3,7 +3,7 @@ import datetime
 import json
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
-from calendar_utils.calocr import generate_umn_classes
+from calendar_utils.calocr import generate_umn_classes, UMNClass
 try:
     from PIL import Image
 except ImportError:
@@ -55,6 +55,16 @@ def upload_endpoint():
         return json.dumps(classes)
     else:
         return jsonify(exception='File type not allowed')
+
+
+@app.route('/api/events', methods=['POST'])
+def events_endpoint():
+    classes = json.loads(request.data)
+    # Put the days of of the week back into an array
+    for c in classes:
+        c['days_of_week'] = c['days_of_week'].split(', ')
+    classes = [UMNClass(**c).to_gcal_event() for c in classes]
+    return json.dumps(classes)
 
 
 if __name__ == '__main__':

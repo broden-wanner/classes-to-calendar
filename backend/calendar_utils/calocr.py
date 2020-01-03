@@ -32,10 +32,23 @@ class UMNClass:
         self.course_num = kwargs.get('course_num')
         self.section = kwargs.get('section')
         self.location = kwargs.get('location')
+
         self.start_time = kwargs.get('start_time')
+        if isinstance(self.start_time, str):
+            self.start_time = datetime.datetime.strptime(self.start_time, '%H:%M:%S').time()
+
         self.end_time = kwargs.get('end_time')
+        if isinstance(self.end_time, str):
+            self.end_time = datetime.datetime.strptime(self.end_time, '%H:%M:%S').time()
+
         self.start_date = kwargs.get('start_date')
+        if isinstance(self.start_date, str):
+            self.start_date = datetime.datetime.strptime(self.start_date, '%Y-%m-%d').date()
+
         self.end_date = kwargs.get('end_date')
+        if isinstance(self.end_date, str):
+            self.end_date = datetime.datetime.strptime(self.end_date, '%Y-%m-%d').date()
+
         if kwargs.get('days_of_week'):
             self.days_of_week = kwargs.get('days_of_week')
         else:
