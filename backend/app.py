@@ -3,11 +3,16 @@ import datetime
 import json
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
+from dotenv import load_dotenv
 from calendar_utils.calocr import generate_umn_classes, UMNClass
 try:
     from PIL import Image
 except ImportError:
     import Image
+
+#### Config ####
+load_dotenv()
+FLASK_ENV = os.getenv('FLASK_ENV')
 
 app = Flask(__name__)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
@@ -33,6 +38,9 @@ def index():
 
 @app.route('/api/upload', methods=['POST'])
 def upload_endpoint():
+    """
+    Processes an uploaded image and returns the classes extracted in it with pytesseract
+    """
     # Check if there is a file in the request
     if 'file' not in request.files:
         return jsonify(exception='No file selected')
@@ -59,12 +67,28 @@ def upload_endpoint():
 
 @app.route('/api/events', methods=['POST'])
 def events_endpoint():
+    """
+    Accepts classes in the requests and casts them to gcal event format
+    """
     classes = json.loads(request.data)
     # Put the days of of the week back into an array
     for c in classes:
         c['days_of_week'] = c['days_of_week'].split(', ')
     classes = [UMNClass(**c).to_gcal_event() for c in classes]
     return json.dumps(classes)
+
+
+@app.route('/api/google-config', methods=['GET'])
+def google_config_endpoint():
+    """
+    Sends the google calendar api config to the frontend
+    """
+    return json.dumps({
+        'clientId': os.getenv('GOOGLE_CLIENT_ID'),
+        'apiKey': os.getenv('GOOGLE_API_KEY'),
+        'scope': 'https://www.googleapis.com/auth/calendar',
+        'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest']
+    })
 
 
 if __name__ == '__main__':

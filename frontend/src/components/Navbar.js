@@ -1,4 +1,5 @@
 import React from 'react';
+import PropTypes from 'prop-types';
 import AppBar from '@material-ui/core/AppBar';
 import Button from '@material-ui/core/Button';
 import Toolbar from '@material-ui/core/Toolbar';
@@ -14,12 +15,16 @@ const useStyles = makeStyles(theme => ({
     '&:hover': {
       cursor: 'pointer'
     }
+  },
+  navButton: {
+    marginLeft: theme.spacing(2)
   }
 }));
 
-function Navbar() {
+function Navbar(props) {
   const classes = useStyles();
   const history = useHistory();
+  const { openInstructions } = props;
 
   return (
     <AppBar position="fixed">
@@ -29,12 +34,31 @@ function Navbar() {
             Classes to Calendar
           </span>
         </Typography>
-        <Button variant="outlined" color="inherit" component={Link} to="/upload">
-          Upload Class Calendar
+        <Button
+          variant="outlined"
+          color="inherit"
+          className={classes.navButton}
+          onClick={openInstructions}
+        >
+          Instructions
+        </Button>
+        <Button
+          variant="outlined"
+          color="inherit"
+          className={classes.navButton}
+          component={Link}
+          to="/upload"
+          onClick={openInstructions}
+        >
+          Upload
         </Button>
       </Toolbar>
     </AppBar>
   );
 }
+
+Navbar.propTypes = {
+  openInstructions: PropTypes.func.isRequired
+};
 
 export default Navbar;

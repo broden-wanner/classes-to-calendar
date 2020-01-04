@@ -6,6 +6,7 @@ import { makeStyles, Container, Typography, CircularProgress, fade } from '@mate
 import GCalClient from '../api/GCalClient';
 import axios from 'axios';
 import EventsActions from './EventsActions';
+import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   classesPage: {
@@ -28,7 +29,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: fade(theme.palette.grey[900], 0.4)
   },
   content: {
-    marginTop: '10vh'
+    marginTop: '15vh'
   },
   classesContainer: {
     display: 'flex'
@@ -51,6 +52,7 @@ const gcalClient = new GCalClient();
 
 function ClassesPage(props) {
   const classes = useStyles();
+  const history = useHistory();
   const [signedIn, setSignedIn] = useState(gcalClient.signedIn);
   const [eventsStatus, setEventsStatus] = useState('unbegun');
 
@@ -96,6 +98,7 @@ function ClassesPage(props) {
               if (eventCounter === events.length) {
                 setEventsStatus('created');
                 props.openToast('Sucessfully created events', 'success');
+                history.push('/success');
               }
             })
             .catch(error => {

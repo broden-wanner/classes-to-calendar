@@ -1,9 +1,4 @@
-const Config = {
-  clientId: '564721702931-3kjqa7und1t1gpllrvoa4ntb0d66d3hs.apps.googleusercontent.com',
-  apiKey: 'AIzaSyBmduzMTAnJVbreo_KqJGa38dW9xuZkKoQ',
-  scope: 'https://www.googleapis.com/auth/calendar',
-  discoveryDocs: ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest']
-};
+import axios from 'axios';
 
 class GCalClient {
   signedIn = false;
@@ -19,10 +14,15 @@ class GCalClient {
     this.handleClientLoad();
   }
 
-  initClient() {
+  async getConfig() {
+    return await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/google-config`);
+  }
+
+  async initClient() {
     this.gapi = window['gapi'];
+    const config = await this.getConfig();
     this.gapi.client
-      .init(Config)
+      .init(config.data)
       .then(() => {
         // Listen for sign-in state changes.
         this.gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);

@@ -10,7 +10,6 @@ const useStyles = makeStyles(theme => ({
   uploadContent: {
     display: 'flex',
     width: '100%',
-    justifyContent: 'center',
     alignItems: 'center',
     flexDirection: 'column'
   },
@@ -34,6 +33,9 @@ const useStyles = makeStyles(theme => ({
   header: {
     color: theme.palette.grey[50],
     marginBottom: theme.spacing(2)
+  },
+  pageContent: {
+    marginTop: '15vh'
   }
 }));
 
@@ -98,23 +100,25 @@ function UploadPage(props) {
 
   return (
     <div className={classes.uploadContent}>
-      <Container className={classes.header}>
-        <Typography variant="h2" align="center" component="h1" color="inherit">
-          Upload Schedule
-        </Typography>
-      </Container>
-      <Container maxWidth="sm" className={classes.uploadContainer}>
-        <DragAndDrop
-          handleImageSelect={handleImageSelect}
-          handleUpload={handleUpload}
-          selectedImageLoaded={selectedImageLoaded}
-          selectedImageSrc={selectedImageSrc}
-        ></DragAndDrop>
-        {uploadStatus === 'uploading' && (
-          <div className={classes.loadingOverlay}>
-            <CircularProgress />
-          </div>
-        )}
+      <Container className={classes.pageContent}>
+        <Container className={classes.header}>
+          <Typography variant="h2" align="center" component="h1" color="inherit">
+            Upload Schedule
+          </Typography>
+        </Container>
+        <Container maxWidth="sm" className={classes.uploadContainer}>
+          <DragAndDrop
+            handleImageSelect={handleImageSelect}
+            handleUpload={handleUpload}
+            selectedImageLoaded={selectedImageLoaded}
+            selectedImageSrc={selectedImageSrc}
+          ></DragAndDrop>
+          {uploadStatus === 'uploading' && (
+            <div className={classes.loadingOverlay}>
+              <CircularProgress />
+            </div>
+          )}
+        </Container>
       </Container>
     </div>
   );

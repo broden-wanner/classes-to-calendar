@@ -15,6 +15,9 @@ const useStyles = makeStyles(theme => ({
     fontSize: theme.typography.pxToRem(15),
     fontWeight: theme.typography.fontWeightRegular
   },
+  inputField: {
+    marginBottom: theme.spacing(1)
+  },
   info: {
     flexDirection: 'column'
   }
@@ -60,7 +63,7 @@ function UMNClass(props) {
         {Object.keys(cls).map(
           (name, i) =>
             name !== 'id' && (
-              <FormControl key={i}>
+              <FormControl key={i} className={classes.inputField}>
                 <InputLabel>{snakeToTitleCase(name)}</InputLabel>
                 <Input name={name} defaultValue={cls[name]} onChange={handleChanges} />
               </FormControl>

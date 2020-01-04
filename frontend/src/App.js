@@ -10,6 +10,8 @@ import HomePage from './components/HomePage';
 import UploadPage from './components/UploadPage';
 import Toast from './components/Toast';
 import ClassesPage from './components/ClassesPage';
+import SuccessPage from './components/SuccessPage';
+import InstructionDialog from './components/InstructionDialog';
 
 const appTheme = createMuiTheme({
   palette: {
@@ -40,167 +42,11 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const classes = useStyles();
-  const [extractedClasses, setExtractedClasses] = useState([
-    {
-      name: 'Algs. & Data Str. Discussion',
-      dept: 'CSCI',
-      course_num: '4041',
-      section: '002',
-      location: 'Akerman Hall 225',
-      start_time: '09:05:00',
-      end_time: '09:55:00',
-      start_date: '2020-01-24',
-      end_date: '2020-05-04',
-      days_of_week: 'FRIDAY',
-      id: 'CSCI4041002'
-    },
-    {
-      name: 'Algs. & Data Str. Lecture',
-      dept: 'CSCI',
-      course_num: '4041',
-      section: '001',
-      location: '10 Church Street SE 100',
-      start_time: '13:00:00',
-      end_time: '14:15:00',
-      start_date: '2020-01-21',
-      end_date: '2020-05-04',
-      days_of_week: 'TUESDAY, THURSDAY',
-      id: 'CSCI4041001'
-    },
-    {
-      name: 'Ear-Training II Lecture',
-      dept: 'MUS',
-      course_num: '1512',
-      section: '001',
-      location: 'Ferguson Hall 225',
-      start_time: '08:00:00',
-      end_time: '08:50:00',
-      start_date: '2020-01-27',
-      end_date: '2020-05-04',
-      days_of_week: 'MONDAY',
-      id: 'MUS1512001'
-    },
-    {
-      name: 'Ear-Training Il Discussion',
-      dept: 'MUS',
-      course_num: '1512',
-      section: '002',
-      location: 'Ferguson Hall 115',
-      start_time: '09:05:00',
-      end_time: '09:55:00',
-      start_date: '2020-01-22',
-      end_date: '2020-05-04',
-      days_of_week: 'WEDNESDAY',
-      id: 'MUS1512002'
-    },
-    {
-      name: 'Intro to Operating Systems Laboratory',
-      dept: 'CSCI',
-      course_num: '4061',
-      section: '015',
-      location: 'Keller Hall 1-250',
-      start_time: '17:45:00',
-      end_time: '18:35:00',
-      start_date: '2020-01-27',
-      end_date: '2020-05-04',
-      days_of_week: 'MONDAY',
-      id: 'CSCI4061015'
-    },
-    {
-      name: 'Intro to Operating Systems Lecture',
-      dept: 'CSCI',
-      course_num: '4061',
-      section: '010',
-      location: 'Fraser Hall 101',
-      start_time: '11:15:00',
-      end_time: '12:30:00',
-      start_date: '2020-01-21',
-      end_date: '2020-05-04',
-      days_of_week: 'TUESDAY, THURSDAY',
-      id: 'CSCI4061010'
-    },
-    {
-      name: 'Intro to Prob&Stat Laboratory',
-      dept: 'STAT',
-      course_num: '3021',
-      section: '010',
-      location: 'Amundson Hall 120',
-      start_time: '10:10:00',
-      end_time: '11:00:00',
-      start_date: '2020-01-23',
-      end_date: '2020-05-04',
-      days_of_week: 'THURSDAY',
-      id: 'STAT3021010'
-    },
-    {
-      name: 'Intro to Prob&Stat Lecture',
-      dept: 'STAT',
-      course_num: '3021',
-      section: '009',
-      location: 'Tate Hall B20',
-      start_time: '10:10:00',
-      end_time: '11:00:00',
-      start_date: '2020-01-22',
-      end_date: '2020-05-04',
-      days_of_week: 'MONDAY, WEDNESDAY, FRIDAY',
-      id: 'STAT3021009'
-    },
-    {
-      name: 'Intro: Artificial Intelligence Lecture',
-      dept: 'CSCI',
-      course_num: '4511W',
-      section: '002',
-      location: 'Bruininks Hall 220',
-      start_time: '16:00:00',
-      end_time: '17:15:00',
-      start_date: '2020-01-22',
-      end_date: '2020-05-04',
-      days_of_week: 'MONDAY, WEDNESDAY',
-      id: 'CSCI4511W002'
-    },
-    {
-      name: 'Music Theory II Discussion',
-      dept: 'MUS',
-      course_num: '1502',
-      section: '002',
-      location: 'Ferguson Hall 115',
-      start_time: '09:05:00',
-      end_time: '09:55:00',
-      start_date: '2020-01-27',
-      end_date: '2020-05-04',
-      days_of_week: 'MONDAY',
-      id: 'MUS1502002'
-    },
-    {
-      name: 'Music Theory II Lecture',
-      dept: 'MUS',
-      course_num: '1502',
-      section: '001',
-      location: 'Ferguson Hall 225',
-      start_time: '08:00:00',
-      end_time: '08:50:00',
-      start_date: '2020-01-22',
-      end_date: '2020-05-04',
-      days_of_week: 'WEDNESDAY, FRIDAY',
-      id: 'MUS1502001'
-    },
-    {
-      name: 'University Bands Laboratory',
-      dept: 'MUS',
-      course_num: '3410',
-      section: '001',
-      location: 'Ferguson Hall 95',
-      start_time: '13:25:00',
-      end_time: '15:20:00',
-      start_date: '2020-01-22',
-      end_date: '2020-05-04',
-      days_of_week: 'MONDAY, WEDNESDAY, FRIDAY',
-      id: 'MUS3410001'
-    }
-  ]);
+  const [extractedClasses, setExtractedClasses] = useState([]);
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastVariant, setToastVariant] = useState('error');
+  const [instructionsOpen, setInstructionsOpen] = useState(false);
 
   /**
    * Function to be passed to the upload component to set the classes on the app
@@ -238,6 +84,14 @@ function App() {
     setToastVariant(variant);
   };
 
+  const handleInstructionsOpen = () => {
+    setInstructionsOpen(true);
+  };
+
+  const handleInstructionsClose = () => {
+    setInstructionsOpen(false);
+  };
+
   /**
    * Generates a route component that will only be rendered if there are classes
    */
@@ -251,12 +105,15 @@ function App() {
       <ThemeProvider theme={appTheme}>
         <div className={classes.background}>
           <Router>
-            <Navbar></Navbar>
+            <Navbar openInstructions={handleInstructionsOpen}></Navbar>
             <Route exact path="/">
-              <HomePage />
+              <HomePage openInstructions={handleInstructionsOpen} />
             </Route>
             <Route exact path="/upload">
               <UploadPage openToast={handleToastOpen} handleClasses={handleExtractedClasses} />
+            </Route>
+            <Route exact path="/success">
+              <SuccessPage />
             </Route>
             <ClassesRequiredRoute exact path="/classes">
               <ClassesPage
@@ -271,6 +128,7 @@ function App() {
               message={toastMessage}
               variant={toastVariant}
             />
+            <InstructionDialog open={instructionsOpen} onClose={handleInstructionsClose} />
           </Router>
         </div>
       </ThemeProvider>

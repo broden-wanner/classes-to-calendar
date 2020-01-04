@@ -83,8 +83,12 @@ function EventsActions(props) {
         sendToGcal(calOption, newCalName, null);
       }
     } else if (calOption === 'existing') {
-      const calendar = calList.filter(cal => cal.id === calId)[0];
-      sendToGcal(calOption, null, calendar);
+      if (!calId) {
+        props.openToast('Must select a calendar', 'error');
+      } else {
+        const calendar = calList.filter(cal => cal.id === calId)[0];
+        sendToGcal(calOption, null, calendar);
+      }
     }
   };
 
