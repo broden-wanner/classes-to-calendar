@@ -1,4 +1,4 @@
-import React, { forwardRef } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 
 import {
@@ -11,7 +11,6 @@ import {
   makeStyles,
   DialogContent,
   Typography,
-  Slide,
   DialogActions,
   Button
 } from '@material-ui/core';
@@ -22,10 +21,6 @@ const useStyles = makeStyles(theme => ({
     width: '100%'
   }
 }));
-
-const Transition = forwardRef(function Transition(props, ref) {
-  return <Slide direction="up" ref={ref} {...props} />;
-});
 
 function InstructionDialog(props) {
   const classes = useStyles();

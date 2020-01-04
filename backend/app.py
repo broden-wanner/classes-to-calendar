@@ -13,8 +13,12 @@ except ImportError:
 #### Config ####
 load_dotenv()
 FLASK_ENV = os.getenv('FLASK_ENV')
+DEBUG = True if FLASK_ENV == 'development' else False
+STATIC_FOLDER = '../frontend/build'
+STATIC_URL_PATH = ''
+TEMPLATE_FOLDER = '../frontend/build'
 
-app = Flask(__name__)
+app = Flask(__name__, static_folder=STATIC_FOLDER, template_folder=TEMPLATE_FOLDER, static_url_path=STATIC_URL_PATH)
 cors = CORS(app, resources={r"/api/*": {"origins": "*"}})
 
 
@@ -27,14 +31,14 @@ def allowed_file(filename):
 
 #### Regular routes ####
 
-
 @app.route('/')
+@app.route('/classes')
+@app.route('/upload')
 def index():
-    return render_template('index.html', token='yeet')
+    return render_template('index.html')
 
 
 #### API routes ####
-
 
 @app.route('/api/upload', methods=['POST'])
 def upload_endpoint():
@@ -92,4 +96,4 @@ def google_config_endpoint():
 
 
 if __name__ == '__main__':
-    app.run(debug=True)
+    app.run(debug=DEBUG)
