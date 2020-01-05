@@ -2,12 +2,9 @@ try:
     from PIL import Image
 except ImportError:
     import Image
-
 import pytesseract
 import re
-import json
 import datetime
-from pytesseract import Output
 
 DAYS_OF_WEEK = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
 WEEKDAY_DICT = {
@@ -213,11 +210,11 @@ def ocr_png_to_str_list(input_image):
     # Change the image to black and white
     input_image = black_and_white_image(input_image, False)
     # Extract the data frame of the image with tesseract
-    df = pytesseract.image_to_data(input_image, output_type=Output.DATAFRAME)
-    # Remove rows with null entries in text
-    df = df.dropna()
-    # Change to list of strings
-    return [s for s in df['text'].tolist() if not s.isspace()]
+    text = pytesseract.image_to_string(input_image, output_type=pytesseract.Output.STRING)
+    # Replace newlines with spaces for the splitting
+    text = text.replace('\n', ' ')
+    # Return a list of the strings that are not whitespace or empty strings
+    return [s for s in text.split(' ') if s and not s.isspace()]
 
 
 def generate_umn_classes(img, start_date=None, end_date=None):
@@ -304,6 +301,7 @@ def generate_umn_classes(img, start_date=None, end_date=None):
 
 
 if __name__ == '__main__':
+    # Test
     classes = generate_umn_classes(img=Image.open('example-images/calendar.png'),
                                    start_date=datetime.date(year=2020, month=1, day=21),
                                    end_date=datetime.date(year=2020, month=5, day=4))
