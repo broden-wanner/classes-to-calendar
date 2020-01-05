@@ -33,3 +33,4 @@ credentials.json
 *.pickle
 example-images/
 gcal-files/
+digitalocean/
