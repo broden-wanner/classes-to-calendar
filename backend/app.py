@@ -14,6 +14,7 @@ except ImportError:
 load_dotenv()
 FLASK_ENV = os.getenv('FLASK_ENV')
 DEBUG = True if FLASK_ENV == 'development' else False
+APP_HOST = os.getenv('APP_HOST')
 STATIC_FOLDER = '../frontend/build'
 STATIC_URL_PATH = ''
 TEMPLATE_FOLDER = '../frontend/build'
@@ -96,4 +97,7 @@ def google_config_endpoint():
 
 
 if __name__ == '__main__':
-    app.run(debug=DEBUG)
+    if APP_HOST:
+        app.run(debug=DEBUG, host=APP_HOST)
+    else:
+        app.run(debug=DEBUG)
