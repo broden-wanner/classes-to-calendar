@@ -1,4 +1,4 @@
-sudo systemctl daemon-reload > echo
+sudo systemctl daemon-reload
 sudo systemctl restart classes-to-calendar
 echo "uWSGI service restarted"
 

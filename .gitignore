@@ -33,5 +33,6 @@ credentials.json
 *.pickle
 example-images/
 gcal-files/
-server/
+backend/server-scripts/login
+backend/server-scripts/config.md
 *.ini
