@@ -4,6 +4,12 @@ This is a web application designed to take an image of a UMN class schedule and 
 
 Website: [classes-to-calendar](https://classes-to-calendar.xyz)
 
+## Tech Used
+- React frontend
+- Flask backend
+- Pytesseract to interface with Tesseract OCR
+- Nginx Server
+
 ## Future Work
 - Add option to exort to .ics for importing into other calendars
 - Make the tesseract and parsing more flexible
