@@ -97,7 +97,6 @@ function ClassesPage(props) {
               // Check to see if the last event has been created
               if (eventCounter === events.length) {
                 setEventsStatus('created');
-                props.openToast('Sucessfully created events', 'success');
                 history.push('/success');
               }
             })
