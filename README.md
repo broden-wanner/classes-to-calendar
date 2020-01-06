@@ -2,9 +2,9 @@
 
 This is a web application designed to take an image of a UMN class schedule and extract the class data out of it. It uses [Google's Tesseract OCR](https://github.com/tesseract-ocr/tesseract) to parse the text from the image into a calendar event. The user can then add these classes to their Google Calendar on either a new calendar or an already existing one.
 
-Website: [classes-to-calendar](https://classes-to-calendar.xyz)
+Website: <a href="https://classes-to-calendar.xyz" target="_blank">classes-to-calendar</a>
 
-## Tech Used
+## Technologies Used
 - React frontend
 - Flask backend
 - Pytesseract to interface with Tesseract OCR
