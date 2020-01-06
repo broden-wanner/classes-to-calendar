@@ -34,3 +34,4 @@ credentials.json
 example-images/
 gcal-files/
 digitalocean/
+*.ini
