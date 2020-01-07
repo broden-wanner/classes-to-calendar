@@ -48,7 +48,7 @@ function UploadPage(props) {
   const [uploadStatus, setUploadStatus] = useState('');
 
   /**
-   * Handles the selecting of an image
+   * Handles the selecting of an image and sets it to be previewed
    */
   const handleImageSelect = image => {
     setSelectedImage(image);
@@ -68,7 +68,8 @@ function UploadPage(props) {
   };
 
   /**
-   * Uploades the image to the api endpoint
+   * Uploades the image to the api endpoint. It sends a POST request to the endpoint and handles
+   * any errors returned form the server
    */
   const handleUpload = () => {
     let url = `${process.env.REACT_APP_API_ENDPOINT}/api/upload`;
@@ -88,12 +89,23 @@ function UploadPage(props) {
       .then(res => {
         props.openToast('Classes extracted', 'success');
         setUploadStatus('uploaded');
-        props.handleClasses(res.data);
-        history.push('/classes');
+        // Assert that the returned data is an array
+        if (res && Array.isArray(res.data) && res.data.length > 0) {
+          props.handleClasses(res.data);
+          history.push('/classes');
+        } else {
+          throw new Error('No classes extracted. Ensure your image meets the requirements.');
+        }
       })
       .catch(error => {
         console.error('Error with image upload', error);
-        props.openToast(error.message, 'error');
+        let msg = '';
+        if (error.response) {
+          msg = error.response.data.message;
+        } else {
+          msg = error.message;
+        }
+        props.openToast(msg, 'error');
         setUploadStatus('uploaded');
       });
   };
@@ -112,6 +124,7 @@ function UploadPage(props) {
             handleUpload={handleUpload}
             selectedImageLoaded={selectedImageLoaded}
             selectedImageSrc={selectedImageSrc}
+            openToast={props.openToast}
           ></DragAndDrop>
           {uploadStatus === 'uploading' && (
             <div className={classes.loadingOverlay}>

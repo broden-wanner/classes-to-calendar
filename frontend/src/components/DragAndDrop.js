@@ -41,6 +41,12 @@ export class DragAndDrop extends Component {
   };
   dragCounter = 0;
   dropRef = React.createRef();
+  allowedFiles = ['jpg', 'jpeg', 'png'];
+
+  isImageFile = file => {
+    const ext = file.name.match(/\.([0-9a-z]+)/i);
+    return this.allowedFiles.includes(ext[1].toLowerCase());
+  };
 
   handleDrag = e => {
     e.preventDefault();
@@ -77,9 +83,15 @@ export class DragAndDrop extends Component {
     this.setState({ dragging: false });
     // Check to ensure there are files being dragged
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
+      const file = e.dataTransfer.files[0];
+      // Check to ensure the file is an image
+      if (!this.isImageFile(file)) {
+        this.props.openToast('Invalid file type.', 'error');
+        return;
+      }
       this.setState({ userHasSelectedImage: true });
       // Pass the image to the parent
-      this.props.handleImageSelect(e.dataTransfer.files[0]);
+      this.props.handleImageSelect(file);
       e.dataTransfer.clearData();
       this.dragCounter = 0;
     }
