@@ -1,5 +1,6 @@
 import re
 import datetime
+import uuid
 
 DAYS_OF_WEEK = ['MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY']
 WEEKDAY_DICT = {
@@ -137,10 +138,11 @@ class UMNClass:
             'id': f'{self.dept}{self.course_num}{self.section}'
         }
 
-    def to_gcal_event(self):
+    def to_event_dict(self):
         """
         Turns the class into a recurring gcal event dictionary as specified by
-        the google calendar api
+        the google calendar api. This is a json format conforming to the 
+        icalendar specification.
         """
         start = datetime.datetime.combine(self.start_date, self.start_time)
         end = datetime.datetime.combine(self.start_date, self.end_time)
@@ -169,3 +171,39 @@ class UMNClass:
             'recurrence': [recurrence]
         }
         return event
+
+    def to_ics_event_string(self):
+        """
+        Converts the class into a string in the icalendar format to be written to an
+        ics file:
+
+        BEGIN:VEVENT
+        DTSTAMP: *now*
+        DTSTART;TZID=America/Chicago:*start time*
+        DTEND;TZID=America/Chicago:*end time*
+        RRULE:*recurrence rule*
+        UID:*uuid*
+        DESCRIPTION:*description*
+        LOCATION:*location*
+        SEQUENCE:0
+        STATUS:CONFIRMED
+        SUMMARY:*summary*
+        TRANSP:OPAQUE
+        END:VEVENT
+        """
+        data = self.to_event_dict()
+        start = data["start"]["dateTime"].replace("-", "").replace(":", "").replace(" ", "")
+        end = data["end"]["dateTime"].replace("-", "").replace(":", "").replace(" ", "")
+        return f'BEGIN:VEVENT\n' + \
+               f'DTSTAMP:{datetime.datetime.now().strftime("%Y%m%dT%H%M%S")}Z\n' + \
+               f'DTSTART;TZID={data["start"]["timeZone"]}:{start}\n' + \
+               f'DTEND;TZID={data["end"]["timeZone"]}:{end}\n' + \
+               f'RRULE:{data["recurrence"][0][6:]}\n' + \
+               f'UID:{uuid.uuid4()}\n' + \
+               f'DESCRIPTION:{data["description"]}\n' + \
+               f'LOCATION:{data["location"]}\n' + \
+               f'SEQUENCE:0\n' + \
+               f'STATUS:CONFIRMED\n' + \
+               f'SUMMARY:{data["summary"]}\n' + \
+               f'TRANSP:OPAQUE\n' + \
+               f'END:VEVENT\n'

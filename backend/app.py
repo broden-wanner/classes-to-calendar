@@ -6,6 +6,7 @@ from flask_cors import CORS
 from dotenv import load_dotenv
 from calendar_utils.ocr import generate_umn_classes, ParseError
 from calendar_utils.models import UMNClass
+from calendar_utils.convert import to_ics_string
 try:
     from PIL import Image
 except ImportError:
@@ -136,9 +137,21 @@ def events_endpoint():
     # Put the days of of the week back into an array
     for c in classes:
         c['days_of_week'] = c['days_of_week'].split(', ')
-    classes = [UMNClass(**c).to_gcal_event() for c in classes]
+    classes = [UMNClass(**c).to_event_dict() for c in classes]
     return json.dumps(classes)
 
+@app.route('/api/ics', methods=['POST'])
+    """
+    Accepts classes in the request and returns an ics string with all
+    the events
+    """
+    classes = json.loads(request.data)
+    # Put the days of of the week back into an array
+    for c in classes:
+        c['days_of_week'] = c['days_of_week'].split(', ')
+    classes = [UMNClass(**c) for c in classes]
+    content = to_ics_string(classes)
+    return json.dumps({'ics': content})
 
 @app.route('/api/google-config', methods=['GET'])
 def google_config_endpoint():

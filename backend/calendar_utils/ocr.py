@@ -5,7 +5,7 @@ except ImportError:
 import pytesseract
 import re
 import datetime
-from .models import UMNClass, WEEKDAY_DICT, DAYS_OF_WEEK
+from models import UMNClass, WEEKDAY_DICT, DAYS_OF_WEEK
 
 class ParseError(Exception):
     """
