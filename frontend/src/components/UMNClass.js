@@ -57,7 +57,9 @@ function UMNClass(props) {
   return (
     <ExpansionPanel key={cls.id}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content">
-        <Typography className={classes.heading}>{title}</Typography>
+        <Typography className={classes.heading} color="primary">
+          {title}
+        </Typography>
       </ExpansionPanelSummary>
       <ExpansionPanelDetails className={classes.info}>
         {Object.keys(cls).map(

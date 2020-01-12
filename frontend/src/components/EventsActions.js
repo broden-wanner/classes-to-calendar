@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { makeStyles } from '@material-ui/core';
+import { makeStyles, Divider } from '@material-ui/core';
 import PropTypes from 'prop-types';
 import {
   Card,
@@ -17,10 +17,12 @@ import {
 } from '@material-ui/core';
 import TodayIcon from '@material-ui/icons/Today';
 import SendIcon from '@material-ui/icons/Send';
+import GetAppIcon from '@material-ui/icons/GetApp';
 
 const useStyles = makeStyles(theme => ({
   card: {
-    position: 'relative'
+    position: 'relative',
+    marginBottom: theme.spacing(1)
   },
   buttonContainer: {
     display: 'flex',
@@ -39,6 +41,16 @@ const useStyles = makeStyles(theme => ({
   },
   infoText: {
     marginBottom: theme.spacing(1)
+  },
+  actionSection: {
+    marginBottom: theme.spacing(3),
+    marginTop: theme.spacing(2),
+    '&:last-child': {
+      marginBottom: 0
+    },
+    '&:first-child': {
+      marginTop: 0
+    }
   }
 }));
 
@@ -65,7 +77,7 @@ function EventsActions(props) {
           setCalList(res.result.items);
         })
         .catch(error => {
-          props.openToast(error.message, 'error');
+          props.openToast('Could not retrieve your calendar list.', 'error');
           console.error(error);
         });
     }
@@ -104,77 +116,96 @@ function EventsActions(props) {
     <React.Fragment>
       <Card className={classes.card}>
         <CardContent>
-          <Typography align="left" color="textPrimary" className={classes.infoText}>
-            Here are the extracted classes. Review each class's info, and edit it if any of it's
-            wrong. Click the button below to make the calendar. You must authorize the app to use
-            your google calendar before sending.
-          </Typography>
+          {props.children}
+          <div className={classes.actionSection}>
+            <Typography variant="h6" component="h6">
+              Add to Google Calendar
+            </Typography>
+            <p className={classes.infoText}>
+              You can add your classes to Google Calendar by either making a new calendar or adding
+              them to an existing one. You must authorize GCal in order to do this.
+            </p>
 
-          <div className={classes.optionsForm}>
-            <FormControl component="fieldset">
-              <RadioGroup
-                aria-label="calendarOption"
-                name="calendarOption"
-                defaultValue={calOption}
-                onChange={handleOptionChange}
-              >
-                <FormControlLabel
-                  value="new"
-                  control={<Radio />}
-                  label="Make a new calendar"
-                  disabled={!signedIn}
-                />
-                {calOption === 'new' && (
-                  <TextField
-                    className={classes.formField}
-                    label="New calendar name"
-                    variant="filled"
-                    onChange={handleNewCalChange}
-                    defaultValue={newCalName}
+            <div className={classes.optionsForm}>
+              <FormControl component="fieldset">
+                <RadioGroup
+                  aria-label="calendarOption"
+                  name="calendarOption"
+                  defaultValue={calOption}
+                  onChange={handleOptionChange}
+                >
+                  <FormControlLabel
+                    value="new"
+                    control={<Radio />}
+                    label="Make a new calendar"
                     disabled={!signedIn}
                   />
-                )}
-                <FormControlLabel
-                  value="existing"
-                  control={<Radio />}
-                  label="Add to existing calendar"
-                  disabled={!signedIn}
-                />
-                {calOption === 'existing' && (
-                  <FormControl className={classes.formField}>
-                    <InputLabel>Select from calendars...</InputLabel>
-                    <Select label="existing-calendar" defaultValue="" onChange={handleCalIdChange}>
-                      {calList.map(cal => (
-                        <MenuItem key={cal.id} value={cal.id}>
-                          {cal.summary}
-                        </MenuItem>
-                      ))}
-                    </Select>
-                  </FormControl>
-                )}
-              </RadioGroup>
-            </FormControl>
+                  {calOption === 'new' && (
+                    <TextField
+                      className={classes.formField}
+                      label="New calendar name"
+                      variant="filled"
+                      onChange={handleNewCalChange}
+                      defaultValue={newCalName}
+                      disabled={!signedIn}
+                    />
+                  )}
+                  <FormControlLabel
+                    value="existing"
+                    control={<Radio />}
+                    label="Add to existing calendar"
+                    disabled={!signedIn}
+                  />
+                  {calOption === 'existing' && (
+                    <FormControl className={classes.formField} style={{ width: '300px' }}>
+                      <InputLabel>Select from calendars...</InputLabel>
+                      <Select
+                        label="existing-calendar"
+                        defaultValue=""
+                        onChange={handleCalIdChange}
+                        style={{ width: '300px' }}
+                      >
+                        {calList.map(cal => (
+                          <MenuItem key={cal.id} value={cal.id}>
+                            {cal.summary}
+                          </MenuItem>
+                        ))}
+                      </Select>
+                    </FormControl>
+                  )}
+                </RadioGroup>
+              </FormControl>
+            </div>
+
+            <div className={classes.buttonContainer}>
+              <Button onClick={authorizeGcal}>
+                <TodayIcon className={classes.extendedIcon} />
+                Authorize GCal
+              </Button>
+              <Button color="primary" onClick={handleSubmit} disabled={!signedIn}>
+                <SendIcon className={classes.extendedIcon} />
+                Send to GCal
+              </Button>
+            </div>
           </div>
 
-          <div className={classes.buttonContainer}>
-            <Button onClick={authorizeGcal}>
-              <TodayIcon className={classes.extendedIcon} />
-              Authorize GCal
-            </Button>
-            <Button color="primary" onClick={handleSubmit} disabled={!signedIn}>
-              <SendIcon className={classes.extendedIcon} />
-              Send to GCal
-            </Button>
+          <Divider />
+
+          <div className={classes.actionSection}>
+            <Typography variant="h6" component="h6">
+              Export to Another Calendar
+            </Typography>
+            <p className={classes.infoText}>
+              You can also export your classes to another calendar by clicking the export button.
+              This will download a file that you can import to any other calendar service.
+            </p>
+            <div className={classes.buttonContainer}>
+              <Button color="primary" onClick={exportCalendar}>
+                <GetAppIcon className={classes.extendedIcon} />
+                Download
+              </Button>
+            </div>
           </div>
-        </CardContent>
-        {props.children}
-      </Card>
-      <Card className={classes.card}>
-        <CardContent>
-          <Button color="primary" onClick={exportCalendar}>
-            <SendIcon className={classes.extendedIcon} />
-            Export
-          </Button>
         </CardContent>
       </Card>
     </React.Fragment>

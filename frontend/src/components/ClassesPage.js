@@ -1,7 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import PropTypes from 'prop-types';
 import UMNClass from './UMNClass';
-import { makeStyles, Container, Typography, CircularProgress, fade } from '@material-ui/core';
+import {
+  makeStyles,
+  Container,
+  Typography,
+  CircularProgress,
+  fade,
+  Card,
+  CardContent
+} from '@material-ui/core';
 
 import GCalClient from '../api/GCalClient';
 import axios from 'axios';
@@ -35,7 +43,8 @@ const useStyles = makeStyles(theme => ({
     display: 'flex'
   },
   classList: {
-    flex: 3
+    flex: 3,
+    paddingBottom: theme.spacing(3)
   },
   actionCol: {
     flex: 2,
@@ -45,6 +54,10 @@ const useStyles = makeStyles(theme => ({
   header: {
     color: theme.palette.grey[50],
     marginBottom: theme.spacing(2)
+  },
+  classesInfo: {
+    borderBottomLeftRadius: 0,
+    borderBottomRightRadius: 0
   }
 }));
 
@@ -148,7 +161,7 @@ function ClassesPage(props) {
         createEvents();
       })
       .catch(error => {
-        props.openToast('Could not create or set calendar', 'error');
+        props.openToast('Could not create or add to calendar.', 'error');
       });
   };
 
@@ -189,6 +202,12 @@ function ClassesPage(props) {
         </Container>
         <Container className={classes.classesContainer}>
           <div className={classes.classList}>
+            <Card className={classes.classesInfo}>
+              <CardContent style={{ paddingBottom: '16px' }}>
+                The classes extracted from your screenshot are below. Review and edit the info for
+                each class by clicking on it and changing anything that's incorrect.
+              </CardContent>
+            </Card>
             {props.extractedClasses.map(cls => (
               <UMNClass key={cls.id} cls={cls} handleClassChange={props.handleClassChange} />
             ))}

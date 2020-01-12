@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import { Card, CardContent, Button, CardActions, Typography } from '@material-ui/core';
+import { Card, CardContent, Button, CardActions, Typography, withStyles } from '@material-ui/core';
 import CircularProgress from '@material-ui/core/CircularProgress';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
 
-const styles = {
+const styles = theme => ({
   cardStyle: {
     padding: '20px'
   },
@@ -14,7 +14,12 @@ const styles = {
     border: '2px dashed #ccc',
     width: '100%',
     minHeight: '400px',
-    padding: '20px'
+    padding: '20px',
+    transition: 'all 0.1s ease-in-out',
+    '&:hover': {
+      backgroundColor: theme.palette.grey[200],
+      cursor: 'pointer'
+    }
   },
   uploadInfo: {
     display: 'flex',
@@ -24,7 +29,8 @@ const styles = {
     width: '100%'
   },
   previewImage: {
-    maxHeight: '400px'
+    maxHeight: '400px',
+    maxWidth: '400px'
   },
   input: {
     display: 'none'
@@ -32,7 +38,7 @@ const styles = {
   buttonContainer: {
     justifyContent: 'center'
   }
-};
+});
 
 export class DragAndDrop extends Component {
   state = {
@@ -128,6 +134,8 @@ export class DragAndDrop extends Component {
   }
 
   render() {
+    const { classes } = this.props;
+
     const upload = (
       <React.Fragment>
         <CloudUploadOutlinedIcon style={{ fontSize: 80 }} color="action"></CloudUploadOutlinedIcon>
@@ -149,7 +157,7 @@ export class DragAndDrop extends Component {
     const imagePreview = (
       <React.Fragment>
         {this.props.selectedImageLoaded ? (
-          <img style={styles.previewImage} src={this.props.selectedImageSrc} alt="Uploaded" />
+          <img className={classes.previewImage} src={this.props.selectedImageSrc} alt="Uploaded" />
         ) : (
           <CircularProgress />
         )}
@@ -157,22 +165,24 @@ export class DragAndDrop extends Component {
     );
 
     return (
-      <Card variante="outlined" style={styles.cardStyle}>
+      <Card variante="outlined" className={classes.cardStyle}>
         <CardContent>
-          <div ref={this.dropRef} style={styles.dropzoneArea}>
-            <div style={styles.uploadInfo}>
-              {!this.state.userHasSelectedImage
-                ? !this.state.dragging
-                  ? upload
-                  : drop
-                : imagePreview}
+          <label htmlFor="image-upload">
+            <div ref={this.dropRef} className={classes.dropzoneArea}>
+              <div className={classes.uploadInfo}>
+                {!this.state.userHasSelectedImage
+                  ? !this.state.dragging
+                    ? upload
+                    : drop
+                  : imagePreview}
+              </div>
             </div>
-          </div>
+          </label>
         </CardContent>
-        <CardActions style={styles.buttonContainer}>
+        <CardActions className={classes.buttonContainer}>
           <input
             accept="image/*"
-            style={styles.input}
+            className={classes.input}
             id="image-upload"
             type="file"
             onChange={this.handleImageSelect}
@@ -196,4 +206,4 @@ export class DragAndDrop extends Component {
   }
 }
 
-export default DragAndDrop;
+export default withStyles(styles)(DragAndDrop);
