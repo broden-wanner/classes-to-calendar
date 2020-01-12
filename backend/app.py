@@ -123,6 +123,7 @@ def upload_endpoint():
         except ParseError as e:
             raise ParseError(e.message)
         except Exception as e:
+            app.logger.error(e)
             raise ParseError('Error extracting classes.')
     else:
         raise FileError('Invalid file type.')

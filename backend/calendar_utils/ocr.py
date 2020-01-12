@@ -5,7 +5,7 @@ except ImportError:
 import pytesseract
 import re
 import datetime
-from .models import UMNClass, WEEKDAY_DICT, DAYS_OF_WEEK
+from models import UMNClass, WEEKDAY_DICT, DAYS_OF_WEEK
 
 class ParseError(Exception):
     """
@@ -23,7 +23,7 @@ class ParseError(Exception):
 
 def is_time(text):
     """ Helper function that returns a boolean of whether a string is a time """
-    return re.match(r'^\d+:\d+$', text)
+    return re.match(r'\d+:\d+', text)
 
 
 def is_room_num(text):
@@ -61,14 +61,40 @@ def ocr_png_to_str_list(input_image):
     return [s for s in text.split(' ') if s and not s.isspace()]
 
 
+def clean_text(text):
+    """
+    Cleans the text by splitting up the times by the hyphens in case
+    the ocr groups them together.
+    """
+    assert len(text) > 0
+    i = 0
+    # Handle hyphens
+    while i < len(text):
+        if not is_room_num(text[i]) and is_time(text[i]):
+            strings = re.split(r'(-)', text[i])
+            # Add the split strings to the list at that place
+            if len(strings) > 1:
+                text.pop(i)
+                text[i:i] = strings
+                i += len(strings)
+
+        i += 1
+
+    return [s for s in text if s]
+
 def generate_umn_classes(img, start_date=None, end_date=None):
     """
     Calls the ocr function on the image specified by img and gets the
     extracted text. Then parses the list of strings to form the classes on the
     calendar. Returns a list of all the extracted classes in the UMNClass object.
+
+    Raises parse error if there is anything wrong.
     """
     # Get the list of strings from the image
     text = ocr_png_to_str_list(img)
+    # Clean the text
+    text = clean_text(text)
+
     c = None
     cur_day_of_week = ''
     classes = set()
@@ -149,7 +175,7 @@ def generate_umn_classes(img, start_date=None, end_date=None):
 
 if __name__ == '__main__':
     # Test
-    classes = generate_umn_classes(img=Image.open('example-images/calendar.png'),
+    classes = generate_umn_classes(img=Image.open('example-images/old-calendar.png'),
                                    start_date=datetime.date(year=2020, month=1, day=21),
                                    end_date=datetime.date(year=2020, month=5, day=4))
     for c in classes:
