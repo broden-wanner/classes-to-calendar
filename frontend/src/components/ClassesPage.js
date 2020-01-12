@@ -92,7 +92,6 @@ function ClassesPage(props) {
           gcalClient
             .createEvent(event)
             .then(res => {
-              console.log(res.result);
               eventCounter++;
               // Check to see if the last event has been created
               if (eventCounter === events.length) {
@@ -153,6 +152,33 @@ function ClassesPage(props) {
       });
   };
 
+  /**
+   * Sends the updated events back to the server, which converts them
+   * to icalendar events. This function then creates a download.
+   */
+  const exportCalendar = () => {
+    axios
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/ics`, props.extractedClasses)
+      .then(res => {
+        const icsString = res.data.ics;
+        // Create an invisible link element to download the file
+        var element = document.createElement('a');
+        element.setAttribute(
+          'href',
+          'data:text/calendar;charset=utf-8,' + encodeURIComponent(icsString)
+        );
+        element.setAttribute('download', 'class-calendar.ics');
+        element.style.display = 'none';
+        document.body.appendChild(element);
+        element.click();
+        document.body.removeChild(element);
+      })
+      .catch(error => {
+        props.openToast('Could create ics file. Please try again.', 'error');
+        console.error(error);
+      });
+  };
+
   return (
     <div className={classes.classesPage}>
       <Container className={classes.content}>
@@ -172,6 +198,7 @@ function ClassesPage(props) {
               sendToGcal={sendToGcal}
               authorizeGcal={authorizeGcal}
               gcalClient={gcalClient}
+              exportCalendar={exportCalendar}
               signedIn={signedIn}
               openToast={props.openToast}
             >

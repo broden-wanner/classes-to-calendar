@@ -1,5 +1,5 @@
-from models import UMNClass
-from ocr import generate_umn_classes
+from .models import UMNClass
+from .ocr import generate_umn_classes
 import datetime
 try:
     from PIL import Image

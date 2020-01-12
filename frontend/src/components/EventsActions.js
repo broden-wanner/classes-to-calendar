@@ -44,7 +44,7 @@ const useStyles = makeStyles(theme => ({
 
 function EventsActions(props) {
   const classes = useStyles();
-  const { sendToGcal, authorizeGcal, gcalClient, signedIn } = props;
+  const { sendToGcal, authorizeGcal, gcalClient, signedIn, exportCalendar } = props;
   const [calOption, setCalOption] = useState('new');
   const [calList, setCalList] = useState([]);
   const [calId, setCalId] = useState('');
@@ -101,73 +101,83 @@ function EventsActions(props) {
   };
 
   return (
-    <Card className={classes.card}>
-      <CardContent>
-        <Typography align="left" color="textPrimary" className={classes.infoText}>
-          Here are the extracted classes. Review each class's info, and edit it if any of it's
-          wrong. Click the button below to make the calendar. You must authorize the app to use your
-          google calendar before sending.
-        </Typography>
+    <React.Fragment>
+      <Card className={classes.card}>
+        <CardContent>
+          <Typography align="left" color="textPrimary" className={classes.infoText}>
+            Here are the extracted classes. Review each class's info, and edit it if any of it's
+            wrong. Click the button below to make the calendar. You must authorize the app to use
+            your google calendar before sending.
+          </Typography>
 
-        <div className={classes.optionsForm}>
-          <FormControl component="fieldset">
-            <RadioGroup
-              aria-label="calendarOption"
-              name="calendarOption"
-              defaultValue={calOption}
-              onChange={handleOptionChange}
-            >
-              <FormControlLabel
-                value="new"
-                control={<Radio />}
-                label="Make a new calendar"
-                disabled={!signedIn}
-              />
-              {calOption === 'new' && (
-                <TextField
-                  className={classes.formField}
-                  label="New calendar name"
-                  variant="filled"
-                  onChange={handleNewCalChange}
-                  defaultValue={newCalName}
+          <div className={classes.optionsForm}>
+            <FormControl component="fieldset">
+              <RadioGroup
+                aria-label="calendarOption"
+                name="calendarOption"
+                defaultValue={calOption}
+                onChange={handleOptionChange}
+              >
+                <FormControlLabel
+                  value="new"
+                  control={<Radio />}
+                  label="Make a new calendar"
                   disabled={!signedIn}
                 />
-              )}
-              <FormControlLabel
-                value="existing"
-                control={<Radio />}
-                label="Add to existing calendar"
-                disabled={!signedIn}
-              />
-              {calOption === 'existing' && (
-                <FormControl className={classes.formField}>
-                  <InputLabel>Select from calendars...</InputLabel>
-                  <Select label="existing-calendar" defaultValue="" onChange={handleCalIdChange}>
-                    {calList.map(cal => (
-                      <MenuItem key={cal.id} value={cal.id}>
-                        {cal.summary}
-                      </MenuItem>
-                    ))}
-                  </Select>
-                </FormControl>
-              )}
-            </RadioGroup>
-          </FormControl>
-        </div>
+                {calOption === 'new' && (
+                  <TextField
+                    className={classes.formField}
+                    label="New calendar name"
+                    variant="filled"
+                    onChange={handleNewCalChange}
+                    defaultValue={newCalName}
+                    disabled={!signedIn}
+                  />
+                )}
+                <FormControlLabel
+                  value="existing"
+                  control={<Radio />}
+                  label="Add to existing calendar"
+                  disabled={!signedIn}
+                />
+                {calOption === 'existing' && (
+                  <FormControl className={classes.formField}>
+                    <InputLabel>Select from calendars...</InputLabel>
+                    <Select label="existing-calendar" defaultValue="" onChange={handleCalIdChange}>
+                      {calList.map(cal => (
+                        <MenuItem key={cal.id} value={cal.id}>
+                          {cal.summary}
+                        </MenuItem>
+                      ))}
+                    </Select>
+                  </FormControl>
+                )}
+              </RadioGroup>
+            </FormControl>
+          </div>
 
-        <div className={classes.buttonContainer}>
-          <Button onClick={authorizeGcal}>
-            <TodayIcon className={classes.extendedIcon} />
-            Authorize GCal
-          </Button>
-          <Button color="primary" onClick={handleSubmit} disabled={!signedIn}>
+          <div className={classes.buttonContainer}>
+            <Button onClick={authorizeGcal}>
+              <TodayIcon className={classes.extendedIcon} />
+              Authorize GCal
+            </Button>
+            <Button color="primary" onClick={handleSubmit} disabled={!signedIn}>
+              <SendIcon className={classes.extendedIcon} />
+              Send to GCal
+            </Button>
+          </div>
+        </CardContent>
+        {props.children}
+      </Card>
+      <Card className={classes.card}>
+        <CardContent>
+          <Button color="primary" onClick={exportCalendar}>
             <SendIcon className={classes.extendedIcon} />
-            Send to GCal
+            Export
           </Button>
-        </div>
-      </CardContent>
-      {props.children}
-    </Card>
+        </CardContent>
+      </Card>
+    </React.Fragment>
   );
 }
 
@@ -175,6 +185,7 @@ EventsActions.propTypes = {
   sendToGcal: PropTypes.func.isRequired,
   authorizeGcal: PropTypes.func.isRequired,
   gcalClient: PropTypes.object.isRequired,
+  exportCalendar: PropTypes.func.isRequired,
   openToast: PropTypes.func.isRequired,
   signedIn: PropTypes.bool.isRequired
 };

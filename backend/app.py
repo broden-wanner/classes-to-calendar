@@ -141,6 +141,7 @@ def events_endpoint():
     return json.dumps(classes)
 
 @app.route('/api/ics', methods=['POST'])
+def ics_endpoint():
     """
     Accepts classes in the request and returns an ics string with all
     the events
