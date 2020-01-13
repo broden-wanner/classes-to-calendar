@@ -12,7 +12,11 @@ jobs:
         uses: actions/setup-python@v1
         with:
           python-version: 3.6
-      - name: Install dependencies
+      - name: Install tesseract
+        run: |
+          sudo apt install tesseract-ocr
+          sudo apt install libtesseract-dev
+      - name: Install python dependencies
         run: |
           python -m pip install --upgrade pip
           cat backend/requirements.txt | xargs -n 1 pip install
