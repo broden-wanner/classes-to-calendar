@@ -5,7 +5,10 @@ except ImportError:
 import pytesseract
 import re
 import datetime
-from models import UMNClass, WEEKDAY_DICT, DAYS_OF_WEEK
+try:
+    from .models import UMNClass, WEEKDAY_DICT, DAYS_OF_WEEK
+except ModuleNotFoundError:
+    from models import UMNClass, WEEKDAY_DICT, DAYS_OF_WEEK
 
 class ParseError(Exception):
     """

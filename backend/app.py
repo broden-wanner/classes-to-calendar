@@ -1,9 +1,9 @@
 import os
 import datetime
 import json
+from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
-from dotenv import load_dotenv
 from calendar_utils.ocr import generate_umn_classes, ParseError
 from calendar_utils.models import UMNClass
 from calendar_utils.convert import to_ics_string
@@ -100,13 +100,15 @@ def upload_endpoint():
     """
     # Check if there is a file in the request
     if 'file' not in request.files:
-        raise FileError('No file is present')
+        app.logger.error('No file is present for upload')
+        raise FileError('No file is present.')
 
     image = request.files['file']
 
     # If no file is selected
     if image and image.filename == '':
-        raise FileError('No file is selected')
+        app.logger.error('No file selected for upload.')
+        raise FileError('No file is selected.')
 
     # Ensure the image has the allowable filetypes
     if image and allowed_file(image.filename):
@@ -121,11 +123,13 @@ def upload_endpoint():
             # Return the json response of the classes in an array
             return json.dumps(classes)
         except ParseError as e:
+            app.logger.error(e)
             raise ParseError(e.message)
         except Exception as e:
             app.logger.error(e)
             raise ParseError('Error extracting classes.')
     else:
+        app.logger.error(e)
         raise FileError('Invalid file type.')
 
 
