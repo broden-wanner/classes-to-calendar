@@ -2,8 +2,8 @@ import React from 'react';
 import { render } from '@testing-library/react';
 import App from './App';
 
-test('renders learn react link', () => {
-  const { getByText } = render(<App />);
-  const linkElement = getByText(/learn react/i);
-  expect(linkElement).toBeInTheDocument();
+test('renders Classes to Calendar title header', () => {
+  const { getAllByText } = render(<App />);
+  const title = getAllByText(/Classes to Calendar/i);
+  expect(title).toBeDefined();
 });
