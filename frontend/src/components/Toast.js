@@ -55,7 +55,7 @@ function Toast(props) {
       anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
       open={open}
       onClose={handleClose}
-      autoHideDuration={5000}
+      autoHideDuration={4000}
     >
       <SnackbarContent
         className={classes[variant]}

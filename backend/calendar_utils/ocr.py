@@ -99,7 +99,6 @@ def generate_umn_classes(img, start_date=None, end_date=None):
     
     # Clean the text
     text = clean_text(text)
-    print(text)
 
     c = None
     cur_day_of_week = ''

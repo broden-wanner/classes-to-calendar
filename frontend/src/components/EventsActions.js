@@ -116,7 +116,6 @@ function EventsActions(props) {
     <React.Fragment>
       <Card className={classes.card}>
         <CardContent>
-          {props.children}
           <div className={classes.actionSection}>
             <Typography variant="h6" component="h6">
               Add to Google Calendar
@@ -190,6 +189,7 @@ function EventsActions(props) {
           </div>
 
           <Divider />
+          {props.children}
 
           <div className={classes.actionSection}>
             <Typography variant="h6" component="h6">

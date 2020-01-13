@@ -16,7 +16,7 @@ const useStyles = makeStyles(theme => ({
       cursor: 'pointer'
     }
   },
-  navButton: {
+  navLink: {
     marginLeft: theme.spacing(2)
   }
 }));
@@ -35,22 +35,33 @@ function Navbar(props) {
           </span>
         </Typography>
         <Button
-          variant="outlined"
           color="inherit"
-          className={classes.navButton}
-          onClick={openInstructions}
-        >
-          Instructions
-        </Button>
-        <Button
-          variant="outlined"
-          color="inherit"
-          className={classes.navButton}
+          className={classes.navLink}
           component={Link}
           to="/upload"
           onClick={openInstructions}
         >
           Upload
+        </Button>
+        <Button color="inherit" className={classes.navLink} onClick={openInstructions}>
+          Instructions
+        </Button>
+        <Button
+          href="https://github.com/broden-wanner/classes-to-calendar/issues"
+          color="inherit"
+          className={classes.navLink}
+        >
+          Issues
+        </Button>
+        <Button
+          href="https://github.com/broden-wanner/classes-to-calendar"
+          color="inherit"
+          className={classes.navLink}
+        >
+          Github repo
+        </Button>
+        <Button href="mailto:broden.wanner@outlook.com" color="inherit" className={classes.navLink}>
+          Contact
         </Button>
       </Toolbar>
     </AppBar>

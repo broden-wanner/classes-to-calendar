@@ -44,7 +44,7 @@ export default function HomePage(props) {
               </Typography>
               <Typography variant="h5" align="center" color="textSecondary" paragraph>
                 An online app that takes an screenshot of your class schedule and enters it in
-                Google Calendar.
+                Google Calendar, or you can export it to whatever calendar you want.
               </Typography>
               <div className={classes.homeButtons}>
                 <Grid container spacing={2} justify="center">

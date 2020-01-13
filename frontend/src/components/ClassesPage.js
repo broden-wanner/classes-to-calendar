@@ -14,7 +14,6 @@ import {
 import GCalClient from '../api/GCalClient';
 import axios from 'axios';
 import EventsActions from './EventsActions';
-import { useHistory } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
   classesPage: {
@@ -61,11 +60,11 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
+// Create the gcal client outside of the function so it persists
 const gcalClient = new GCalClient();
 
 function ClassesPage(props) {
   const classes = useStyles();
-  const history = useHistory();
   const [signedIn, setSignedIn] = useState(gcalClient.signedIn);
   const [eventsStatus, setEventsStatus] = useState('unbegun');
 
@@ -109,7 +108,7 @@ function ClassesPage(props) {
               // Check to see if the last event has been created
               if (eventCounter === events.length) {
                 setEventsStatus('created');
-                history.push('/success');
+                props.openToast('Successfully create events! Check your gcal', 'success');
               }
             })
             .catch(error => {

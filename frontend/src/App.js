@@ -10,9 +10,7 @@ import HomePage from './components/HomePage';
 import UploadPage from './components/UploadPage';
 import Toast from './components/Toast';
 import ClassesPage from './components/ClassesPage';
-import SuccessPage from './components/SuccessPage';
 import InstructionDialog from './components/InstructionDialog';
-import Footer from './components/Footer';
 
 const appTheme = createMuiTheme({
   palette: {
@@ -119,9 +117,6 @@ function App() {
             <Route exact path="/upload">
               <UploadPage openToast={handleToastOpen} handleClasses={handleExtractedClasses} />
             </Route>
-            <Route exact path="/success">
-              <SuccessPage />
-            </Route>
             <ClassesRequiredRoute exact path="/classes">
               <ClassesPage
                 extractedClasses={extractedClasses}
@@ -137,7 +132,6 @@ function App() {
             />
             <InstructionDialog open={instructionsOpen} onClose={handleInstructionsClose} />
           </Router>
-          <Footer />
         </div>
       </ThemeProvider>
     </React.Fragment>
