@@ -37,14 +37,14 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: fade(theme.palette.grey[900], 0.4)
   },
   content: {
-    marginTop: '15vh'
+    marginTop: '10vh',
+    marginBottom: '10vh'
   },
   classesContainer: {
     display: 'flex'
   },
   classList: {
-    flex: 3,
-    paddingBottom: theme.spacing(3)
+    flex: 3
   },
   actionCol: {
     flex: 2,

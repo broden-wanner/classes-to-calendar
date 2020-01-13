@@ -12,6 +12,7 @@ import Toast from './components/Toast';
 import ClassesPage from './components/ClassesPage';
 import SuccessPage from './components/SuccessPage';
 import InstructionDialog from './components/InstructionDialog';
+import Footer from './components/Footer';
 
 const appTheme = createMuiTheme({
   palette: {
@@ -84,10 +85,16 @@ function App() {
     setToastVariant(variant);
   };
 
+  /**
+   * Simply opens the instructions modal
+   */
   const handleInstructionsOpen = () => {
     setInstructionsOpen(true);
   };
 
+  /**
+   * Simply closes the instructions modal
+   */
   const handleInstructionsClose = () => {
     setInstructionsOpen(false);
   };
@@ -130,6 +137,7 @@ function App() {
             />
             <InstructionDialog open={instructionsOpen} onClose={handleInstructionsClose} />
           </Router>
+          <Footer />
         </div>
       </ThemeProvider>
     </React.Fragment>
