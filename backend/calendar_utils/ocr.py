@@ -60,8 +60,8 @@ def ocr_png_to_str_list(input_image):
     text = pytesseract.image_to_string(input_image, output_type=pytesseract.Output.STRING)
     # Replace newlines with spaces for the splitting
     text = text.replace('\n', ' ')
-    # Return a list of the strings that are not whitespace or empty strings
-    return [s for s in text.split(' ') if s and not s.isspace()]
+    # Return a list of the strings
+    return text.split(' ')
 
 
 def clean_text(text):
@@ -71,19 +71,20 @@ def clean_text(text):
     """
     assert len(text) > 0
     i = 0
-    # Handle hyphens
+    # Handle hyphens and 'AM' and 'PM' text
     while i < len(text):
         if not is_room_num(text[i]) and is_time(text[i]):
-            strings = re.split(r'(-)', text[i])
+            strings = re.split(r'(-|AM|PM)', text[i])
             # Add the split strings to the list at that place
-            if len(strings) > 1:
-                text.pop(i)
-                text[i:i] = strings
-                i += len(strings)
-
+            text.pop(i)
+            text[i:i] = strings
+            i += len(strings)
         i += 1
 
-    return [s for s in text if s]
+    # Handle empty strings and 'No classes scheduled' text
+    text = [s for s in text if s and s not in ['No', 'scheduled', 'classes']]
+
+    return text
 
 def generate_umn_classes(img, start_date=None, end_date=None):
     """
@@ -95,8 +96,10 @@ def generate_umn_classes(img, start_date=None, end_date=None):
     """
     # Get the list of strings from the image
     text = ocr_png_to_str_list(img)
+    
     # Clean the text
     text = clean_text(text)
+    print(text)
 
     c = None
     cur_day_of_week = ''
@@ -106,9 +109,15 @@ def generate_umn_classes(img, start_date=None, end_date=None):
 
     while i < length:
         # Get the day of the week
-        if text[i] in DAYS_OF_WEEK:
+        while text[i] in DAYS_OF_WEEK:
+            # Go to place where next text isn't a day of the week
             cur_day_of_week = text[i]
             i += 1
+            if i >= len(text) - 1:
+                break
+        if i >= len(text) - 1:
+            # Special case for if there are no classes at the end of the week
+            break
 
         # Start a new class
         c = UMNClass()
@@ -123,6 +132,7 @@ def generate_umn_classes(img, start_date=None, end_date=None):
         # Section number
         found = re.search(r'^\((\d{3})\)$', text[i])
         if not found:
+            print(text[i])
             raise ParseError('No section found.')
         c.section = found.group(1)
         i += 1
@@ -178,7 +188,7 @@ def generate_umn_classes(img, start_date=None, end_date=None):
 
 if __name__ == '__main__':
     # Test
-    classes = generate_umn_classes(img=Image.open('example-images/old-calendar.png'),
+    classes = generate_umn_classes(img=Image.open('example-images/no-classes-end.png'),
                                    start_date=datetime.date(year=2020, month=1, day=21),
                                    end_date=datetime.date(year=2020, month=5, day=4))
     for c in classes:
