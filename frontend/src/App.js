@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
@@ -41,11 +41,19 @@ const useStyles = makeStyles(theme => ({
 
 function App() {
   const classes = useStyles();
-  const [extractedClasses, setExtractedClasses] = useState([]);
+  // Attempt to get the local classes on init
+  const [extractedClasses, setExtractedClasses] = useState(
+    JSON.parse(localStorage.getItem('extractedClasses')) || []
+  );
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState('');
   const [toastVariant, setToastVariant] = useState('error');
   const [instructionsOpen, setInstructionsOpen] = useState(false);
+
+  useEffect(() => {
+    // Set the extracted classes locally on any change
+    localStorage.setItem('extractedClasses', JSON.stringify(extractedClasses));
+  }, [extractedClasses]);
 
   /**
    * Function to be passed to the upload component to set the classes on the app
@@ -62,6 +70,7 @@ function App() {
     const i = extractedClasses.indexOf(cls);
     extractedClasses.splice(i, 1, cls);
     setExtractedClasses(extractedClasses);
+    localStorage.setItem('extractedClasses', JSON.stringify(extractedClasses));
   };
 
   /**

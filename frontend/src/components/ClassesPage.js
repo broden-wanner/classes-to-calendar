@@ -36,6 +36,7 @@ const useStyles = makeStyles(theme => ({
     backgroundColor: fade(theme.palette.grey[900], 0.4)
   },
   content: {
+    height: 'max-content',
     marginTop: '10vh',
     marginBottom: '10vh'
   },
