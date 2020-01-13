@@ -5,6 +5,7 @@ except ImportError:
 import pytesseract
 import re
 import datetime
+import pickle
 try:
     from .models import UMNClass, WEEKDAY_DICT, DAYS_OF_WEEK
 except ModuleNotFoundError:
@@ -187,8 +188,9 @@ def generate_umn_classes(img, start_date=None, end_date=None):
 
 if __name__ == '__main__':
     # Test
-    classes = generate_umn_classes(img=Image.open('example-images/no-classes-end.png'),
+    classes = generate_umn_classes(img=Image.open('test-images/no-classes-end.png'),
                                    start_date=datetime.date(year=2020, month=1, day=21),
                                    end_date=datetime.date(year=2020, month=5, day=4))
+    pickle.dump(classes, open('true-classes-output/no-classes-end.p', 'wb'))
     for c in classes:
         print(c)
