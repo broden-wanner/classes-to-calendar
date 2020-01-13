@@ -10,9 +10,7 @@ Have a question? Rather than opening an issue, please ask away on the wiki.
 
 ## Providing Feedback
 
-Your comments and feedback are welcome, and the development team is available via a handful of different channels.
-
-See the [Feedback Channels](https://github.com/broden-wanner/classes-to-calendar/wiki/Feedback-Channels) wiki page for details on how to share your thoughts.
+Your comments and feedback are welcome. Please fill out an issue on the issues tab.
 
 ## Reporting Issues
 
