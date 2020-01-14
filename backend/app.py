@@ -165,9 +165,9 @@ def google_config_endpoint():
     Sends the google calendar api config to the frontend
     """
     return json.dumps({
-        'clientId': os.getenv('GOOGLE_CLIENT_ID'),
-        'apiKey': os.getenv('GOOGLE_API_KEY'),
-        'scope': 'https://www.googleapis.com/auth/calendar',
+        'clientId': os.getenv('ACTUAL_GOOGLE_CLIENT_ID'),
+        'apiKey': os.getenv('ACTUAL_GOOGLE_CALENDAR_API_KEY'),
+        'scope': os.getenv('ACTUAL_GOOGLE_SCOPE'),
         'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest']
     })
 

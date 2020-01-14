@@ -5,6 +5,7 @@ class GCalClient {
   gapi = null;
   onLoadCallback = null;
   calendar = null;
+  GoogleAuth = null;
 
   constructor() {
     this.initClient = this.initClient.bind(this);
@@ -14,29 +15,51 @@ class GCalClient {
     this.handleClientLoad();
   }
 
+  /**
+   * Gets the api config from the backend
+   */
   async getConfig() {
     return await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/google-config`);
   }
 
+  /**
+   * Performs the inital auth setup:
+   * Gets the config and initializes the Google API client
+   * Sets the GoogleAuth object and listens for signedIn status
+   */
   async initClient() {
     this.gapi = window['gapi'];
     const config = await this.getConfig();
     this.gapi.client
       .init(config.data)
       .then(() => {
+        // Get the google auth instance
+        this.GoogleAuth = this.gapi.auth2.getAuthInstance();
+        if (!this.GoogleAuth) {
+          throw new Error('Could not authorize Google API');
+        }
+
         // Listen for sign-in state changes.
-        this.gapi.auth2.getAuthInstance().isSignedIn.listen(this.updateSigninStatus);
+        this.GoogleAuth.isSignedIn.listen(this.updateSigninStatus);
+
         // Handle the initial sign-in state.
-        this.updateSigninStatus(this.gapi.auth2.getAuthInstance().isSignedIn.get());
+        this.updateSigninStatus(this.GoogleAuth.isSignedIn.get());
+
+        // Call the callback
         if (this.onLoadCallback) {
           this.onLoadCallback(this.signedIn);
         }
       })
       .catch(e => {
+        console.error('Error in setting up the google client:');
         console.error(e);
       });
   }
 
+  /**
+   * Add the Google API Client script to the DOM and load.
+   * When done loading, call this.initClient
+   */
   handleClientLoad() {
     this.gapi = window['gapi'];
     var script = document.createElement('script');
@@ -47,22 +70,42 @@ class GCalClient {
     };
   }
 
+  /**
+   * Signs the users in using the GoogleAuth object
+   */
   handleAuthClick() {
-    if (this.gapi) {
-      this.gapi.auth2.getAuthInstance().signIn();
+    if (this.GoogleAuth) {
+      this.GoogleAuth.signIn();
     } else {
-      console.log('Error: this.gapi not loaded');
+      console.error('App not authorized with Google');
     }
   }
 
+  /**
+   * Callback to be passed into the listen state to update the signed in status
+   * @param {boolean} isSignedIn
+   */
   updateSigninStatus(isSignedIn) {
     this.signedIn = isSignedIn;
+    // Call the callback
+    if (this.onLoadCallback) {
+      this.onLoadCallback(isSignedIn);
+    }
   }
 
+  /**
+   * Gets the calendar list of the user.
+   * @returns {Promise}
+   */
   listCalendars() {
     return this.gapi.client.calendar.calendarList.list();
   }
 
+  /**
+   * Creates a new calendar for the user
+   * @param {string} name - name of the new calendar to create
+   * @returns {Promise}
+   */
   createCalendar(name) {
     const calendar = {
       summary: name,
@@ -74,6 +117,10 @@ class GCalClient {
     });
   }
 
+  /**
+   * Adds a new event to the calendar specificed by this.calendar
+   * @param {object} event - the event to add to a calendar
+   */
   createEvent(event) {
     return this.gapi.client.calendar.events.insert({
       calendarId: this.calendar.id,
@@ -81,6 +128,10 @@ class GCalClient {
     });
   }
 
+  /**
+   * Sets the calendar on the client
+   * @param {object} calendar - calendar object
+   */
   setCalendar(calendar) {
     this.calendar = calendar;
   }
