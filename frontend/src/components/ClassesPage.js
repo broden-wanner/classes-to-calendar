@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState } from 'react';
 import PropTypes from 'prop-types';
 import UMNClass from './UMNClass';
 import {
@@ -8,14 +8,15 @@ import {
   fade,
   Card,
   CardContent,
-  withStyles
+  makeStyles
 } from '@material-ui/core';
 
 import GCalClient from '../api/GCalClient';
 import axios from 'axios';
 import EventsActions from './EventsActions';
+import { Redirect } from 'react-router-dom';
 
-const styles = theme => ({
+const useStyles = makeStyles(theme => ({
   classesPage: {
     display: 'flex',
     width: '100%',
@@ -59,33 +60,30 @@ const styles = theme => ({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0
   }
-});
+}));
 
 // Create the gcal client outside of the function so it persists
 const gcalClient = new GCalClient();
 
-class ClassesPage extends React.Component {
-  constructor(props) {
-    super(props);
-    this.state = {
-      signedIn: gcalClient.signedIn,
-      eventsStatus: 'unbegun'
-    };
-    // Set the gcal client to set the signed in status once finished
-    gcalClient.onLoadCallback = status => {
-      this.setState(() => ({ signedIn: status }));
-    };
+function ClassesPage(props) {
+  const classes = useStyles();
+  const [signedIn, setSignedIn] = useState(gcalClient.signedIn);
+  const [eventsStatus, setEventsStatus] = useState('unbegun');
 
-    // Redirect to the home page if there are no classes
-    if (this.props.extractedClasses.length === 0) {
-      this.props.history.push('/');
-    }
+  // Set the gcal client to set the signed in status once finished
+  gcalClient.onLoadCallback = status => {
+    setSignedIn(status);
+  };
+
+  // Redirect to homepage if there are no classes
+  if (props.extractedClasses.length === 0) {
+    return <Redirect to="/" />;
   }
 
   /**
    * Authorizes the user with Google Calendar through the api
    */
-  authorizeGcal = () => {
+  const authorizeGcal = () => {
     gcalClient.handleAuthClick();
   };
 
@@ -93,17 +91,17 @@ class ClassesPage extends React.Component {
    * Sends the classes back to the server to serialize into events.
    * Then takes these events and adds them to the calendar.
    */
-  createEvents = () => {
+  const createEvents = () => {
     // Ensure there is a calendar to add to
     if (!gcalClient.calendar) {
-      this.props.openToast('A calendar must be selected', 'error');
+      props.openToast('A calendar must be selected', 'error');
     }
 
     // Make the requrest to server for the events
     let events = [];
     let eventCounter = 0;
     axios
-      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/events`, this.props.extractedClasses)
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/events`, props.extractedClasses)
       .then(res => {
         events = res.data;
         // Add each event to the calendar on the gcalClient
@@ -114,18 +112,18 @@ class ClassesPage extends React.Component {
               eventCounter++;
               // Check to see if the last event has been created
               if (eventCounter === events.length) {
-                this.setState(() => ({ eventsStatus: 'created' }));
-                this.props.openToast('Successfully create events! Check your gcal', 'success');
+                setEventsStatus('created');
+                props.openToast('Successfully create events! Check your gcal', 'success');
               }
             })
             .catch(error => {
-              this.props.openToast('Could not create event ' + event.summary, 'error');
+              props.openToast('Could not create event ' + event.summary, 'error');
               console.error(error);
             });
         });
       })
       .catch(error => {
-        this.props.openToast(error.message, 'error');
+        props.openToast(error.message, 'error');
         console.error(error);
       });
   };
@@ -134,7 +132,7 @@ class ClassesPage extends React.Component {
    * Either creates a new calendar or sets one on the client.
    * Returns a promise for the next steps.
    */
-  setCalendar = (calOption, name, calendar) => {
+  const setCalendar = (calOption, name, calendar) => {
     if (calOption === 'new') {
       // Create a new calendar with the api
       if (!name) {
@@ -159,16 +157,15 @@ class ClassesPage extends React.Component {
    * the events to there. Will not work if the user has not authorized
    * Gcal.
    */
-  sendToGcal = (calOption, newCalendarName, existingCalendar) => {
-    this.setState(() => ({ eventsStatus: 'creating' }));
-    this.setCalendar(calOption, newCalendarName, existingCalendar)
+  const sendToGcal = (calOption, newCalendarName, existingCalendar) => {
+    setEventsStatus('creating');
+    setCalendar(calOption, newCalendarName, existingCalendar)
       .then(() => {
         // Add the events to the calendar once successful
-        this.createEvents();
+        createEvents();
       })
       .catch(error => {
-        this.props.openToast('Could not create or add to calendar.', 'error');
-        console.error(error);
+        props.openToast('Could not create or add to calendar.', 'error');
       });
   };
 
@@ -176,9 +173,9 @@ class ClassesPage extends React.Component {
    * Sends the updated events back to the server, which converts them
    * to icalendar events. This function then creates a download.
    */
-  exportCalendar = () => {
+  const exportCalendar = () => {
     axios
-      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/ics`, this.props.extractedClasses)
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/ics`, props.extractedClasses)
       .then(res => {
         const icsString = res.data.ics;
         // Create an invisible link element to download the file
@@ -194,54 +191,51 @@ class ClassesPage extends React.Component {
         document.body.removeChild(element);
       })
       .catch(error => {
-        this.props.openToast('Could create ics file. Please try again.', 'error');
+        props.openToast('Could create ics file. Please try again.', 'error');
         console.error(error);
       });
   };
 
-  render() {
-    const { classes } = this.props;
-    return (
-      <div className={classes.classesPage}>
-        <Container className={classes.content}>
-          <Container className={classes.header}>
-            <Typography variant="h2" align="center" component="h1" color="inherit">
-              Review Classes
-            </Typography>
-          </Container>
-          <Container className={classes.classesContainer}>
-            <div className={classes.classList}>
-              <Card className={classes.classesInfo}>
-                <CardContent style={{ paddingBottom: '16px' }}>
-                  The classes extracted from your screenshot are below. Review and edit the info for
-                  each class by clicking on it and changing anything that's incorrect.
-                </CardContent>
-              </Card>
-              {this.props.extractedClasses.map(cls => (
-                <UMNClass key={cls.id} cls={cls} handleClassChange={this.props.handleClassChange} />
-              ))}
-            </div>
-            <div className={classes.actionCol}>
-              <EventsActions
-                sendToGcal={this.sendToGcal}
-                authorizeGcal={this.authorizeGcal}
-                gcalClient={gcalClient}
-                exportCalendar={this.exportCalendar}
-                signedIn={this.state.signedIn}
-                openToast={this.props.openToast}
-              >
-                {this.state.eventsStatus === 'creating' && (
-                  <div className={classes.loadingOverlay}>
-                    <CircularProgress />
-                  </div>
-                )}
-              </EventsActions>
-            </div>
-          </Container>
+  return (
+    <div className={classes.classesPage}>
+      <Container className={classes.content}>
+        <Container className={classes.header}>
+          <Typography variant="h2" align="center" component="h1" color="inherit">
+            Review Classes
+          </Typography>
         </Container>
-      </div>
-    );
-  }
+        <Container className={classes.classesContainer}>
+          <div className={classes.classList}>
+            <Card className={classes.classesInfo}>
+              <CardContent style={{ paddingBottom: '16px' }}>
+                The classes extracted from your screenshot are below. Review and edit the info for
+                each class by clicking on it and changing anything that's incorrect.
+              </CardContent>
+            </Card>
+            {props.extractedClasses.map(cls => (
+              <UMNClass key={cls.id} cls={cls} handleClassChange={props.handleClassChange} />
+            ))}
+          </div>
+          <div className={classes.actionCol}>
+            <EventsActions
+              sendToGcal={sendToGcal}
+              authorizeGcal={authorizeGcal}
+              gcalClient={gcalClient}
+              exportCalendar={exportCalendar}
+              signedIn={signedIn}
+              openToast={props.openToast}
+            >
+              {eventsStatus === 'creating' && (
+                <div className={classes.loadingOverlay}>
+                  <CircularProgress />
+                </div>
+              )}
+            </EventsActions>
+          </div>
+        </Container>
+      </Container>
+    </div>
+  );
 }
 
 ClassesPage.propTypes = {
@@ -250,4 +244,4 @@ ClassesPage.propTypes = {
   openToast: PropTypes.func.isRequired
 };
 
-export default withStyles(styles)(ClassesPage);
+export default ClassesPage;
