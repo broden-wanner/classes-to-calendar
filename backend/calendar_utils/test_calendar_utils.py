@@ -50,3 +50,15 @@ class TestCalendarUtils:
         assert len(true_classes) == len(classes)
         for i in range(len(true_classes)):
             assert true_classes[i] in classes
+
+    def test_calendar_parsing_with_tba(self):
+        f = open('calendar_utils/true-classes-output/tba-calendar.p', 'rb')
+        true_classes = pickle.load(f)
+
+        classes = generate_umn_classes(img=Image.open('calendar_utils/test-images/tba-calendar.png'),
+                                       start_date=datetime.date(year=2020, month=1, day=21),
+                                       end_date=datetime.date(year=2020, month=5, day=4))
+
+        assert len(true_classes) == len(classes)
+        for i in range(len(true_classes)):
+            assert true_classes[i] in classes

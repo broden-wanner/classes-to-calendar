@@ -6,6 +6,7 @@ import pytesseract
 import re
 import datetime
 import pickle
+import sys
 try:
     from .models import UMNClass, WEEKDAY_DICT, DAYS_OF_WEEK
 except ModuleNotFoundError:
@@ -15,11 +16,15 @@ class ParseError(Exception):
     """
     Class for error raised when parsing the text from the ocr reader
     """
-    def __init__(self, message):
+    def __init__(self, message, text=None):
         self.message = str(message)
+        self.text = text
     
     def __str__(self):
-        return self.message
+        if self.text:
+            return f'{self.message} in `{self.text}`'
+        else:
+            return self.message
 
     def to_dict(self):
         return {'message': self.message}
@@ -33,7 +38,7 @@ def is_time(text):
 def is_room_num(text):
     """ Helper functiont to determine if the string is a room number at the U """
     room_regexes = [
-        r'^\d{2,4}$',
+        r'^\d{2,4}\.?$',
         r'^\d-\d{3}$',
         r'^\w\d{2,}$'
     ]
@@ -87,7 +92,7 @@ def clean_text(text):
 
     return text
 
-def generate_umn_classes(img, start_date=None, end_date=None):
+def generate_umn_classes(img, start_date=None, end_date=None, debug=False):
     """
     Calls the ocr function on the image specified by img and gets the
     extracted text. Then parses the list of strings to form the classes on the
@@ -97,9 +102,12 @@ def generate_umn_classes(img, start_date=None, end_date=None):
     """
     # Get the list of strings from the image
     text = ocr_png_to_str_list(img)
-    
+
     # Clean the text
     text = clean_text(text)
+
+    if debug:
+        print('[DEBUG] Cleaned text:', text)
 
     c = None
     cur_day_of_week = ''
@@ -132,8 +140,7 @@ def generate_umn_classes(img, start_date=None, end_date=None):
         # Section number
         found = re.search(r'^\((\d{3})\)$', text[i])
         if not found:
-            print(text[i])
-            raise ParseError('No section found.')
+            raise ParseError('No section found', text[i])
         c.section = found.group(1)
         i += 1
 
@@ -158,10 +165,15 @@ def generate_umn_classes(img, start_date=None, end_date=None):
         # Location
         c.location = text[i]
         i += 1
-        while i < length - 1 and not is_room_num(text[i]):
-            c.location += ' ' + text[i]
-            i += 1
-        c.location += ' ' + text[i]  # Add the room number to the end
+        # Special case when the location is TBA
+        if c.location != 'TBA':
+            while i < length - 1 and not is_room_num(text[i]):
+                c.location += ' ' + text[i]
+                i += 1
+            # Special case when the room number ends with a period
+            if text[i][-1] == '.':
+                text[i] = text[i][:-1]
+            c.location += ' ' + text[i]  # Add the room number to the end
 
         # Add the class to the set. If it's already in the set,
         # add this day of the week to the set on the class
@@ -169,10 +181,14 @@ def generate_umn_classes(img, start_date=None, end_date=None):
             for existing_class in classes:
                 if c == existing_class:
                     existing_class.days_of_week.append(cur_day_of_week)
+                    if debug:
+                        print(existing_class)
                     break
         else:
             c.set_times()  # Set the times to datetime objects
             classes.add(c)
+            if debug:
+                print(c)
 
         i += 1
 
@@ -188,9 +204,11 @@ def generate_umn_classes(img, start_date=None, end_date=None):
 
 if __name__ == '__main__':
     # Test
-    classes = generate_umn_classes(img=Image.open('test-images/no-classes-end.png'),
+    filename = 'tba-calendar'
+    classes = generate_umn_classes(img=Image.open(f'test-images/{filename}.png'),
                                    start_date=datetime.date(year=2020, month=1, day=21),
-                                   end_date=datetime.date(year=2020, month=5, day=4))
-    pickle.dump(classes, open('true-classes-output/no-classes-end.p', 'wb'))
-    for c in classes:
-        print(c)
+                                   end_date=datetime.date(year=2020, month=5, day=4),
+                                   debug=True)
+
+    if len(sys.argv) > 1 and sys.argv[1] == '--pickle':
+        pickle.dump(classes, open(f'true-classes-output/{filename}.p', 'wb'))
