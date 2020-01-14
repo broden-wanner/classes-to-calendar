@@ -190,7 +190,9 @@ def generate_umn_classes(img, start_date=None, end_date=None, debug=False):
             if debug:
                 print(c)
 
-        i += 1
+        # Do not increment if at a day of the week
+        if not text[i] in DAYS_OF_WEEK:
+            i += 1
 
     if start_date and end_date:
         # Must be done after all the class days have been assigned
