@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import { BrowserRouter as Router, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter as Router, Route } from 'react-router-dom';
 
 import CssBaseline from '@material-ui/core/CssBaseline';
 import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
@@ -106,13 +106,6 @@ function App() {
     setInstructionsOpen(false);
   };
 
-  /**
-   * Generates a route component that will only be rendered if there are classes
-   */
-  const ClassesRequiredRoute = ({ component, children, ...rest }) => (
-    <Route {...rest}>{extractedClasses.length !== 0 ? children : <Redirect to="/" />}</Route>
-  );
-
   return (
     <React.Fragment>
       <CssBaseline />
@@ -126,21 +119,21 @@ function App() {
             <Route exact path="/upload">
               <UploadPage openToast={handleToastOpen} handleClasses={handleExtractedClasses} />
             </Route>
-            <ClassesRequiredRoute exact path="/classes">
+            <Route exact path="/classes">
               <ClassesPage
                 extractedClasses={extractedClasses}
                 handleClassChange={handleClassChange}
                 openToast={handleToastOpen}
               />
-            </ClassesRequiredRoute>
-            <Toast
-              open={toastOpen}
-              handleClose={handleToastClose}
-              message={toastMessage}
-              variant={toastVariant}
-            />
-            <InstructionDialog open={instructionsOpen} onClose={handleInstructionsClose} />
+            </Route>
           </Router>
+          <InstructionDialog open={instructionsOpen} onClose={handleInstructionsClose} />
+          <Toast
+            open={toastOpen}
+            handleClose={handleToastClose}
+            message={toastMessage}
+            variant={toastVariant}
+          />
         </div>
       </ThemeProvider>
     </React.Fragment>

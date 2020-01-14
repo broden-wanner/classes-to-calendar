@@ -75,6 +75,11 @@ class ClassesPage extends React.Component {
     gcalClient.onLoadCallback = status => {
       this.setState(() => ({ signedIn: status }));
     };
+
+    // Redirect to the home page if there are no classes
+    if (this.props.extractedClasses.length === 0) {
+      this.props.history.push('/');
+    }
   }
 
   /**
