@@ -1,21 +1,21 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import PropTypes from 'prop-types';
 import UMNClass from './UMNClass';
 import {
-  makeStyles,
   Container,
   Typography,
   CircularProgress,
   fade,
   Card,
-  CardContent
+  CardContent,
+  withStyles
 } from '@material-ui/core';
 
 import GCalClient from '../api/GCalClient';
 import axios from 'axios';
 import EventsActions from './EventsActions';
 
-const useStyles = makeStyles(theme => ({
+const styles = theme => ({
   classesPage: {
     display: 'flex',
     width: '100%',
@@ -59,27 +59,28 @@ const useStyles = makeStyles(theme => ({
     borderBottomLeftRadius: 0,
     borderBottomRightRadius: 0
   }
-}));
+});
 
 // Create the gcal client outside of the function so it persists
 const gcalClient = new GCalClient();
 
-function ClassesPage(props) {
-  const classes = useStyles();
-  const [signedIn, setSignedIn] = useState(gcalClient.signedIn);
-  const [eventsStatus, setEventsStatus] = useState('unbegun');
-
-  useEffect(() => {
+class ClassesPage extends React.Component {
+  constructor(props) {
+    super(props);
+    this.state = {
+      signedIn: gcalClient.signedIn,
+      eventsStatus: 'unbegun'
+    };
     // Set the gcal client to set the signed in status once finished
     gcalClient.onLoadCallback = status => {
-      setSignedIn(status);
+      this.setState(() => ({ signedIn: status }));
     };
-  }, []);
+  }
 
   /**
    * Authorizes the user with Google Calendar through the api
    */
-  const authorizeGcal = () => {
+  authorizeGcal = () => {
     gcalClient.handleAuthClick();
   };
 
@@ -87,17 +88,17 @@ function ClassesPage(props) {
    * Sends the classes back to the server to serialize into events.
    * Then takes these events and adds them to the calendar.
    */
-  const createEvents = () => {
+  createEvents = () => {
     // Ensure there is a calendar to add to
     if (!gcalClient.calendar) {
-      props.openToast('A calendar must be selected', 'error');
+      this.props.openToast('A calendar must be selected', 'error');
     }
 
     // Make the requrest to server for the events
     let events = [];
     let eventCounter = 0;
     axios
-      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/events`, props.extractedClasses)
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/events`, this.props.extractedClasses)
       .then(res => {
         events = res.data;
         // Add each event to the calendar on the gcalClient
@@ -108,18 +109,18 @@ function ClassesPage(props) {
               eventCounter++;
               // Check to see if the last event has been created
               if (eventCounter === events.length) {
-                setEventsStatus('created');
-                props.openToast('Successfully create events! Check your gcal', 'success');
+                this.setState(() => ({ eventsStatus: 'created' }));
+                this.props.openToast('Successfully create events! Check your gcal', 'success');
               }
             })
             .catch(error => {
-              props.openToast('Could not create event ' + event.summary, 'error');
+              this.props.openToast('Could not create event ' + event.summary, 'error');
               console.error(error);
             });
         });
       })
       .catch(error => {
-        props.openToast(error.message, 'error');
+        this.props.openToast(error.message, 'error');
         console.error(error);
       });
   };
@@ -128,7 +129,7 @@ function ClassesPage(props) {
    * Either creates a new calendar or sets one on the client.
    * Returns a promise for the next steps.
    */
-  const setCalendar = (calOption, name, calendar) => {
+  setCalendar = (calOption, name, calendar) => {
     if (calOption === 'new') {
       // Create a new calendar with the api
       if (!name) {
@@ -153,15 +154,16 @@ function ClassesPage(props) {
    * the events to there. Will not work if the user has not authorized
    * Gcal.
    */
-  const sendToGcal = (calOption, newCalendarName, existingCalendar) => {
-    setEventsStatus('creating');
-    setCalendar(calOption, newCalendarName, existingCalendar)
+  sendToGcal = (calOption, newCalendarName, existingCalendar) => {
+    this.setState(() => ({ eventsStatus: 'creating' }));
+    this.setCalendar(calOption, newCalendarName, existingCalendar)
       .then(() => {
         // Add the events to the calendar once successful
-        createEvents();
+        this.createEvents();
       })
       .catch(error => {
-        props.openToast('Could not create or add to calendar.', 'error');
+        this.props.openToast('Could not create or add to calendar.', 'error');
+        console.error(error);
       });
   };
 
@@ -169,9 +171,9 @@ function ClassesPage(props) {
    * Sends the updated events back to the server, which converts them
    * to icalendar events. This function then creates a download.
    */
-  const exportCalendar = () => {
+  exportCalendar = () => {
     axios
-      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/ics`, props.extractedClasses)
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/ics`, this.props.extractedClasses)
       .then(res => {
         const icsString = res.data.ics;
         // Create an invisible link element to download the file
@@ -187,51 +189,54 @@ function ClassesPage(props) {
         document.body.removeChild(element);
       })
       .catch(error => {
-        props.openToast('Could create ics file. Please try again.', 'error');
+        this.props.openToast('Could create ics file. Please try again.', 'error');
         console.error(error);
       });
   };
 
-  return (
-    <div className={classes.classesPage}>
-      <Container className={classes.content}>
-        <Container className={classes.header}>
-          <Typography variant="h2" align="center" component="h1" color="inherit">
-            Review Classes
-          </Typography>
+  render() {
+    const { classes } = this.props;
+    return (
+      <div className={classes.classesPage}>
+        <Container className={classes.content}>
+          <Container className={classes.header}>
+            <Typography variant="h2" align="center" component="h1" color="inherit">
+              Review Classes
+            </Typography>
+          </Container>
+          <Container className={classes.classesContainer}>
+            <div className={classes.classList}>
+              <Card className={classes.classesInfo}>
+                <CardContent style={{ paddingBottom: '16px' }}>
+                  The classes extracted from your screenshot are below. Review and edit the info for
+                  each class by clicking on it and changing anything that's incorrect.
+                </CardContent>
+              </Card>
+              {this.props.extractedClasses.map(cls => (
+                <UMNClass key={cls.id} cls={cls} handleClassChange={this.props.handleClassChange} />
+              ))}
+            </div>
+            <div className={classes.actionCol}>
+              <EventsActions
+                sendToGcal={this.sendToGcal}
+                authorizeGcal={this.authorizeGcal}
+                gcalClient={gcalClient}
+                exportCalendar={this.exportCalendar}
+                signedIn={this.state.signedIn}
+                openToast={this.props.openToast}
+              >
+                {this.state.eventsStatus === 'creating' && (
+                  <div className={classes.loadingOverlay}>
+                    <CircularProgress />
+                  </div>
+                )}
+              </EventsActions>
+            </div>
+          </Container>
         </Container>
-        <Container className={classes.classesContainer}>
-          <div className={classes.classList}>
-            <Card className={classes.classesInfo}>
-              <CardContent style={{ paddingBottom: '16px' }}>
-                The classes extracted from your screenshot are below. Review and edit the info for
-                each class by clicking on it and changing anything that's incorrect.
-              </CardContent>
-            </Card>
-            {props.extractedClasses.map(cls => (
-              <UMNClass key={cls.id} cls={cls} handleClassChange={props.handleClassChange} />
-            ))}
-          </div>
-          <div className={classes.actionCol}>
-            <EventsActions
-              sendToGcal={sendToGcal}
-              authorizeGcal={authorizeGcal}
-              gcalClient={gcalClient}
-              exportCalendar={exportCalendar}
-              signedIn={signedIn}
-              openToast={props.openToast}
-            >
-              {eventsStatus === 'creating' && (
-                <div className={classes.loadingOverlay}>
-                  <CircularProgress />
-                </div>
-              )}
-            </EventsActions>
-          </div>
-        </Container>
-      </Container>
-    </div>
-  );
+      </div>
+    );
+  }
 }
 
 ClassesPage.propTypes = {
@@ -240,4 +245,4 @@ ClassesPage.propTypes = {
   openToast: PropTypes.func.isRequired
 };
 
-export default ClassesPage;
+export default withStyles(styles)(ClassesPage);
