@@ -38,7 +38,7 @@ def is_time(text):
 def is_room_num(text):
     """ Helper functiont to determine if the string is a room number at the U """
     room_regexes = [
-        r'^\d{2,4}\.?$',
+        r'^\d{2,4}.?$',
         r'^\d-\d{3}$',
         r'^\w\d{2,}$'
     ]
@@ -206,7 +206,7 @@ def generate_umn_classes(img, start_date=None, end_date=None, debug=False):
 
 if __name__ == '__main__':
     # Test
-    filename = 'tba-calendar'
+    filename = 'calendar4'
     classes = generate_umn_classes(img=Image.open(f'test-images/{filename}.png'),
                                    start_date=datetime.date(year=2020, month=1, day=21),
                                    end_date=datetime.date(year=2020, month=5, day=4),
