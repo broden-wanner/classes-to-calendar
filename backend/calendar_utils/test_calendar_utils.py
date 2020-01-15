@@ -18,10 +18,11 @@ class TestCalendarUtils:
         f = open(f'calendar_utils/true-classes-output/{name}.p', 'rb')
         true_classes = pickle.load(f)
 
-        classes = generate_umn_classes(img=Image.open(f'calendar_utils/test-images/{name}.png'),
+        results = generate_umn_classes(img=Image.open(f'calendar_utils/test-images/{name}.png'),
                                        start_date=datetime.date(year=2020, month=1, day=21),
                                        end_date=datetime.date(year=2020, month=5, day=4))
-
+        classes = results['classes']
+        assert results['extracted_all'] == True
         assert len(true_classes) == len(classes)
         for i in range(len(true_classes)):
             assert true_classes[i] in classes
