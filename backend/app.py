@@ -114,17 +114,21 @@ def upload_endpoint():
     if image and allowed_file(image.filename):
         try:
             # Get the classes in the image
-            classes = generate_umn_classes(img=Image.open(image),
+            result = generate_umn_classes(img=Image.open(image),
                                         start_date=datetime.date(year=2020, month=1, day=21),
                                         end_date=datetime.date(year=2020, month=5, day=4))
+
             # Change each class into a json serializeable dictionary
-            classes.sort(key=lambda c: c.name)
-            classes = [c.serialize() for c in classes]
+            result['classes'].sort(key=lambda c: c.name)
+            result['classes'] = [c.serialize() for c in result['classes']]
+
+            # Log an error if there is one
+            if result['extracted_all'] == False:
+                app.logger.error(f'Parse error: {result["message"]}')
+
             # Return the json response of the classes in an array
-            return json.dumps(classes)
-        except ParseError as e:
-            app.logger.error(e)
-            raise ParseError(e.message)
+            return json.dumps(result)
+
         except Exception as e:
             app.logger.error(e)
             raise ParseError('Error extracting classes.')

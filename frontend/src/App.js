@@ -69,8 +69,38 @@ function App() {
   const handleClassChange = cls => {
     const i = extractedClasses.indexOf(cls);
     extractedClasses.splice(i, 1, cls);
-    setExtractedClasses(extractedClasses);
-    localStorage.setItem('extractedClasses', JSON.stringify(extractedClasses));
+    setExtractedClasses([...extractedClasses]);
+  };
+
+  /**
+   * Adds a new empty class to the list of extracted classes
+   */
+  const handleClassAdd = () => {
+    const newClass = {
+      name: '',
+      dept: '',
+      course_num: '',
+      section: '',
+      location: '',
+      start_time: '',
+      end_time: '',
+      start_date: '',
+      end_date: '',
+      days_of_week: '',
+      id: extractedClasses.length + 1
+    };
+    setExtractedClasses([...extractedClasses, newClass]);
+  };
+
+  /**
+   * Deletes a class from the extractedClasses array
+   * @param {object} cls - class object to delete
+   */
+  const handleClassDelete = cls => {
+    const i = extractedClasses.indexOf(cls);
+    extractedClasses.splice(i, 1);
+    setExtractedClasses([...extractedClasses]);
+    handleToastOpen('Class deleted', 'success');
   };
 
   /**
@@ -85,6 +115,8 @@ function App() {
 
   /**
    * Opens the toast with a message and a color variant
+   * @param {string} - message
+   * @param {string} - variant (one of sucess, info, warning, or error)
    */
   const handleToastOpen = (message, variant) => {
     setToastOpen(true);
@@ -123,6 +155,8 @@ function App() {
               <ClassesPage
                 extractedClasses={extractedClasses}
                 handleClassChange={handleClassChange}
+                handleClassAdd={handleClassAdd}
+                handleClassDelete={handleClassDelete}
                 openToast={handleToastOpen}
               />
             </Route>

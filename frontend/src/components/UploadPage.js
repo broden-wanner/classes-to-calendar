@@ -87,11 +87,19 @@ function UploadPage(props) {
         }
       })
       .then(res => {
-        props.openToast('Classes extracted', 'success');
         setUploadStatus('uploaded');
+        const { classes, extracted_all } = res.data;
         // Assert that the returned data is an array
-        if (res && Array.isArray(res.data) && res.data.length > 0) {
-          props.handleClasses(res.data);
+        if (classes && Array.isArray(classes) && classes.length > 0) {
+          // Add the classes to the app
+          props.handleClasses(classes);
+          // Handle not all classes being extracted
+          if (extracted_all) {
+            props.openToast('Classes extracted', 'success');
+          } else {
+            props.openToast('Only some data extracted. Fill in the missing info.', 'warning');
+          }
+          // Redirect to the classes page
           history.push('/classes');
         } else {
           throw new Error('No classes extracted. Ensure your image meets the requirements.');

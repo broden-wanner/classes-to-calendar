@@ -8,8 +8,10 @@ import {
   fade,
   Card,
   CardContent,
-  makeStyles
+  makeStyles,
+  Fab
 } from '@material-ui/core';
+import AddIcon from '@material-ui/icons/Add';
 
 import GCalClient from '../api/GCalClient';
 import axios from 'axios';
@@ -45,6 +47,7 @@ const useStyles = makeStyles(theme => ({
     display: 'flex'
   },
   classList: {
+    textAlign: 'center',
     flex: 3
   },
   actionCol: {
@@ -58,7 +61,16 @@ const useStyles = makeStyles(theme => ({
   },
   classesInfo: {
     borderBottomLeftRadius: 0,
-    borderBottomRightRadius: 0
+    borderBottomRightRadius: 0,
+    textAlign: 'left'
+  },
+  fabButton: {
+    position: 'relative',
+    zIndex: 1,
+    top: -30,
+    left: 0,
+    right: 0,
+    margin: '0 auto'
   }
 }));
 
@@ -124,6 +136,7 @@ function ClassesPage(props) {
       })
       .catch(error => {
         props.openToast(error.message, 'error');
+        setEventsStatus('error');
         console.error(error);
       });
   };
@@ -213,8 +226,16 @@ function ClassesPage(props) {
               </CardContent>
             </Card>
             {props.extractedClasses.map(cls => (
-              <UMNClass key={cls.id} cls={cls} handleClassChange={props.handleClassChange} />
+              <UMNClass
+                key={cls.id}
+                cls={cls}
+                handleClassChange={props.handleClassChange}
+                handleClassDelete={props.handleClassDelete}
+              />
             ))}
+            <Fab color="primary" className={classes.fabButton} onClick={props.handleClassAdd}>
+              <AddIcon />
+            </Fab>
           </div>
           <div className={classes.actionCol}>
             <EventsActions
@@ -241,6 +262,8 @@ function ClassesPage(props) {
 ClassesPage.propTypes = {
   extractedClasses: PropTypes.array.isRequired,
   handleClassChange: PropTypes.func.isRequired,
+  handleClassAdd: PropTypes.func.isRequired,
+  handleClassDelete: PropTypes.func.isRequired,
   openToast: PropTypes.func.isRequired
 };
 

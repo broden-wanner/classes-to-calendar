@@ -9,6 +9,7 @@ import Input from '@material-ui/core/Input';
 import InputLabel from '@material-ui/core/InputLabel';
 import Typography from '@material-ui/core/Typography';
 import ExpandMoreIcon from '@material-ui/icons/ExpandMore';
+import { Button, ExpansionPanelActions } from '@material-ui/core';
 
 const ExpansionPanel = withStyles({
   root: {
@@ -66,7 +67,7 @@ const useStyles = makeStyles(theme => ({
 
 function UMNClass(props) {
   const classes = useStyles();
-  const { cls, handleClassChange } = props;
+  const { cls, handleClassChange, handleClassDelete } = props;
   const [title, setTitle] = useState(cls.name);
 
   /**
@@ -95,6 +96,13 @@ function UMNClass(props) {
     }
   };
 
+  /**
+   * Remove the class from the extracted class list
+   */
+  const handleRemove = () => {
+    handleClassDelete(cls);
+  };
+
   return (
     <ExpansionPanel key={cls.id}>
       <ExpansionPanelSummary expandIcon={<ExpandMoreIcon />} aria-controls="panel1a-content">
@@ -106,20 +114,26 @@ function UMNClass(props) {
         {Object.keys(cls).map(
           (name, i) =>
             name !== 'id' && (
-              <FormControl key={i} className={classes.inputField}>
+              <FormControl key={i} className={classes.inputField} required={true}>
                 <InputLabel>{snakeToTitleCase(name)}</InputLabel>
                 <Input name={name} defaultValue={cls[name]} onChange={handleChanges} />
               </FormControl>
             )
         )}
       </ExpansionPanelDetails>
+      <ExpansionPanelActions>
+        <Button color="primary" onClick={handleRemove} variant="contained">
+          Remove
+        </Button>
+      </ExpansionPanelActions>
     </ExpansionPanel>
   );
 }
 
 UMNClass.propTypes = {
   cls: PropTypes.object.isRequired,
-  handleClassChange: PropTypes.func.isRequired
+  handleClassChange: PropTypes.func.isRequired,
+  handleClassDelete: PropTypes.func.isRequired
 };
 
 export default UMNClass;
