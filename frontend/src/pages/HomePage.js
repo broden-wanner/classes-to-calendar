@@ -20,6 +20,15 @@ const useStyles = makeStyles(theme => ({
   },
   card: {
     padding: '50px'
+  },
+  logo: {
+    paddingLeft: theme.spacing(1)
+  },
+  title: {
+    display: 'flex',
+    width: '100%',
+    justifyContent: 'center',
+    alignItems: 'center'
   }
 }));
 
@@ -39,8 +48,10 @@ export default function HomePage(props) {
                 align="center"
                 color="textPrimary"
                 gutterBottom
+                className={classes.title}
               >
                 Classes to Calendar
+                <img className={classes.logo} src="/logo.png" alt="Logo png" height="100" />
               </Typography>
               <Typography variant="h5" align="center" color="textSecondary" paragraph>
                 An online app that takes the html file of your class schedule and enters it in
