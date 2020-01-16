@@ -74,7 +74,7 @@ function Navbar(props) {
         >
           Github repo
         </Button>
-        <Button href="mailto:broden.wanner@outlook.com" color="inherit" className={classes.navLink}>
+        <Button color="inherit" className={classes.navLink} component={Link} to="/contact">
           Contact
         </Button>
       </Toolbar>

@@ -13,6 +13,7 @@ import ClassesPage from './pages/ClassesPage';
 import InstructionDialog from './components/InstructionDialog';
 import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
 import Footer from './components/Footer';
+import ContactPage from './pages/ContactPage';
 
 const appTheme = createMuiTheme({
   palette: {
@@ -167,6 +168,9 @@ function App() {
             </Route>
             <Route exact path="/privacy-policy">
               <PrivacyPolicyPage />
+            </Route>
+            <Route exact path="/contact">
+              <ContactPage />
             </Route>
             <Footer />
           </Router>
