@@ -146,7 +146,10 @@ function App() {
       <ThemeProvider theme={appTheme}>
         <div className={classes.background}>
           <Router>
-            <Navbar openInstructions={handleInstructionsOpen}></Navbar>
+            <Navbar
+              openInstructions={handleInstructionsOpen}
+              extractedClasses={extractedClasses}
+            ></Navbar>
             <Route exact path="/">
               <HomePage openInstructions={handleInstructionsOpen} />
             </Route>

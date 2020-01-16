@@ -24,7 +24,7 @@ const useStyles = makeStyles(theme => ({
 function Navbar(props) {
   const classes = useStyles();
   const history = useHistory();
-  const { openInstructions } = props;
+  const { openInstructions, extractedClasses } = props;
 
   return (
     <AppBar position="fixed">
@@ -43,10 +43,16 @@ function Navbar(props) {
         >
           Upload
         </Button>
+        {extractedClasses.length > 0 && (
+          <Button color="inherit" className={classes.navLink} component={Link} to="/classes">
+            Classes
+          </Button>
+        )}
         <Button color="inherit" className={classes.navLink} onClick={openInstructions}>
           Instructions
         </Button>
         <Button
+          target="blank"
           href="https://github.com/broden-wanner/classes-to-calendar/issues"
           color="inherit"
           className={classes.navLink}
@@ -54,6 +60,7 @@ function Navbar(props) {
           Issues
         </Button>
         <Button
+          target="blank"
           href="https://github.com/broden-wanner/classes-to-calendar"
           color="inherit"
           className={classes.navLink}
@@ -69,7 +76,8 @@ function Navbar(props) {
 }
 
 Navbar.propTypes = {
-  openInstructions: PropTypes.func.isRequired
+  openInstructions: PropTypes.func.isRequired,
+  extractedClasses: PropTypes.array.isRequired
 };
 
 export default Navbar;

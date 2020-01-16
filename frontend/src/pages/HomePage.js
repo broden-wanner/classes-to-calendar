@@ -56,7 +56,7 @@ export default function HomePage(props) {
                       to="/upload"
                       onClick={openInstructions}
                     >
-                      Upload class schedule image
+                      Upload class schedule html file
                     </Button>
                   </Grid>
                 </Grid>

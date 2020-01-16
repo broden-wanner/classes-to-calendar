@@ -93,8 +93,8 @@ def handle_file_error(error):
 
 #### API routes ####
 
-@app.route('/api/upload', methods=['POST'])
-def upload_endpoint():
+@app.route('/api/upload-image', methods=['POST'])
+def upload_image_endpoint():
     """
     Processes an uploaded image and returns the classes extracted in it with pytesseract.
     Raises FileError if there is no file or if it is not and image. Raises a parse error
