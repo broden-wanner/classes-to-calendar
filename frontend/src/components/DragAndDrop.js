@@ -48,7 +48,7 @@ export class DragAndDrop extends Component {
   };
   dragCounter = 0;
   dropRef = React.createRef();
-  allowedFiles = ['html'];
+  allowedFiles = ['html', 'htm'];
 
   isAllowedFile = file => {
     const ext = file.name.match(/\.([0-9a-z]+)/i);
@@ -93,7 +93,7 @@ export class DragAndDrop extends Component {
       const file = e.dataTransfer.files[0];
       // Check to ensure the file is html
       if (!this.isAllowedFile(file)) {
-        this.props.openToast('Invalid file type.', 'error');
+        this.props.openToast('Invalid file type. Make sure it is html or htm.', 'error');
         return;
       }
       this.setState({ userHasSelectedFile: true });
@@ -140,8 +140,8 @@ export class DragAndDrop extends Component {
     const upload = (
       <React.Fragment>
         <CloudUploadOutlinedIcon style={{ fontSize: 80 }} color="action"></CloudUploadOutlinedIcon>
-        <Typography component="h4" variant="h4" color="textSecondary">
-          Drag and drop html file here
+        <Typography component="h4" variant="h4" color="textSecondary" align="center">
+          Drag and drop .html or .htm file here
         </Typography>
       </React.Fragment>
     );
@@ -181,7 +181,7 @@ export class DragAndDrop extends Component {
         </CardContent>
         <CardActions className={classes.buttonContainer}>
           <input
-            accept="text/html"
+            accept="text/html, text/htm"
             className={classes.input}
             id="html-upload"
             type="file"

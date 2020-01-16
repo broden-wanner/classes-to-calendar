@@ -40,7 +40,7 @@ if FLASK_ENV == 'development':
 
 def allowed_file(filename):
     """ Checks the allowed file extensions """
-    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'html'])
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'html', 'htm'])
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
