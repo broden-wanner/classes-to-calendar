@@ -1,8 +1,9 @@
 import React, { Component } from 'react';
+import PropTypes from 'prop-types';
 import { Card, CardContent, Button, CardActions, Typography, withStyles } from '@material-ui/core';
-import CircularProgress from '@material-ui/core/CircularProgress';
 import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
 import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
+import FileCopyIcon from '@material-ui/icons/FileCopy';
 
 const styles = theme => ({
   cardStyle: {
@@ -28,9 +29,9 @@ const styles = theme => ({
     justifyContent: 'center',
     width: '100%'
   },
-  previewImage: {
-    maxHeight: '400px',
-    maxWidth: '400px'
+  filePreview: {
+    fontSize: '34px',
+    marginTop: theme.spacing(2)
   },
   input: {
     display: 'none'
@@ -43,13 +44,13 @@ const styles = theme => ({
 export class DragAndDrop extends Component {
   state = {
     dragging: false,
-    userHasSelectedImage: false
+    userHasSelectedFile: false
   };
   dragCounter = 0;
   dropRef = React.createRef();
-  allowedFiles = ['jpg', 'jpeg', 'png'];
+  allowedFiles = ['html'];
 
-  isImageFile = file => {
+  isAllowedFile = file => {
     const ext = file.name.match(/\.([0-9a-z]+)/i);
     return this.allowedFiles.includes(ext[1].toLowerCase());
   };
@@ -90,14 +91,14 @@ export class DragAndDrop extends Component {
     // Check to ensure there are files being dragged
     if (e.dataTransfer.files && e.dataTransfer.files.length > 0) {
       const file = e.dataTransfer.files[0];
-      // Check to ensure the file is an image
-      if (!this.isImageFile(file)) {
+      // Check to ensure the file is html
+      if (!this.isAllowedFile(file)) {
         this.props.openToast('Invalid file type.', 'error');
         return;
       }
-      this.setState({ userHasSelectedImage: true });
+      this.setState({ userHasSelectedFile: true });
       // Pass the image to the parent
-      this.props.handleImageSelect(file);
+      this.props.handleFileSelect(file);
       e.dataTransfer.clearData();
       this.dragCounter = 0;
     }
@@ -106,12 +107,12 @@ export class DragAndDrop extends Component {
   /**
    * Handles the selecting of an image using the input
    */
-  handleImageSelect = e => {
+  handleFileSelect = e => {
     this.setState({ dragging: false });
     if (e.target.files && e.target.files.length > 0) {
-      this.setState({ userHasSelectedImage: true });
+      this.setState({ userHasSelectedFile: true });
       // Pass the image to the parent
-      this.props.handleImageSelect(e.target.files[0]);
+      this.props.handleFileSelect(e.target.files[0]);
       this.dragCounter = 0;
     }
   };
@@ -140,7 +141,7 @@ export class DragAndDrop extends Component {
       <React.Fragment>
         <CloudUploadOutlinedIcon style={{ fontSize: 80 }} color="action"></CloudUploadOutlinedIcon>
         <Typography component="h4" variant="h4" color="textSecondary">
-          Drag and drop screenshot here
+          Drag and drop html file here
         </Typography>
       </React.Fragment>
     );
@@ -149,45 +150,44 @@ export class DragAndDrop extends Component {
       <React.Fragment>
         <AddPhotoAlternateIcon style={{ fontSize: 80 }} color="action"></AddPhotoAlternateIcon>
         <Typography component="h4" variant="h4" color="textSecondary">
-          Add image
+          Add file
         </Typography>
       </React.Fragment>
     );
 
-    const imagePreview = (
+    const filePreview = (
       <React.Fragment>
-        {this.props.selectedImageLoaded ? (
-          <img className={classes.previewImage} src={this.props.selectedImageSrc} alt="Uploaded" />
-        ) : (
-          <CircularProgress />
-        )}
+        <FileCopyIcon style={{ fontSize: 80 }} color="action" />
+        <Typography color="textSecondary" className={classes.filePreview}>
+          {this.props.selectedFileName}
+        </Typography>
       </React.Fragment>
     );
 
     return (
       <Card variante="outlined" className={classes.cardStyle}>
         <CardContent>
-          <label htmlFor="image-upload">
+          <label htmlFor="html-upload">
             <div ref={this.dropRef} className={classes.dropzoneArea}>
               <div className={classes.uploadInfo}>
-                {!this.state.userHasSelectedImage
+                {!this.state.userHasSelectedFile
                   ? !this.state.dragging
                     ? upload
                     : drop
-                  : imagePreview}
+                  : filePreview}
               </div>
             </div>
           </label>
         </CardContent>
         <CardActions className={classes.buttonContainer}>
           <input
-            accept="image/*"
+            accept="text/html"
             className={classes.input}
-            id="image-upload"
+            id="html-upload"
             type="file"
-            onChange={this.handleImageSelect}
+            onChange={this.handleFileSelect}
           />
-          <label htmlFor="image-upload">
+          <label htmlFor="html-upload">
             <Button variant="contained" color="primary" component="span">
               Browse
             </Button>
@@ -195,7 +195,7 @@ export class DragAndDrop extends Component {
           <Button
             variant="contained"
             color="primary"
-            disabled={!this.props.selectedImageSrc}
+            disabled={!this.props.selectedFileName}
             onClick={this.props.handleUpload}
           >
             Upload
@@ -205,5 +205,12 @@ export class DragAndDrop extends Component {
     );
   }
 }
+
+DragAndDrop.propTypes = {
+  handleFileSelect: PropTypes.func.isRequired,
+  handleUpload: PropTypes.func.isRequired,
+  selectedFileName: PropTypes.string.isRequired,
+  openToast: PropTypes.func.isRequired
+};
 
 export default withStyles(styles)(DragAndDrop);

@@ -5,6 +5,7 @@ from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
 from calendar_utils.ocr import generate_umn_classes, ParseError
+from calendar_utils.html_parser import generate_umn_classes_from_html
 from calendar_utils.models import UMNClass
 from calendar_utils.convert import to_ics_string
 try:
@@ -39,7 +40,7 @@ if FLASK_ENV == 'development':
 
 def allowed_file(filename):
     """ Checks the allowed file extensions """
-    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg'])
+    ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'html'])
     return '.' in filename and \
            filename.rsplit('.', 1)[1].lower() in ALLOWED_EXTENSIONS
 
@@ -118,6 +119,52 @@ def upload_endpoint():
             result = generate_umn_classes(img=Image.open(image),
                                         start_date=datetime.date(year=2020, month=1, day=21),
                                         end_date=datetime.date(year=2020, month=5, day=4))
+
+            # Change each class into a json serializeable dictionary
+            result['classes'].sort(key=lambda c: c.name)
+            result['classes'] = [c.serialize() for c in result['classes']]
+
+            # Log an error if there is one
+            if result['extracted_all'] == False:
+                app.logger.error(f'Parse error: {result["message"]}')
+
+            # Return the json response of the classes in an array
+            return json.dumps(result)
+
+        except Exception as e:
+            app.logger.error(e)
+            raise ParseError('Error extracting classes.')
+    else:
+        app.logger.error(e)
+        raise FileError('Invalid file type.')
+
+@app.route('/api/upload-html', methods=['POST'])
+def upload_html_endpoint():
+    """
+    Processes uploaded html and returns the classes extracted in it with the html parser.
+    Raises FileError if there is no file or if it is not and image. Raises a parse error
+    if there is a problem generating classes.
+    """
+    # Check if there is a file in the request
+    if 'file' not in request.files:
+        app.logger.error('No file is present for upload')
+        raise FileError('No file is present.')
+
+    html_file = request.files['file']
+
+    # If no file is selected
+    if html_file and html_file.filename == '':
+        app.logger.error('No file selected for upload.')
+        raise FileError('No file is selected.')
+
+    # Ensure the file is html
+    if html_file and allowed_file(html_file.filename):
+        try:
+            # Get the classes in the html
+            html_string = html_file.read()
+            start_date = datetime.date(year=2020, month=1, day=21)
+            end_date = datetime.date(year=2020, month=5, day=4)
+            result = generate_umn_classes_from_html(html_string=html_string, start_date=start_date, end_date=end_date)
 
             # Change each class into a json serializeable dictionary
             result['classes'].sort(key=lambda c: c.name)

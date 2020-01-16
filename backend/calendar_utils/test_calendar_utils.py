@@ -64,3 +64,6 @@ class TestHTMLParserUtils:
 
     def test_regular_calendar_parsing(self):
         self.check_calendar('calendar')
+
+    def test_no_class_day_calendar(self):
+        self.check_calendar('no-class-day')

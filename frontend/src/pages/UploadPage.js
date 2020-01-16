@@ -42,29 +42,16 @@ const useStyles = makeStyles(theme => ({
 function UploadPage(props) {
   const classes = useStyles();
   const history = useHistory();
-  const [selectedImage, setSelectedImage] = useState(null);
-  const [selectedImageSrc, setSelectedImageSrc] = useState('');
-  const [selectedImageLoaded, setSelectedImageLoaded] = useState(false);
+  const [selectedFile, setSelectedFile] = useState(null);
+  const [selectedFileName, setSelectedFileName] = useState('');
   const [uploadStatus, setUploadStatus] = useState('');
 
   /**
    * Handles the selecting of an image and sets it to be previewed
    */
-  const handleImageSelect = image => {
-    setSelectedImage(image);
-    previewImage(image);
-  };
-
-  /**
-   * Uses the image on the props to preview the image in the uploader by setting the selectedImageSrc
-   */
-  const previewImage = image => {
-    let reader = new FileReader();
-    reader.readAsDataURL(image);
-    reader.onloadend = () => {
-      setSelectedImageSrc(reader.result);
-      setSelectedImageLoaded(true);
-    };
+  const handleFileSelect = file => {
+    setSelectedFile(file);
+    setSelectedFileName(file.name);
   };
 
   /**
@@ -72,11 +59,11 @@ function UploadPage(props) {
    * any errors returned form the server
    */
   const handleUpload = () => {
-    let url = `${process.env.REACT_APP_API_ENDPOINT}/api/upload`;
+    let url = `${process.env.REACT_APP_API_ENDPOINT}/api/upload-html`;
 
     // Added the file to the form data for submission
     let formData = new FormData();
-    formData.append('file', selectedImage);
+    formData.append('file', selectedFile);
 
     // Make the post request with the image
     setUploadStatus('uploading');
@@ -128,10 +115,9 @@ function UploadPage(props) {
         </Container>
         <Container maxWidth="sm" className={classes.uploadContainer}>
           <DragAndDrop
-            handleImageSelect={handleImageSelect}
+            handleFileSelect={handleFileSelect}
             handleUpload={handleUpload}
-            selectedImageLoaded={selectedImageLoaded}
-            selectedImageSrc={selectedImageSrc}
+            selectedFileName={selectedFileName}
             openToast={props.openToast}
           ></DragAndDrop>
           {uploadStatus === 'uploading' && (
