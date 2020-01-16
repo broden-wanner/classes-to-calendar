@@ -179,7 +179,7 @@ def upload_html_endpoint():
 
         except Exception as e:
             app.logger.error(e)
-            raise ParseError('Error extracting classes.')
+            raise ParseError('Error extracting classes. Make sure the file is html and from MyU.')
     else:
         app.logger.error('Invalid file type for upload.')
         raise FileError('Invalid file type.')
