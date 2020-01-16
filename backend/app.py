@@ -62,6 +62,7 @@ class FileError(Exception):
 @app.route('/')
 @app.route('/classes')
 @app.route('/upload')
+@app.route('/privacy-policy')
 def index():
     """
     Return the main index.html whenever these routes are visited. The React router will
