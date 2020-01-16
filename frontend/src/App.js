@@ -6,11 +6,13 @@ import { createMuiTheme, ThemeProvider } from '@material-ui/core/styles';
 import { makeStyles } from '@material-ui/core';
 
 import Navbar from './components/Navbar';
-import HomePage from './components/HomePage';
-import UploadPage from './components/UploadPage';
+import HomePage from './pages/HomePage';
+import UploadPage from './pages/UploadPage';
 import Toast from './components/Toast';
-import ClassesPage from './components/ClassesPage';
+import ClassesPage from './pages/ClassesPage';
 import InstructionDialog from './components/InstructionDialog';
+import PrivacyPolicyPage from './pages/PrivacyPolicyPage';
+import Footer from './components/Footer';
 
 const appTheme = createMuiTheme({
   palette: {
@@ -160,7 +162,12 @@ function App() {
                 openToast={handleToastOpen}
               />
             </Route>
+            <Route exact path="/privacy-policy">
+              <PrivacyPolicyPage />
+            </Route>
+            <Footer />
           </Router>
+
           <InstructionDialog open={instructionsOpen} onClose={handleInstructionsClose} />
           <Toast
             open={toastOpen}

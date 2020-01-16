@@ -3,7 +3,7 @@ import { useHistory } from 'react-router-dom';
 import PropTypes from 'prop-types';
 import axios from 'axios';
 
-import DragAndDrop from './DragAndDrop';
+import DragAndDrop from '../components/DragAndDrop';
 import { Container, makeStyles, CircularProgress, Typography, fade } from '@material-ui/core';
 
 const useStyles = makeStyles(theme => ({

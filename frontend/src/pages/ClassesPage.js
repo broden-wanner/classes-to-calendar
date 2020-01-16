@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
 import PropTypes from 'prop-types';
-import UMNClass from './UMNClass';
+import UMNClass from '../components/UMNClass';
 import {
   Container,
   Typography,
@@ -15,7 +15,7 @@ import AddIcon from '@material-ui/icons/Add';
 
 import GCalClient from '../api/GCalClient';
 import axios from 'axios';
-import EventsActions from './EventsActions';
+import EventsActions from '../components/EventsActions';
 import { Redirect } from 'react-router-dom';
 
 const useStyles = makeStyles(theme => ({
