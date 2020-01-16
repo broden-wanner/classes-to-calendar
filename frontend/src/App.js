@@ -79,7 +79,7 @@ function App() {
    */
   const handleClassAdd = () => {
     const newClass = {
-      name: '',
+      name: 'Class Name',
       dept: '',
       course_num: '',
       section: '',

@@ -48,24 +48,28 @@ function InstructionDialog(props) {
               on Monday for instance, go to the second week so the Monday classes can be seen.)
             </ListItemText>
           </ListItem>
+
+          <ListItem style={{ display: 'text', justifyContent: 'center' }}>
+            <img src="example-calendar.png" height="300" alt="Example Calendar" />
+          </ListItem>
           <ListItem>
             <ListItemIcon>
               <Typography>3.</Typography>
             </ListItemIcon>
             <ListItemText>
-              Take a screenshot of the entire schedule and save it locally. Make sure the days of
-              the week at the top of each column are in the screenshot.
+              Right-click somewhere on the webpage and click "Save As..." to save the html file
+              somewhere you'll rememeber. (This will also download an extra folder that you can
+              delete. All you need is the .html file)
             </ListItemText>
-          </ListItem>
-          <ListItem style={{ display: 'text', justifyContent: 'center' }}>
-            <img src="example-calendar.png" height="400" alt="Example Calendar" />
           </ListItem>
 
           <ListItem>
             <ListItemIcon>
               <Typography>4.</Typography>
             </ListItemIcon>
-            <ListItemText>Upload the image here and wait for the classes to be read.</ListItemText>
+            <ListItemText>
+              Upload the html file here and wait for the classes to be read.
+            </ListItemText>
           </ListItem>
           <ListItem>
             <ListItemIcon>

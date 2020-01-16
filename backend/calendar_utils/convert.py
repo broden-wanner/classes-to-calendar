@@ -1,5 +1,4 @@
 from .models import UMNClass
-from .ocr import generate_umn_classes
 import datetime
 try:
     from PIL import Image
@@ -43,11 +42,3 @@ def to_ics_string(classes, calendar_name='Class Calendar', timezone='America/Chi
     content = ''.join(calendar) + ''.join(events) + footer
     content = content.replace(r'\n', '\r\n') # Put crlf line endings
     return content
-
-if __name__ == '__main__':
-    classes = generate_umn_classes(img=Image.open('example-images/calendar.png'),
-                                   start_date=datetime.date(year=2020, month=1, day=21),
-                                   end_date=datetime.date(year=2020, month=5, day=4))
-    content = to_ics_string(classes)
-    with open('ics-output/calendar.ics', 'w') as f:
-        f.write(content)

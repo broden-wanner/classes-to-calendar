@@ -4,7 +4,7 @@ import json
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, jsonify
 from flask_cors import CORS
-from calendar_utils.ocr import generate_umn_classes, ParseError
+from calendar_utils.image_parser import generate_umn_classes, ParseError
 from calendar_utils.html_parser import generate_umn_classes_from_html
 from calendar_utils.models import UMNClass
 from calendar_utils.convert import to_ics_string

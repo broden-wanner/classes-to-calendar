@@ -43,7 +43,7 @@ export default function HomePage(props) {
                 Classes to Calendar
               </Typography>
               <Typography variant="h5" align="center" color="textSecondary" paragraph>
-                An online app that takes an screenshot of your class schedule and enters it in
+                An online app that takes the html file of your class schedule and enters it in
                 Google Calendar, or you can export it to whatever calendar you want.
               </Typography>
               <div className={classes.homeButtons}>

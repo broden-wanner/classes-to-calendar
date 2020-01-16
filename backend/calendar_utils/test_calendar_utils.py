@@ -2,7 +2,7 @@ import pytest
 import pickle
 import datetime
 from .html_parser import generate_umn_classes_from_html
-from .ocr import generate_umn_classes
+from .image_parser import generate_umn_classes
 from . import models 
 import sys
 try:
