@@ -8,7 +8,6 @@ Website: <a href="https://classes-to-calendar.xyz" target="blank">classes-to-cal
 
 - React frontend
 - Flask backend
-- Pytesseract to interface with Tesseract OCR
 - Nginx Server
 
 ## Future Work
