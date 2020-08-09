@@ -22,6 +22,8 @@ APP_HOST = os.getenv('APP_HOST')
 STATIC_FOLDER = '../frontend/build'
 STATIC_URL_PATH = ''
 TEMPLATE_FOLDER = '../frontend/build'
+DEFAULT_CLASS_START_DATE = datetime.date(year=2020, month=1, day=21)
+DEFAULT_CLASS_END_DATE = datetime.date(year=2020, month=5, day=4)
 
 
 #### Main flask app ####
@@ -117,8 +119,8 @@ def upload_image_endpoint():
         try:
             # Get the classes in the image
             result = generate_umn_classes(img=Image.open(image),
-                                        start_date=datetime.date(year=2020, month=1, day=21),
-                                        end_date=datetime.date(year=2020, month=5, day=4))
+                                        start_date=DEFAULT_CLASS_START_DATE,
+                                        end_date=DEFAULT_CLASS_END_DATE)
 
             # Change each class into a json serializeable dictionary
             result['classes'].sort(key=lambda c: c.name)
@@ -162,8 +164,8 @@ def upload_html_endpoint():
         try:
             # Get the classes in the html
             html_string = html_file.read()
-            start_date = datetime.date(year=2020, month=1, day=21)
-            end_date = datetime.date(year=2020, month=5, day=4)
+            start_date = DEFAULT_CLASS_START_DATE
+            end_date = DEFAULT_CLASS_END_DATE
             result = generate_umn_classes_from_html(html_string=html_string, start_date=start_date, end_date=end_date)
 
             # Change each class into a json serializeable dictionary
