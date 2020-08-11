@@ -16,8 +16,8 @@ STATIC_URL_PATH = ''
 TEMPLATE_FOLDER = '../../frontend/build'
 
 # App settings
-DEFAULT_CLASS_START_DATE = datetime.date(year=2020, month=1, day=21)
-DEFAULT_CLASS_END_DATE = datetime.date(year=2020, month=5, day=4)
+DEFAULT_CLASS_START_DATE = datetime.date(year=2020, month=9, day=8)
+DEFAULT_CLASS_END_DATE = datetime.date(year=2020, month=12, day=16)
 ALLOWED_EXTENSIONS = set(['png', 'jpg', 'jpeg', 'html', 'htm'])
 
 # Google Calendar keys

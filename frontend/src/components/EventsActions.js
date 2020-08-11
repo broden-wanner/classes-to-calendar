@@ -1,14 +1,9 @@
 import React, { useState } from "react";
-import { makeStyles, Divider, Grid } from "@material-ui/core";
 import PropTypes from "prop-types";
-import DateFnsUtils from "@date-io/date-fns";
-import {
-  MuiPickersUtilsProvider,
-  KeyboardDatePicker,
-} from "@material-ui/pickers";
 import {
   Card,
   CardContent,
+  Divider,
   Button,
   FormControl,
   RadioGroup,
@@ -17,13 +12,13 @@ import {
   TextField,
   InputLabel,
   Select,
+  makeStyles,
   MenuItem,
   Typography,
 } from "@material-ui/core";
 import TodayIcon from "@material-ui/icons/Today";
 import SendIcon from "@material-ui/icons/Send";
 import GetAppIcon from "@material-ui/icons/GetApp";
-import { addDays } from "date-fns";
 
 const useStyles = makeStyles((theme) => ({
   card: {
@@ -79,8 +74,6 @@ function EventsActions(props) {
   const [calList, setCalList] = useState([]);
   const [calId, setCalId] = useState("");
   const [newCalName, setNewCalName] = useState("Class Schedule");
-  const [classStartDate, setClassStartDate] = useState(new Date());
-  const [classEndDate, setClassEndDate] = useState(addDays(new Date(), 100));
 
   /**
    * Handles the switching of new and existing calendars.
@@ -132,55 +125,10 @@ function EventsActions(props) {
     setNewCalName(e.target.value);
   };
 
-  const handleStartDateChange = (date) => {
-    setClassStartDate(date);
-  };
-
-  const handleEndDateChange = (date) => {
-    setClassEndDate(date);
-  };
-
   return (
     <React.Fragment>
       <Card className={classes.card}>
         <CardContent>
-          <div className={classes.actionSection}>
-            <Typography variant="h6" component="h6">
-              Select Date Range
-            </Typography>
-            <p className={classes.infoText}>
-              Range for the class dates. Defaults to the current UMN term.
-            </p>
-            <MuiPickersUtilsProvider utils={DateFnsUtils}>
-              <Grid container justify="space-between">
-                <KeyboardDatePicker
-                  className={classes.datePicker}
-                  disableToolbar
-                  variant="inline"
-                  format="MM/dd/yyyy"
-                  margin="normal"
-                  label="Start date"
-                  value={classStartDate}
-                  onChange={handleStartDateChange}
-                  KeyboardButtonProps={{ "aria-label": "change date" }}
-                ></KeyboardDatePicker>
-                <KeyboardDatePicker
-                  className={classes.datePicker}
-                  disableToolbar
-                  variant="inline"
-                  format="MM/dd/yyyy"
-                  margin="normal"
-                  label="End date"
-                  value={classEndDate}
-                  onChange={handleEndDateChange}
-                  KeyboardButtonProps={{ "aria-label": "change date" }}
-                ></KeyboardDatePicker>
-              </Grid>
-            </MuiPickersUtilsProvider>
-          </div>
-
-          <Divider />
-
           <div className={classes.actionSection}>
             <Typography variant="h6" component="h6">
               Add to Google Calendar

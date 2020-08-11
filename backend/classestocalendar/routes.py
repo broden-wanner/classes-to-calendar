@@ -1,5 +1,7 @@
 import os
 import json
+import datetime
+import dateutil.parser
 from flask import render_template, request, jsonify
 from .exceptions import ParseError, FileError
 from .utils import allowed_file
@@ -35,6 +37,10 @@ def upload_html_endpoint():
         raise FileError('No file is present.')
 
     html_file = request.files['file']
+    class_start_date_str = request.form.get('startDate', None)
+    class_start_date = datetime.datetime.strptime(class_start_date_str, '%Y-%m-%d').date()
+    class_end_date_str = request.form.get('endDate', None)
+    class_end_date = datetime.datetime.strptime(class_end_date_str, '%Y-%m-%d').date()
 
     # If no file is selected
     if html_file and html_file.filename == '':
@@ -46,8 +52,8 @@ def upload_html_endpoint():
         try:
             # Get the classes in the html
             html_string = html_file.read()
-            start_date = settings.DEFAULT_CLASS_START_DATE
-            end_date = settings.DEFAULT_CLASS_END_DATE
+            start_date = class_start_date if class_start_date else settings.DEFAULT_CLASS_START_DATE
+            end_date = class_end_date if class_end_date else settings.DEFAULT_CLASS_END_DATE
             result = generate_umn_classes_from_html(html_string=html_string, start_date=start_date, end_date=end_date)
 
             # Change each class into a json serializeable dictionary
