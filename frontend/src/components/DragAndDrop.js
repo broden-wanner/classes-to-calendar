@@ -1,66 +1,93 @@
-import React, { Component } from 'react';
-import PropTypes from 'prop-types';
-import { Card, CardContent, Button, CardActions, Typography, withStyles } from '@material-ui/core';
-import CloudUploadOutlinedIcon from '@material-ui/icons/CloudUploadOutlined';
-import AddPhotoAlternateIcon from '@material-ui/icons/AddPhotoAlternate';
-import FileCopyIcon from '@material-ui/icons/FileCopy';
+import React, { Component } from "react";
+import PropTypes from "prop-types";
+import {
+  Card,
+  CardContent,
+  Button,
+  CardActions,
+  Typography,
+  withStyles,
+  CircularProgress,
+  fade,
+} from "@material-ui/core";
+import CloudUploadOutlinedIcon from "@material-ui/icons/CloudUploadOutlined";
+import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
+import FileCopyIcon from "@material-ui/icons/FileCopy";
 
-const styles = theme => ({
+const styles = (theme) => ({
   cardStyle: {
-    padding: '20px'
+    padding: "20px",
   },
   dropzoneArea: {
-    display: 'flex',
-    position: 'relative',
-    border: '2px dashed #ccc',
-    width: '100%',
-    minHeight: '400px',
-    padding: '20px',
-    transition: 'all 0.1s ease-in-out',
-    '&:hover': {
+    display: "flex",
+    position: "relative",
+    border: "2px dashed #ccc",
+    width: "100%",
+    minHeight: "400px",
+    padding: "20px",
+    transition: "all 0.1s ease-in-out",
+    "&:hover": {
       backgroundColor: theme.palette.grey[200],
-      cursor: 'pointer'
-    }
+      cursor: "pointer",
+    },
+  },
+  loadingOverlay: {
+    display: "flex",
+    alignItems: "center",
+    justifyContent: "center",
+    position: "absolute",
+    top: 0,
+    left: 0,
+    zIndex: 9999,
+    width: "100%",
+    height: "100%",
+    borderRadius: "4px",
+    backgroundColor: fade(theme.palette.grey[900], 0.4),
+    flexGrow: 0,
+    flexBasis: "66.66667%",
+    maxWidth: "65.86667%",
+    maxHeight: "94.3%",
+    marginTop: theme.spacing(2),
   },
   uploadInfo: {
-    display: 'flex',
-    flexDirection: 'column',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '100%'
+    display: "flex",
+    flexDirection: "column",
+    alignItems: "center",
+    justifyContent: "center",
+    width: "100%",
   },
   filePreview: {
-    fontSize: '34px',
-    marginTop: theme.spacing(2)
+    fontSize: "34px",
+    marginTop: theme.spacing(2),
   },
   input: {
-    display: 'none'
+    display: "none",
   },
   buttonContainer: {
-    justifyContent: 'center'
-  }
+    justifyContent: "center",
+  },
 });
 
 export class DragAndDrop extends Component {
   state = {
     dragging: false,
-    userHasSelectedFile: false
+    userHasSelectedFile: false,
   };
   dragCounter = 0;
   dropRef = React.createRef();
-  allowedFiles = ['html', 'htm'];
+  allowedFiles = ["html", "htm"];
 
-  isAllowedFile = file => {
+  isAllowedFile = (file) => {
     const ext = file.name.match(/\.([0-9a-z]+)/i);
     return this.allowedFiles.includes(ext[1].toLowerCase());
   };
 
-  handleDrag = e => {
+  handleDrag = (e) => {
     e.preventDefault();
     e.stopPropagation();
   };
 
-  handleDragIn = e => {
+  handleDragIn = (e) => {
     e.preventDefault();
     e.stopPropagation();
     // Increment a drag counter to handle children dragin events
@@ -71,7 +98,7 @@ export class DragAndDrop extends Component {
     }
   };
 
-  handleDragOut = e => {
+  handleDragOut = (e) => {
     e.preventDefault();
     e.stopPropagation();
     // Decrement the dragcounter for child events and
@@ -84,7 +111,7 @@ export class DragAndDrop extends Component {
   /**
    * Handles the selection of an image by drag and drop
    */
-  handleDrop = e => {
+  handleDrop = (e) => {
     e.preventDefault();
     e.stopPropagation();
     this.setState({ dragging: false });
@@ -93,7 +120,10 @@ export class DragAndDrop extends Component {
       const file = e.dataTransfer.files[0];
       // Check to ensure the file is html
       if (!this.isAllowedFile(file)) {
-        this.props.openToast('Invalid file type. Make sure it is html or htm.', 'error');
+        this.props.openToast(
+          "Invalid file type. Make sure it is html or htm.",
+          "error"
+        );
         return;
       }
       this.setState({ userHasSelectedFile: true });
@@ -107,7 +137,7 @@ export class DragAndDrop extends Component {
   /**
    * Handles the selecting of an image using the input
    */
-  handleFileSelect = e => {
+  handleFileSelect = (e) => {
     this.setState({ dragging: false });
     if (e.target.files && e.target.files.length > 0) {
       this.setState({ userHasSelectedFile: true });
@@ -120,18 +150,18 @@ export class DragAndDrop extends Component {
   componentDidMount() {
     let div = this.dropRef.current;
     this.dragCounter = 0;
-    div.addEventListener('dragenter', this.handleDragIn);
-    div.addEventListener('dragleave', this.handleDragOut);
-    div.addEventListener('dragover', this.handleDrag);
-    div.addEventListener('drop', this.handleDrop);
+    div.addEventListener("dragenter", this.handleDragIn);
+    div.addEventListener("dragleave", this.handleDragOut);
+    div.addEventListener("dragover", this.handleDrag);
+    div.addEventListener("drop", this.handleDrop);
   }
 
   componentWillUnmount() {
     let div = this.dropRef.current;
-    div.removeEventListener('dragenter', this.handleDragIn);
-    div.removeEventListener('dragleave', this.handleDragOut);
-    div.removeEventListener('dragover', this.handleDrag);
-    div.removeEventListener('drop', this.handleDrop);
+    div.removeEventListener("dragenter", this.handleDragIn);
+    div.removeEventListener("dragleave", this.handleDragOut);
+    div.removeEventListener("dragover", this.handleDrag);
+    div.removeEventListener("drop", this.handleDrop);
   }
 
   render() {
@@ -139,8 +169,16 @@ export class DragAndDrop extends Component {
 
     const upload = (
       <React.Fragment>
-        <CloudUploadOutlinedIcon style={{ fontSize: 80 }} color="action"></CloudUploadOutlinedIcon>
-        <Typography component="h4" variant="h4" color="textSecondary" align="center">
+        <CloudUploadOutlinedIcon
+          style={{ fontSize: 80 }}
+          color="action"
+        ></CloudUploadOutlinedIcon>
+        <Typography
+          component="h4"
+          variant="h4"
+          color="textSecondary"
+          align="center"
+        >
           Drag and drop .html or .htm file here
         </Typography>
       </React.Fragment>
@@ -148,7 +186,10 @@ export class DragAndDrop extends Component {
 
     const drop = (
       <React.Fragment>
-        <AddPhotoAlternateIcon style={{ fontSize: 80 }} color="action"></AddPhotoAlternateIcon>
+        <AddPhotoAlternateIcon
+          style={{ fontSize: 80 }}
+          color="action"
+        ></AddPhotoAlternateIcon>
         <Typography component="h4" variant="h4" color="textSecondary">
           Add file
         </Typography>
@@ -201,6 +242,12 @@ export class DragAndDrop extends Component {
             Upload
           </Button>
         </CardActions>
+
+        {this.props.uploadStatus === "uploading" && (
+          <div className={classes.loadingOverlay}>
+            <CircularProgress />
+          </div>
+        )}
       </Card>
     );
   }
@@ -210,7 +257,7 @@ DragAndDrop.propTypes = {
   handleFileSelect: PropTypes.func.isRequired,
   handleUpload: PropTypes.func.isRequired,
   selectedFileName: PropTypes.string.isRequired,
-  openToast: PropTypes.func.isRequired
+  openToast: PropTypes.func.isRequired,
 };
 
 export default withStyles(styles)(DragAndDrop);

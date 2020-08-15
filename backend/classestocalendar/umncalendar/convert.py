@@ -1,9 +1,5 @@
 from .models import UMNClass
 import datetime
-try:
-    from PIL import Image
-except ImportError:
-    import Image
 
 def to_ics_string(classes, calendar_name='Class Calendar', timezone='America/Chicago', description=''):
     """
