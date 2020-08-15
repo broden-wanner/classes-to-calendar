@@ -48,7 +48,7 @@ function Footer() {
 
           <Typography
             component="p"
-            variant="body1"
+            variant="body2"
             className={classes.footerLink}
           >
             &#169; 2020 Broden Wanner
