@@ -46,7 +46,11 @@ function Footer() {
           </Link>
           <span className={classes.divder}>|</span>
 
-          <Typography component="p" variant="p" className={classes.footerLink}>
+          <Typography
+            component="p"
+            variant="body1"
+            className={classes.footerLink}
+          >
             &#169; 2020 Broden Wanner
           </Typography>
         </Grid>
