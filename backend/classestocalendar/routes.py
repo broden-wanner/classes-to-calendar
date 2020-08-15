@@ -1,7 +1,6 @@
 import os
 import json
 import datetime
-import dateutil.parser
 from flask import render_template, request, jsonify
 from .exceptions import ParseError, FileError
 from .utils import allowed_file
@@ -87,6 +86,7 @@ def events_endpoint():
     classes = [UMNClass(**c).to_event_dict() for c in classes]
     return json.dumps(classes)
 
+
 @app.route('/api/ics', methods=['POST'])
 def ics_endpoint():
     """
@@ -101,6 +101,7 @@ def ics_endpoint():
     content = to_ics_string(classes)
     return json.dumps({'ics': content})
 
+
 @app.route('/api/google-config', methods=['GET'])
 def google_config_endpoint():
     """
@@ -112,4 +113,3 @@ def google_config_endpoint():
         'scope': settings.ACTUAL_GOOGLE_SCOPE,
         'discoveryDocs': ['https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest']
     })
-

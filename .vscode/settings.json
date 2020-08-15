@@ -1,0 +1,9 @@
+{
+  "python.pythonPath": "backend/venv/bin/python",
+  "python.formatting.autopep8Args": [
+    "--ignore",
+    "E402",
+    "--max-line-length",
+    "120"
+  ]
+}

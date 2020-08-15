@@ -1,5 +1,6 @@
 from . import settings
 
+
 def allowed_file(filename: str) -> bool:
     """ 
     Checks the allowed file extensions

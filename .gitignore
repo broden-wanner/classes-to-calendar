@@ -29,7 +29,6 @@ yarn-error.log*
 .env
 
 ### Other ignores ###
-.vscode
 credentials.json
 *.pickle
 example-images/
