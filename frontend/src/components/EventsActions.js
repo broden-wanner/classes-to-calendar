@@ -16,7 +16,6 @@ import {
   MenuItem,
   Typography,
 } from "@material-ui/core";
-import TodayIcon from "@material-ui/icons/Today";
 import SendIcon from "@material-ui/icons/Send";
 import GetAppIcon from "@material-ui/icons/GetApp";
 
@@ -44,8 +43,8 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   actionSection: {
-    marginBottom: theme.spacing(3),
-    marginTop: theme.spacing(2),
+    marginBottom: theme.spacing(2),
+    marginTop: theme.spacing(1),
     "&:last-child": {
       marginBottom: 0,
     },
@@ -131,12 +130,31 @@ function EventsActions(props) {
         <CardContent>
           <div className={classes.actionSection}>
             <Typography variant="h6" component="h6">
+              Sign-in with Google
+            </Typography>
+            <p className={classes.infoText}>
+              Before you can add the classes to your calendar, you must first
+              sign in with Google.
+            </p>
+            <div className={classes.buttonContainer}>
+              <div
+                onClick={authorizeGcal}
+                className="google-sign-in-button"
+              ></div>
+            </div>
+          </div>
+
+          <Divider />
+          {props.children}
+
+          <div className={classes.actionSection}>
+            <Typography variant="h6" component="h6">
               Add to Google Calendar
             </Typography>
             <p className={classes.infoText}>
               You can add your classes to Google Calendar by either making a new
-              calendar or adding them to an existing one. You must authorize
-              GCal in order to do this.
+              calendar or adding them to an existing one. (You must be signed in
+              with Google before you can do this.)
             </p>
 
             <div className={classes.optionsForm}>
@@ -194,10 +212,6 @@ function EventsActions(props) {
             </div>
 
             <div className={classes.buttonContainer}>
-              <Button onClick={authorizeGcal}>
-                <TodayIcon className={classes.extendedIcon} />
-                Authorize GCal
-              </Button>
               <Button
                 color="primary"
                 onClick={handleSubmit}
