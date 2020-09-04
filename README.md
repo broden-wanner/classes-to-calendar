@@ -15,7 +15,3 @@ Website: <a href="https://classestocalendar.brodenwanner.com" target="blank">cla
 - React frontend
 - Flask backend
 - Nginx Server
-
-## Future Work
-
-- Validate with Google Calendar APIs
