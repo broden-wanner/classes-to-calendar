@@ -1,0 +1,24 @@
+{
+  "short_name": "UMN Classes to Calendar",
+  "name": "UMN Classes to Calendar",
+  "description": "Add your UMN classes to your Google Calendar through MyU",
+  "version": "1.0.0",
+  "manifest_version": 2,
+
+  "permissions": ["declarativeContent", "activeTab", "*://www.myu.umn.edu/*"],
+
+  "background": {
+    "scripts": ["background.js"]
+  },
+
+  "content_security_policy": "script-src 'self' https://cdnjs.cloudflare.com; object-src 'self'",
+
+  "content_scripts": [
+    {
+      "matches": ["*://www.myu.umn.edu/*"],
+      "js": ["content.js", "moment.js"]
+    }
+  ],
+
+  "browser_action": {}
+}

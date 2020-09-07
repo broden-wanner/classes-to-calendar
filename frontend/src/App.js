@@ -43,11 +43,30 @@ const useStyles = makeStyles((theme) => ({
   },
 }));
 
+// Get the json courses if they are in the query parameters
+let queryCourses = [];
+if ("URLSearchParams" in window) {
+  const searchParams = new URLSearchParams(window.location.search);
+  let queryString = searchParams.get("course_json");
+  try {
+    queryCourses = JSON.parse(queryString);
+  } catch (e) {
+    queryCourses = [];
+  }
+  if (!queryString) {
+    queryCourses = [];
+  }
+}
+
+// Get the stashed courses
+let stashedCourses = JSON.parse(localStorage.getItem("extractedClasses"));
+stashedCourses = stashedCourses ? stashedCourses : [];
+
 function App() {
   const classes = useStyles();
   // Attempt to get the local classes on init
   const [extractedClasses, setExtractedClasses] = useState(
-    JSON.parse(localStorage.getItem("extractedClasses")) || []
+    stashedCourses.length > 0 ? stashedCourses : queryCourses
   );
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");

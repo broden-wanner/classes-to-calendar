@@ -10,12 +10,10 @@ app = Flask(
     static_url_path=settings.STATIC_URL_PATH
 )
 
-# Add cors config in development
-if settings.FLASK_ENV == 'development':
-    # Set only api calls to come from localhost in development
-    cors = CORS(app, resources={r'/api/*': {'origins': 'http://localhost:3000'}})
+# Add cors config to allow all origins
+cors = CORS(app)
 
-# Import routes and hanlers after app initialization
+# Import routes and handlers after app initialization
 from . import routes
 from . import exceptions
 from . import handlers
