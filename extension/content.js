@@ -50,12 +50,12 @@ function submitHTML() {
         window.open(`${redirectUrl}?course_json=${encodedJSON}`);
       } else {
         throw new Error(
-          "No classes extracted. Ensure your image meets the requirements."
+          "No classes extracted. Ensure your html meets the requirements."
         );
       }
     })
     .catch((error) => {
-      console.error("Error with html upload", error);
+      console.log("Error with html upload", error);
       // Go on to the next page
       document
         .querySelector("#ID_UM_SSS_ENRL_SCHEDULE_PGLT button.btn.btn-link.next")
