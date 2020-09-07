@@ -36,10 +36,11 @@ def upload_html_endpoint():
         raise FileError('No file is present.')
 
     html_file = request.files['file']
-    class_start_date_str = request.form.get('startDate', None)
-    class_start_date = datetime.datetime.strptime(class_start_date_str, '%Y-%m-%d').date()
-    class_end_date_str = request.form.get('endDate', None)
-    class_end_date = datetime.datetime.strptime(class_end_date_str, '%Y-%m-%d').date()
+    class_start_date_str = request.form.get('startDate', '')
+    class_start_date = datetime.datetime.strptime(
+        class_start_date_str, '%Y-%m-%d').date() if class_start_date_str else ''
+    class_end_date_str = request.form.get('endDate', '')
+    class_end_date = datetime.datetime.strptime(class_end_date_str, '%Y-%m-%d').date() if class_end_date_str else ''
 
     # If no file is selected
     if html_file and html_file.filename == '':

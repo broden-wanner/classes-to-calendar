@@ -49,6 +49,7 @@ if ("URLSearchParams" in window) {
   const searchParams = new URLSearchParams(window.location.search);
   let queryString = searchParams.get("course_json");
   try {
+    queryString = decodeURIComponent(queryString);
     queryCourses = JSON.parse(queryString);
   } catch (e) {
     queryCourses = [];
@@ -57,6 +58,7 @@ if ("URLSearchParams" in window) {
     queryCourses = [];
   }
 }
+queryCourses = queryCourses ? queryCourses : [];
 
 // Get the stashed courses
 let stashedCourses = JSON.parse(localStorage.getItem("extractedClasses"));
@@ -66,7 +68,7 @@ function App() {
   const classes = useStyles();
   // Attempt to get the local classes on init
   const [extractedClasses, setExtractedClasses] = useState(
-    stashedCourses.length > 0 ? stashedCourses : queryCourses
+    queryCourses.length > 0 ? queryCourses : stashedCourses
   );
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");

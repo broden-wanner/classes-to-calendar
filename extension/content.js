@@ -1,10 +1,8 @@
 "use strict";
 
 // Default class start dates
-const classStartDate = new Date(2020, 8, 8);
-const classEndDate = new Date(2020, 11, 16);
-const apiRoot = `http://localhost:5000/api/upload-html`;
-const redirectUrl = `http://localhost:3000/classes`;
+const apiRoot = `https://classestocalendar.brodenwanner.com/api/upload-html`;
+const redirectUrl = `https://classestocalendar.brodenwanner.com/classes`;
 const retryWaitTime = 1500;
 
 /**
@@ -35,9 +33,6 @@ function submitHTML() {
     "file",
     new File([calendarHTML], "calendar.html", { type: "text/html" })
   );
-  // Add the chosen dates to the form
-  submitFormData.append("startDate", moment(classStartDate).format("Y-M-d"));
-  submitFormData.append("endDate", moment(classEndDate).format("Y-M-d"));
 
   // Make the post request with the html string
   fetch(url, {

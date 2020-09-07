@@ -11,12 +11,10 @@
     "scripts": ["background.js"]
   },
 
-  "content_security_policy": "script-src 'self' https://cdnjs.cloudflare.com; object-src 'self'",
-
   "content_scripts": [
     {
       "matches": ["*://www.myu.umn.edu/*"],
-      "js": ["content.js", "moment.js"]
+      "js": ["content.js"]
     }
   ],
 
