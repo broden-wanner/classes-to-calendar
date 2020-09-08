@@ -58,7 +58,7 @@ function UploadPage(props) {
   };
 
   /**
-   * Uploades the image to the api endpoint. It sends a POST request to the endpoint and handles
+   * Uploads the image to the api endpoint. It sends a POST request to the endpoint and handles
    * any errors returned form the server
    */
   const handleUpload = () => {

@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { BrowserRouter as Router, Route } from "react-router-dom";
+import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
 import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
@@ -15,6 +15,7 @@ import InstructionDialog from "./components/InstructionDialog";
 import PrivacyPolicyPage from "./pages/PrivacyPolicyPage";
 import Footer from "./components/Footer";
 import ContactPage from "./pages/ContactPage";
+import NotFound from "./components/NotFound";
 
 const appTheme = createMuiTheme({
   palette: {
@@ -173,30 +174,35 @@ function App() {
               openInstructions={handleInstructionsOpen}
               extractedClasses={extractedClasses}
             ></Navbar>
-            <Route exact path="/">
-              <HomePage openInstructions={handleInstructionsOpen} />
-            </Route>
-            <Route exact path="/upload">
-              <UploadPage
-                openToast={handleToastOpen}
-                handleClasses={handleExtractedClasses}
-              />
-            </Route>
-            <Route exact path="/classes">
-              <ClassesPage
-                extractedClasses={extractedClasses}
-                handleClassChange={handleClassChange}
-                handleClassAdd={handleClassAdd}
-                handleClassDelete={handleClassDelete}
-                openToast={handleToastOpen}
-              />
-            </Route>
-            <Route exact path="/privacy-policy">
-              <PrivacyPolicyPage />
-            </Route>
-            <Route exact path="/contact">
-              <ContactPage />
-            </Route>
+            <Switch>
+              <Route exact path="/">
+                <HomePage openInstructions={handleInstructionsOpen} />
+              </Route>
+              <Route exact path="/upload">
+                <UploadPage
+                  openToast={handleToastOpen}
+                  handleClasses={handleExtractedClasses}
+                />
+              </Route>
+              <Route exact path="/classes">
+                <ClassesPage
+                  extractedClasses={extractedClasses}
+                  handleClassChange={handleClassChange}
+                  handleClassAdd={handleClassAdd}
+                  handleClassDelete={handleClassDelete}
+                  openToast={handleToastOpen}
+                />
+              </Route>
+              <Route exact path="/privacy-policy">
+                <PrivacyPolicyPage />
+              </Route>
+              <Route exact path="/contact">
+                <ContactPage />
+              </Route>
+              <Route>
+                <NotFound />
+              </Route>
+            </Switch>
             <Footer />
           </Router>
 
