@@ -15,4 +15,5 @@ Currently, the dates default to the UMN Fall 2020 term, which
 starts on **9/8/2020** and ends on **12/16/2020**.
 
 Website: <a href="https://classestocalendar.brodenwanner.com" target="blank">classestocalendar.brodenwanner.com</a>
+
 Extension: <a href="https://chrome.google.com/webstore/detail/umn-classes-to-calendar/hgdfmecgpajmoeionaieooohpbkibaen" target="blank">chrome.google.com/webstore/umn-classes-to-calendar</a>
