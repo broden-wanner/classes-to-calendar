@@ -4,11 +4,23 @@
 const apiRoot = `https://classestocalendar.brodenwanner.com/api/upload-html`;
 const redirectUrl = `https://classestocalendar.brodenwanner.com/classes`;
 const retryWaitTime = 1500;
+const maxAttempts = 5;
+
+let currentAttempt = 0;
 
 /**
  * Submits the current HTML of the page
  */
 function submitHTML() {
+  // Stop if max attempts reached
+  if (currentAttempt >= maxAttempts){
+    alert('Could get classes because of an unknown error. Please contact the extension author.');
+    return;
+  }
+
+  // Increment the attempt number
+  currentAttempt += 1;
+  
   // Get the calendar HTML
   let calendarHTML = document.documentElement.innerHTML;
 
