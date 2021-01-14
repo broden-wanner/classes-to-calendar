@@ -13,6 +13,7 @@ import {
   Card,
   CardContent,
 } from "@material-ui/core";
+import globals from '../globals';
 
 const useStyles = makeStyles((theme) => ({
   uploadContent: {
@@ -46,8 +47,8 @@ function UploadPage(props) {
   const [selectedFile, setSelectedFile] = useState(null);
   const [selectedFileName, setSelectedFileName] = useState("");
   const [uploadStatus, setUploadStatus] = useState("");
-  const [classStartDate, setClassStartDate] = useState(new Date(2020, 8, 8));
-  const [classEndDate, setClassEndDate] = useState(new Date(2020, 11, 16));
+  const [classStartDate, setClassStartDate] = useState(globals.defaultStartDate);
+  const [classEndDate, setClassEndDate] = useState(globals.defaultEndDate);
 
   /**
    * Handles the selecting of an image and sets it to be previewed
@@ -99,12 +100,12 @@ function UploadPage(props) {
           history.push("/classes");
         } else {
           throw new Error(
-            "No classes extracted. Ensure your image meets the requirements."
+            "No classes extracted. Ensure your file meets the requirements."
           );
         }
       })
       .catch((error) => {
-        console.error("Error with image upload", error);
+        console.error("Error with upload", error);
         let msg = "";
         if (error.response) {
           msg = error.response.data.message;

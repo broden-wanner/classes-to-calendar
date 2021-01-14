@@ -4,7 +4,7 @@
   height: 46.5px;
   width: 196px;
   margin-right: 10px;
-  background-image: url(/google-buttons/signin-light-normal.png);
+  background-image: url(assets/google-buttons/signin-light-normal.png);
 }
 
 .google-sign-in-button:hover {
@@ -12,11 +12,11 @@
 }
 
 .google-sign-in-button:active {
-  background-image: url(/google-buttons/signin-light-pressed.png);
+  background-image: url(assets/google-buttons/signin-light-pressed.png);
   outline: none;
 }
 
 .google-sign-in-button:focus {
-  background-image: url(/google-buttons/signin-light-focus.png);
+  background-image: url(assets/google-buttons/signin-light-focus.png);
   outline: none;
 }

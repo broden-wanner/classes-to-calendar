@@ -4,6 +4,7 @@ import pickle
 import datetime
 from classestocalendar.umncalendar.html_parser import generate_umn_classes_from_html
 from classestocalendar.umncalendar import models
+from classestocalendar import settings
 
 # Set the modules needed to unpickle
 sys.modules['models'] = models
@@ -17,8 +18,8 @@ class TestHTMLParserUtils:
 
         with open(f'tests/test-html/{name}.html', 'r+') as f:
             html_string = f.read()
-        start_date = datetime.date(year=2020, month=1, day=21)
-        end_date = datetime.date(year=2020, month=5, day=4)
+        start_date = settings.DEFAULT_CLASS_START_DATE
+        end_date = settings.DEFAULT_CLASS_END_DATE
 
         results = generate_umn_classes_from_html(html_string=html_string, start_date=start_date, end_date=end_date)
         classes = results['classes']
@@ -33,3 +34,12 @@ class TestHTMLParserUtils:
 
     def test_no_class_day_calendar(self):
         self.check_calendar('no-class-day')
+
+    def test_fall2020_calendar(self):
+        self.check_calendar('fall2020calendar')
+
+    def test_spring2021_calendar(self):
+        self.check_calendar('spring2021calendar')
+
+    def test_partial_calendar(self):
+        self.check_calendar('partial-calendar')

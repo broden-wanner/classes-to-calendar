@@ -12,9 +12,8 @@ function submitHTML() {
   // Get the calendar HTML
   let calendarHTML = document.documentElement.innerHTML;
 
-  // Move onto the next page if there is "No Classes Scheduled" text
-  let noScheduledText =
-    '<span class="myu_calendar-class no-class">No classes scheduled</span>';
+  // Move onto the next page if there is "No classes" text
+  let noScheduledText = 'No classes';
   if (calendarHTML.includes(noScheduledText)) {
     // Go on to the next page
     document

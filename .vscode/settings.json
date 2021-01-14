@@ -1,9 +1,14 @@
 {
-  "python.pythonPath": "backend/venv/bin/python",
+  "python.pythonPath": "${workspaceFolder}\\backend\\venv\\Scripts\\python",
   "python.formatting.autopep8Args": [
     "--ignore",
     "E402",
     "--max-line-length",
     "120"
+  ],
+  "python.analysis.extraPaths": [
+    "backend",
+    "backend\\classestocalendar",
+    "backend\\classestocalendar\\umncalendar"
   ]
 }
