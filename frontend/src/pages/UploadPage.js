@@ -20,7 +20,7 @@ const useStyles = makeStyles((theme) => ({
     display: "flex",
     width: "100%",
     alignItems: "center",
-    flexDirection: "column",
+    flexDirection: "column"
   },
   uploadContainer: {
     position: "relative",
@@ -34,7 +34,7 @@ const useStyles = makeStyles((theme) => ({
     marginBottom: theme.spacing(1),
   },
   pageContent: {
-    marginTop: "15vh",
+    marginTop: "10vh",
   },
   datePicker: {
     padding: theme.spacing(4),

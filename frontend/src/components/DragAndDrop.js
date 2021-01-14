@@ -23,7 +23,7 @@ const styles = (theme) => ({
     position: "relative",
     border: "2px dashed #ccc",
     width: "100%",
-    minHeight: "400px",
+    minHeight: "300px",
     padding: "20px",
     transition: "all 0.1s ease-in-out",
     "&:hover": {

@@ -1,7 +1,6 @@
 import sys
 import pytest
 import pickle
-import datetime
 from classestocalendar.umncalendar.html_parser import generate_umn_classes_from_html
 from classestocalendar.umncalendar import models
 from classestocalendar import settings
