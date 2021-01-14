@@ -11,8 +11,8 @@ their calendars.
 The [Chrome extension](https://chrome.google.com/webstore/detail/umn-classes-to-calendar/hgdfmecgpajmoeionaieooohpbkibaen)
 adds a button to MyU so students can add their classes to their calendar with one click.
 
-Currently, the dates default to the UMN Fall 2020 term, which
-starts on **9/8/2020** and ends on **12/16/2020**.
+Currently, the dates default to the UMN Spring 2021 term, which
+starts on **1/19/2021** and ends on **5/3/2021**.
 
 Website: <a href="https://classestocalendar.brodenwanner.com" target="blank">classestocalendar.brodenwanner.com</a>
 
