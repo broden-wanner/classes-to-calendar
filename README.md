@@ -1,6 +1,7 @@
 # Classes to Calendar
 
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/hgdfmecgpajmoeionaieooohpbkibaen)
+![Mozilla Add-on](https://img.shields.io/amo/v/umn-classes-to-calendar)
 
 This is a web application and browser extension duo designed to take a UMN class schedule
 and extract the class data out of it. The user can then add these classes to

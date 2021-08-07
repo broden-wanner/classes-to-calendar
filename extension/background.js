@@ -1,16 +1,26 @@
 "use strict";
 
+// Set the correct browser
+let extensionsAPI;
+if (typeof chrome !== 'undefined') {
+  // Chrome, Edge, Opera
+  extensionsAPI = chrome;
+} else {
+  // Firefox
+  extensionsAPI = browser;
+}
+
 // Add a listener to show the page action when the host is correct
-chrome.runtime.onInstalled.addListener(() => {
-  chrome.declarativeContent.onPageChanged.removeRules(undefined, function () {
-    chrome.declarativeContent.onPageChanged.addRules([
+extensionsAPI.runtime.onInstalled.addListener(() => {
+  extensionsAPI.declarativeContent.onPageChanged.removeRules(undefined, function () {
+    extensionsAPI.declarativeContent.onPageChanged.addRules([
       {
         conditions: [
-          new chrome.declarativeContent.PageStateMatcher({
-            pageUrl: { hostEquals: "myu.umn.edu" },
+          new extensionsAPI.declarativeContent.PageStateMatcher({
+            pageUrl: { hostEquals: "www.myu.umn.edu", schemes: ['https', 'http'] },
           }),
         ],
-        actions: [new chrome.declarativeContent.ShowPageAction()],
+        actions: [new extensionsAPI.declarativeContent.ShowPageAction()],
       },
     ]);
   });

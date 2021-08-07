@@ -97,16 +97,16 @@ def generate_umn_classes_from_html(
 if __name__ == '__main__':
     # Check the arguments
     if len(sys.argv) == 1:
-        print(f'Usage: python {sys.argv[0]} --f filename')
+        print(f'Usage: python {sys.argv[0]} -f filename')
         sys.exit()
 
     # Get the filename to pickle
     filename = ''
     try:
-        fname_index = sys.argv.index('--f') + 1
+        fname_index = sys.argv.index('-f') + 1
         filename = sys.argv[fname_index]
     except ValueError:
-        print('Specify the filename with --f')
+        print('Specify the filename with -f')
         sys.exit()
 
     with open(f'../../tests/test-html/{filename}.html', 'r+') as f:
