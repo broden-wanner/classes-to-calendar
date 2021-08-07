@@ -5,22 +5,15 @@ import axios from "axios";
 import { format } from "date-fns";
 import DragAndDrop from "../components/DragAndDrop";
 import ClassDatePicker from "../components/ClassDatePicker";
-import {
-  Container,
-  makeStyles,
-  Typography,
-  Grid,
-  Card,
-  CardContent,
-} from "@material-ui/core";
-import globals from '../globals';
+import { Container, makeStyles, Typography, Grid, Card, CardContent } from "@material-ui/core";
+import globals from "../globals";
 
 const useStyles = makeStyles((theme) => ({
   uploadContent: {
     display: "flex",
     width: "100%",
     alignItems: "center",
-    flexDirection: "column"
+    flexDirection: "column",
   },
   uploadContainer: {
     position: "relative",
@@ -91,17 +84,12 @@ function UploadPage(props) {
           if (extracted_all) {
             props.openToast("Classes extracted", "success");
           } else {
-            props.openToast(
-              "Only some data extracted. Fill in the missing info.",
-              "warning"
-            );
+            props.openToast("Only some data extracted. Fill in the missing info.", "warning");
           }
           // Redirect to the classes page
           history.push("/classes");
         } else {
-          throw new Error(
-            "No classes extracted. Ensure your file meets the requirements."
-          );
+          throw new Error("No classes extracted. Ensure your file meets the requirements.");
         }
       })
       .catch((error) => {
@@ -121,12 +109,7 @@ function UploadPage(props) {
     <div className={classes.uploadContent}>
       <Container className={classes.pageContent}>
         <Container className={classes.header}>
-          <Typography
-            variant="h2"
-            align="center"
-            component="h1"
-            color="inherit"
-          >
+          <Typography variant="h2" align="center" component="h1" color="inherit">
             Upload Schedule
           </Typography>
         </Container>
@@ -144,15 +127,11 @@ function UploadPage(props) {
             <Grid item xs={4}>
               <Card>
                 <CardContent className={classes.datePicker}>
-                  <Typography
-                    className={classes.sectionTitle}
-                    component="h5"
-                    variant="h5"
-                  >
+                  <Typography className={classes.sectionTitle} component="h5" variant="h5">
                     Select date range
                   </Typography>
                   <Typography variant="body2">
-                    Defaults to the current UMN term: <strong>Fall 2020</strong>
+                    Defaults to the current UMN term: <strong>{globals.currentTerm}</strong>
                   </Typography>
                   <ClassDatePicker
                     startDate={classStartDate}
