@@ -97,7 +97,10 @@ function ClassesPage(props) {
    * Authorizes the user with Google Calendar through the api
    */
   const authorizeGcal = () => {
-    gcalClient.handleAuthClick();
+    const succeeded = gcalClient.handleAuthClick();
+    if (!succeeded) {
+      props.openToast("Sign-in with Google failed. Please contact support.", "error");
+    }
   };
 
   /**
@@ -110,14 +113,11 @@ function ClassesPage(props) {
       props.openToast("A calendar must be selected", "error");
     }
 
-    // Make the requrest to server for the events
+    // Make the request to server for the events
     let events = [];
     let eventCounter = 0;
     axios
-      .post(
-        `${process.env.REACT_APP_API_ENDPOINT}/api/events`,
-        props.extractedClasses
-      )
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/events`, props.extractedClasses)
       .then((res) => {
         events = res.data;
         // Add each event to the calendar on the gcalClient
@@ -129,17 +129,11 @@ function ClassesPage(props) {
               // Check to see if the last event has been created
               if (eventCounter === events.length) {
                 setEventsStatus("created");
-                props.openToast(
-                  "Successfully create events! Check your gcal",
-                  "success"
-                );
+                props.openToast("Successfully create events! Check your gcal", "success");
               }
             })
             .catch((error) => {
-              props.openToast(
-                "Could not create event " + event.summary,
-                "error"
-              );
+              props.openToast("Could not create event " + event.summary, "error");
               console.error(error);
             });
         });
@@ -198,18 +192,12 @@ function ClassesPage(props) {
    */
   const exportCalendar = () => {
     axios
-      .post(
-        `${process.env.REACT_APP_API_ENDPOINT}/api/ics`,
-        props.extractedClasses
-      )
+      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/ics`, props.extractedClasses)
       .then((res) => {
         const icsString = res.data.ics;
         // Create an invisible link element to download the file
         var element = document.createElement("a");
-        element.setAttribute(
-          "href",
-          "data:text/calendar;charset=utf-8," + encodeURIComponent(icsString)
-        );
+        element.setAttribute("href", "data:text/calendar;charset=utf-8," + encodeURIComponent(icsString));
         element.setAttribute("download", "class-calendar.ics");
         element.style.display = "none";
         document.body.appendChild(element);
@@ -226,12 +214,7 @@ function ClassesPage(props) {
     <div className={classes.classesPage}>
       <Container className={classes.content}>
         <Container className={classes.header}>
-          <Typography
-            variant="h2"
-            align="center"
-            component="h1"
-            color="inherit"
-          >
+          <Typography variant="h2" align="center" component="h1" color="inherit">
             Review Classes
           </Typography>
         </Container>
@@ -239,9 +222,8 @@ function ClassesPage(props) {
           <div className={classes.classList}>
             <Card className={classes.classesInfo}>
               <CardContent style={{ paddingBottom: "16px" }}>
-                The classes extracted from your html are below. Review and edit
-                the info for each class by clicking on it and changing anything
-                that's incorrect.
+                The classes extracted from your html are below. Review and edit the info for each class by clicking on
+                it and changing anything that's incorrect.
               </CardContent>
             </Card>
             {props.extractedClasses.map((cls) => (
@@ -253,11 +235,7 @@ function ClassesPage(props) {
               />
             ))}
             <Tooltip title="Add class" aria-label="add class">
-              <Fab
-                color="primary"
-                className={classes.fabButton}
-                onClick={props.handleClassAdd}
-              >
+              <Fab color="primary" className={classes.fabButton} onClick={props.handleClassAdd}>
                 <AddIcon />
               </Fab>
             </Tooltip>

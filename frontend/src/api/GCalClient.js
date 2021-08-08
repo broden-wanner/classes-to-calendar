@@ -1,4 +1,4 @@
-import axios from 'axios';
+import axios from "axios";
 
 class GCalClient {
   signedIn = false;
@@ -23,12 +23,12 @@ class GCalClient {
   }
 
   /**
-   * Performs the inital auth setup:
+   * Performs the initial auth setup:
    * Gets the config and initializes the Google API client
    * Sets the GoogleAuth object and listens for signedIn status
    */
   async initClient() {
-    this.gapi = window['gapi'];
+    this.gapi = window["gapi"];
     const config = await this.getConfig();
     this.gapi.client
       .init(config.data)
@@ -36,7 +36,7 @@ class GCalClient {
         // Get the google auth instance
         this.GoogleAuth = this.gapi.auth2.getAuthInstance();
         if (!this.GoogleAuth) {
-          throw new Error('Could not authorize Google API');
+          throw new Error("Could not authorize Google API");
         }
 
         // Listen for sign-in state changes.
@@ -50,8 +50,8 @@ class GCalClient {
           this.onLoadCallback(this.signedIn);
         }
       })
-      .catch(e => {
-        console.error('Error in setting up the google client:');
+      .catch((e) => {
+        console.error("Error in setting up the google client:");
         console.error(e);
       });
   }
@@ -61,23 +61,26 @@ class GCalClient {
    * When done loading, call this.initClient
    */
   handleClientLoad() {
-    this.gapi = window['gapi'];
-    var script = document.createElement('script');
-    script.src = 'https://apis.google.com/js/api.js';
+    this.gapi = window["gapi"];
+    var script = document.createElement("script");
+    script.src = "https://apis.google.com/js/api.js";
     document.body.appendChild(script);
     script.onload = () => {
-      window['gapi'].load('client:auth2', this.initClient);
+      window["gapi"].load("client:auth2", this.initClient);
     };
   }
 
   /**
    * Signs the users in using the GoogleAuth object
+   * @returns {boolean} - if true, sign-in succeeded. else, did not succeed.
    */
   handleAuthClick() {
     if (this.GoogleAuth) {
       this.GoogleAuth.signIn();
+      return true;
     } else {
-      console.error('App not authorized with Google');
+      console.error("App not authorized with Google");
+      return false;
     }
   }
 
@@ -109,22 +112,22 @@ class GCalClient {
   createCalendar(name) {
     const calendar = {
       summary: name,
-      timeZone: 'America/Chicago'
+      timeZone: "America/Chicago",
     };
-    return this.gapi.client.calendar.calendars.insert(calendar).then(res => {
+    return this.gapi.client.calendar.calendars.insert(calendar).then((res) => {
       this.calendar = res.result;
       console.log(res);
     });
   }
 
   /**
-   * Adds a new event to the calendar specificed by this.calendar
+   * Adds a new event to the calendar specified by this.calendar
    * @param {object} event - the event to add to a calendar
    */
   createEvent(event) {
     return this.gapi.client.calendar.events.insert({
       calendarId: this.calendar.id,
-      resource: event
+      resource: event,
     });
   }
 

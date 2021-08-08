@@ -62,13 +62,7 @@ const useStyles = makeStyles((theme) => ({
 
 function EventsActions(props) {
   const classes = useStyles();
-  const {
-    sendToGcal,
-    authorizeGcal,
-    gcalClient,
-    signedIn,
-    exportCalendar,
-  } = props;
+  const { sendToGcal, authorizeGcal, gcalClient, signedIn, exportCalendar } = props;
   const [calOption, setCalOption] = useState("new");
   const [calList, setCalList] = useState([]);
   const [calId, setCalId] = useState("");
@@ -133,14 +127,10 @@ function EventsActions(props) {
               Sign-in with Google
             </Typography>
             <p className={classes.infoText}>
-              Before you can add the classes to your calendar, you must first
-              sign in with Google.
+              Before you can add the classes to your calendar, you must first sign in with Google.
             </p>
             <div className={classes.buttonContainer}>
-              <div
-                onClick={authorizeGcal}
-                className="google-sign-in-button"
-              ></div>
+              <div onClick={authorizeGcal} className="google-sign-in-button"></div>
             </div>
           </div>
 
@@ -152,9 +142,8 @@ function EventsActions(props) {
               Add to Google Calendar
             </Typography>
             <p className={classes.infoText}>
-              You can add your classes to Google Calendar by either making a new
-              calendar or adding them to an existing one. (You must be signed in
-              with Google before you can do this.)
+              You can add your classes to Google Calendar by either making a new calendar or adding them to an existing
+              one. (You must be signed in with Google before you can do this.)
             </p>
 
             <div className={classes.optionsForm}>
@@ -165,12 +154,7 @@ function EventsActions(props) {
                   defaultValue={calOption}
                   onChange={handleOptionChange}
                 >
-                  <FormControlLabel
-                    value="new"
-                    control={<Radio />}
-                    label="Make a new calendar"
-                    disabled={!signedIn}
-                  />
+                  <FormControlLabel value="new" control={<Radio />} label="Make a new calendar" disabled={!signedIn} />
                   {calOption === "new" && (
                     <TextField
                       className={classes.formField}
@@ -188,10 +172,7 @@ function EventsActions(props) {
                     disabled={!signedIn}
                   />
                   {calOption === "existing" && (
-                    <FormControl
-                      className={classes.formField}
-                      style={{ width: "300px" }}
-                    >
+                    <FormControl className={classes.formField} style={{ width: "300px" }}>
                       <InputLabel>Select from calendars...</InputLabel>
                       <Select
                         label="existing-calendar"
@@ -212,11 +193,7 @@ function EventsActions(props) {
             </div>
 
             <div className={classes.buttonContainer}>
-              <Button
-                color="primary"
-                onClick={handleSubmit}
-                disabled={!signedIn}
-              >
+              <Button color="primary" onClick={handleSubmit} disabled={!signedIn}>
                 <SendIcon className={classes.extendedIcon} />
                 Send to GCal
               </Button>
@@ -231,9 +208,8 @@ function EventsActions(props) {
               Export to Another Calendar
             </Typography>
             <p className={classes.infoText}>
-              You can also export your classes to another calendar by clicking
-              the export button. This will download a file that you can import
-              to any other calendar service.
+              You can also export your classes to another calendar by clicking the export button. This will download a
+              file that you can import to any other calendar service.
             </p>
             <div className={classes.buttonContainer}>
               <Button color="primary" onClick={exportCalendar}>
