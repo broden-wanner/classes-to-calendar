@@ -12,7 +12,6 @@
     "192": "icons/android-chrome-192x192.png",
     "512": "icons/android-chrome-512x512.png"
   },
-
   "permissions": [
     "declarativeContent",
     "activeTab",
@@ -20,17 +19,14 @@
     "*://classestocalendar.brodenwanner.com/*",
     "*://*.umnclassestocalendar.com/*"
   ],
-
   "background": {
     "scripts": ["background.js"]
   },
-
   "content_scripts": [
     {
       "matches": ["*://www.myu.umn.edu/*"],
       "js": ["content.js"]
     }
   ],
-
   "browser_action": {}
 }
