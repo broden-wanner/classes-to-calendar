@@ -2,7 +2,7 @@
 
 ![Website](https://img.shields.io/website?down_color=red&down_message=down&up_color=green&up_message=online&url=https%3A%2F%2Fumnclassestocalendar.com%2F)
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/hgdfmecgpajmoeionaieooohpbkibaen)
-![Mozilla Add-on](https://img.shields.io/amo/v/umn-classes-to-calendar)
+![Mozilla Add-on](https://img.shields.io/amo/v/%7Bbc5ce2f1-6eda-4ffa-8c8a-aba76a72cc04%7D)
 
 This is a web application and browser extension duo designed to take a UMN class schedule
 and extract the class data out of it. The user can then add these classes to
