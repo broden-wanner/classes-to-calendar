@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Switch } from "react-router-dom";
 
 import CssBaseline from "@material-ui/core/CssBaseline";
-import { createMuiTheme, ThemeProvider } from "@material-ui/core/styles";
+import { createTheme, ThemeProvider } from "@material-ui/core/styles";
 import { makeStyles } from "@material-ui/core";
 import "./App.css";
 
@@ -17,7 +17,7 @@ import Footer from "./components/Footer";
 import ContactPage from "./pages/ContactPage";
 import NotFound from "./components/NotFound";
 
-const appTheme = createMuiTheme({
+const appTheme = createTheme({
   palette: {
     primary: {
       light: "#913447",
@@ -68,9 +68,7 @@ stashedCourses = stashedCourses ? stashedCourses : [];
 function App() {
   const classes = useStyles();
   // Attempt to get the local classes on init
-  const [extractedClasses, setExtractedClasses] = useState(
-    queryCourses.length > 0 ? queryCourses : stashedCourses
-  );
+  const [extractedClasses, setExtractedClasses] = useState(queryCourses.length > 0 ? queryCourses : stashedCourses);
   const [toastOpen, setToastOpen] = useState(false);
   const [toastMessage, setToastMessage] = useState("");
   const [toastVariant, setToastVariant] = useState("error");
@@ -170,19 +168,13 @@ function App() {
       <ThemeProvider theme={appTheme}>
         <div className={classes.background}>
           <Router>
-            <Navbar
-              openInstructions={handleInstructionsOpen}
-              extractedClasses={extractedClasses}
-            ></Navbar>
+            <Navbar openInstructions={handleInstructionsOpen} extractedClasses={extractedClasses}></Navbar>
             <Switch>
               <Route exact path="/">
                 <HomePage openInstructions={handleInstructionsOpen} />
               </Route>
               <Route exact path="/upload">
-                <UploadPage
-                  openToast={handleToastOpen}
-                  handleClasses={handleExtractedClasses}
-                />
+                <UploadPage openToast={handleToastOpen} handleClasses={handleExtractedClasses} />
               </Route>
               <Route exact path="/classes">
                 <ClassesPage
@@ -206,16 +198,8 @@ function App() {
             <Footer />
           </Router>
 
-          <InstructionDialog
-            open={instructionsOpen}
-            onClose={handleInstructionsClose}
-          />
-          <Toast
-            open={toastOpen}
-            handleClose={handleToastClose}
-            message={toastMessage}
-            variant={toastVariant}
-          />
+          <InstructionDialog open={instructionsOpen} onClose={handleInstructionsClose} />
+          <Toast open={toastOpen} handleClose={handleToastClose} message={toastMessage} variant={toastVariant} />
         </div>
       </ThemeProvider>
     </React.Fragment>

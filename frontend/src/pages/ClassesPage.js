@@ -5,13 +5,14 @@ import {
   Container,
   Typography,
   CircularProgress,
-  fade,
+  alpha,
   Card,
   CardContent,
   makeStyles,
   Fab,
   Tooltip,
 } from "@material-ui/core";
+import globals from "../globals";
 import AddIcon from "@material-ui/icons/Add";
 
 import GCalClient from "../api/GCalClient";
@@ -37,7 +38,7 @@ const useStyles = makeStyles((theme) => ({
     width: "100%",
     height: "100%",
     borderRadius: "4px",
-    backgroundColor: fade(theme.palette.grey[900], 0.4),
+    backgroundColor: alpha(theme.palette.grey[900], 0.4),
   },
   content: {
     height: "max-content",
@@ -117,7 +118,7 @@ function ClassesPage(props) {
     let events = [];
     let eventCounter = 0;
     axios
-      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/events`, props.extractedClasses)
+      .post(`${globals.apiUrl}/calendar/events`, props.extractedClasses)
       .then((res) => {
         events = res.data;
         // Add each event to the calendar on the gcalClient
@@ -192,7 +193,7 @@ function ClassesPage(props) {
    */
   const exportCalendar = () => {
     axios
-      .post(`${process.env.REACT_APP_API_ENDPOINT}/api/ics`, props.extractedClasses)
+      .post(`${globals.apiUrl}/calendar/ics`, props.extractedClasses)
       .then((res) => {
         const icsString = res.data.ics;
         // Create an invisible link element to download the file
