@@ -14,7 +14,7 @@ jobs:
           python-version: 3.8
       - name: Install Poetry
         if: steps.cache.outputs.cache-hit != 'true'
-        run: pip install poetry
+        run: pip install poetry && poetry config virtualenvs.create false
       - name: Install Dependencies
         if: steps.cache.outputs.cache-hit != 'true'
         run: cd backend/app && poetry install
