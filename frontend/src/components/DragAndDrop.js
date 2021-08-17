@@ -8,7 +8,7 @@ import {
   Typography,
   withStyles,
   CircularProgress,
-  fade,
+  alpha,
 } from "@material-ui/core";
 import CloudUploadOutlinedIcon from "@material-ui/icons/CloudUploadOutlined";
 import AddPhotoAlternateIcon from "@material-ui/icons/AddPhotoAlternate";
@@ -42,7 +42,7 @@ const styles = (theme) => ({
     width: "100%",
     height: "100%",
     borderRadius: "4px",
-    backgroundColor: fade(theme.palette.grey[900], 0.4),
+    backgroundColor: alpha(theme.palette.grey[900], 0.4),
     flexGrow: 0,
     flexBasis: "66.66667%",
     maxWidth: "65.86667%",
@@ -120,10 +120,7 @@ export class DragAndDrop extends Component {
       const file = e.dataTransfer.files[0];
       // Check to ensure the file is html
       if (!this.isAllowedFile(file)) {
-        this.props.openToast(
-          "Invalid file type. Make sure it is html or htm.",
-          "error"
-        );
+        this.props.openToast("Invalid file type. Make sure it is html or htm.", "error");
         return;
       }
       this.setState({ userHasSelectedFile: true });
@@ -169,16 +166,8 @@ export class DragAndDrop extends Component {
 
     const upload = (
       <React.Fragment>
-        <CloudUploadOutlinedIcon
-          style={{ fontSize: 80 }}
-          color="action"
-        ></CloudUploadOutlinedIcon>
-        <Typography
-          component="h4"
-          variant="h4"
-          color="textSecondary"
-          align="center"
-        >
+        <CloudUploadOutlinedIcon style={{ fontSize: 80 }} color="action"></CloudUploadOutlinedIcon>
+        <Typography component="h4" variant="h4" color="textSecondary" align="center">
           Drag and drop .html or .htm file here
         </Typography>
       </React.Fragment>
@@ -186,10 +175,7 @@ export class DragAndDrop extends Component {
 
     const drop = (
       <React.Fragment>
-        <AddPhotoAlternateIcon
-          style={{ fontSize: 80 }}
-          color="action"
-        ></AddPhotoAlternateIcon>
+        <AddPhotoAlternateIcon style={{ fontSize: 80 }} color="action"></AddPhotoAlternateIcon>
         <Typography component="h4" variant="h4" color="textSecondary">
           Add file
         </Typography>
@@ -211,11 +197,7 @@ export class DragAndDrop extends Component {
           <label htmlFor="html-upload">
             <div ref={this.dropRef} className={classes.dropzoneArea}>
               <div className={classes.uploadInfo}>
-                {!this.state.userHasSelectedFile
-                  ? !this.state.dragging
-                    ? upload
-                    : drop
-                  : filePreview}
+                {!this.state.userHasSelectedFile ? (!this.state.dragging ? upload : drop) : filePreview}
               </div>
             </div>
           </label>

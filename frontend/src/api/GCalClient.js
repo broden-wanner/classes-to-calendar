@@ -1,4 +1,5 @@
 import axios from "axios";
+import globals from "../globals";
 
 class GCalClient {
   signedIn = false;
@@ -19,7 +20,7 @@ class GCalClient {
    * Gets the api config from the backend
    */
   async getConfig() {
-    return await axios.get(`${process.env.REACT_APP_API_ENDPOINT}/api/google-config`);
+    return await axios.get(`${globals.apiUrl}/calendar/google-config`);
   }
 
   /**

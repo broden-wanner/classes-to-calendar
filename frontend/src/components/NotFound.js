@@ -1,12 +1,5 @@
 import React from "react";
-import {
-  makeStyles,
-  Typography,
-  Card,
-  Container,
-  Grid,
-  CardContent,
-} from "@material-ui/core";
+import { makeStyles, Typography, Card, Container, Grid, CardContent } from "@material-ui/core";
 import { Link } from "react-router-dom";
 
 const useStyles = makeStyles((theme) => ({
@@ -32,7 +25,7 @@ export default function NotFound() {
       <Container className={classes.content}>
         <Card className={classes.card}>
           <CardContent>
-            <Grid container justify="space-between">
+            <Grid container justifyContent="space-between">
               <Typography variant="h2" component="h2" align="center">
                 Not Found :(
               </Typography>

@@ -36,7 +36,7 @@ function Footer() {
   return (
     <AppBar position="fixed" color="primary" className={classes.footer}>
       <Toolbar>
-        <Grid container justify="center" alignItems="center">
+        <Grid container justifyContent="center" alignItems="center">
           <Link to="/privacy-policy" className={classes.footerLink}>
             Privacy Policy
           </Link>

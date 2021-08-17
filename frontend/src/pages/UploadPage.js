@@ -56,14 +56,14 @@ function UploadPage(props) {
    * any errors returned form the server
    */
   const handleUpload = () => {
-    let url = `${process.env.REACT_APP_API_ENDPOINT}/api/upload-html`;
+    let url = `${globals.apiUrl}/upload/myu-calendar`;
 
     // Added the file to the form data for submission
     let formData = new FormData();
-    formData.append("file", selectedFile);
+    formData.append("calendar_html", selectedFile);
     // Add the chosen dates to the form
-    formData.append("startDate", format(classStartDate, "Y-M-d"));
-    formData.append("endDate", format(classEndDate, "Y-M-d"));
+    formData.append("class_start_date_str", format(classStartDate, "Y-M-d"));
+    formData.append("class_end_date_str", format(classEndDate, "Y-M-d"));
 
     // Make the post request with the image
     setUploadStatus("uploading");
@@ -93,12 +93,13 @@ function UploadPage(props) {
         }
       })
       .catch((error) => {
-        console.error("Error with upload", error);
-        let msg = "";
+        console.error("Error with upload - ", error);
+        let msg;
         if (error.response) {
-          msg = error.response.data.message;
+          console.error("Error response", error.response.data.detail);
+          msg = `${error.response.statusText}. See console for details.`;
         } else {
-          msg = error.message;
+          msg = "Error uploading file. See console.";
         }
         props.openToast(msg, "error");
         setUploadStatus("uploaded");
@@ -114,7 +115,7 @@ function UploadPage(props) {
           </Typography>
         </Container>
         <Container maxWidth="xl" className={classes.uploadContainer}>
-          <Grid container justify="space-between" spacing={4}>
+          <Grid container justifyContent="space-between" spacing={4}>
             <Grid item xs={8}>
               <DragAndDrop
                 handleFileSelect={handleFileSelect}

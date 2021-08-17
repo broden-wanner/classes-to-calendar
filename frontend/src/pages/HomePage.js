@@ -60,35 +60,18 @@ export default function HomePage(props) {
                 className={classes.title}
               >
                 Classes to Calendar
-                <img
-                  className={classes.logo}
-                  src="/logo.png"
-                  alt="Logo png"
-                  height="100"
-                />
+                <img className={classes.logo} src="/logo.png" alt="Logo png" height="100" />
               </Typography>
-              <Typography
-                variant="h5"
-                align="left"
-                color="textSecondary"
-                paragraph
-              >
-                An online app that takes your UMN class schedule and enters it
-                in Google Calendar, and you can export it to whatever calendar
-                you want.
+              <Typography variant="h5" align="left" color="textSecondary" paragraph>
+                An online app that takes your UMN class schedule and enters it in Google Calendar, and you can export it
+                to whatever calendar you want.
               </Typography>
               <hr className={classes.divider} />
-              <Typography
-                variant="h5"
-                align="center"
-                color="textSecondary"
-                paragraph
-              >
-                You can either install the browser extension or directly upload
-                your schedule.
+              <Typography variant="h5" align="center" color="textSecondary" paragraph>
+                You can either install the browser extension or directly upload your schedule.
               </Typography>
               <div className={classes.homeButtons}>
-                <Grid container spacing={2} justify="center">
+                <Grid container spacing={2} justifyContent="center">
                   <Grid item>
                     <Button
                       variant="contained"

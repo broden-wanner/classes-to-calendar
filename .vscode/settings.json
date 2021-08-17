@@ -1,14 +1,13 @@
 {
-  "python.pythonPath": "${workspaceFolder}\\backend\\venv\\Scripts\\python",
-  "python.formatting.autopep8Args": [
-    "--ignore",
-    "E402",
-    "--max-line-length",
-    "120"
+  "python.formatting.provider": "black",
+  "python.linting.flake8Enabled": true,
+  "python.linting.enabled": true,
+  "python.linting.flake8Args": [
+    "--max-line-length=88"
   ],
-  "python.analysis.extraPaths": [
-    "backend",
-    "backend\\classestocalendar",
-    "backend\\classestocalendar\\umncalendar"
-  ]
+  "[python]": {
+    "editor.codeActionsOnSave": {
+      "source.organizeImports": true
+    }
+  }
 }

@@ -27,13 +27,3 @@ yarn-debug.log*
 yarn-error.log*
 # env variables
 .env
-
-### Other ignores ###
-credentials.json
-*.pickle
-example-images/
-gcal-files/
-backend/server/login.sh
-backend/server/deploy.sh
-backend/server/config.md
-*.ini
