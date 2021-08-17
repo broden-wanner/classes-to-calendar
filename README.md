@@ -1,6 +1,9 @@
 # UMN Classes to Calendar
 
+[![Backend Tests](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/backend-tests.yml) 
+[![codecov](https://codecov.io/gh/broden-wanner/classes-to-calendar/branch/master/graph/badge.svg?token=O3743HVAON)](https://codecov.io/gh/broden-wanner/classes-to-calendar)
 ![Website](https://img.shields.io/website?down_color=red&down_message=down&up_color=green&up_message=online&url=https%3A%2F%2Fumnclassestocalendar.com%2F)
+
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/hgdfmecgpajmoeionaieooohpbkibaen)
 ![Mozilla Add-on](https://img.shields.io/amo/v/umn-classes-to-calendar)
 
