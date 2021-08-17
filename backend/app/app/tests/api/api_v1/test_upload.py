@@ -4,13 +4,36 @@ from app.core.config import settings
 from app.tests.utils.utils import load_class_html_file, load_classes_true_json
 
 
-def test_upload_myu_html_no_file(client: TestClient) -> None:
+def test_upload_myu_html_no_body(client: TestClient) -> None:
     response = client.post(f"{settings.API_V1_STR}/upload/myu-calendar")
     assert response.status_code == 422
     content = response.json()["detail"]
 
     assert all("calendar_html" in error["loc"] for error in content)
     assert all(error["type"] == "value_error.missing" for error in content)
+
+
+def test_upload_myu_html_empty_file(client: TestClient) -> None:
+    response = client.post(
+        url=f"{settings.API_V1_STR}/upload/myu-calendar",
+        files={"calendar_html": ("", "", "")},
+    )
+    assert response.status_code == 422
+    content = response.json()["detail"]
+    assert content == "No file present."
+
+
+def test_upload_myu_html_non_html(client: TestClient) -> None:
+    response = client.post(
+        url=f"{settings.API_V1_STR}/upload/myu-calendar",
+        files={"calendar_html": ("calendar.html", "random string", "application/pdf")},
+    )
+    assert response.status_code == 422
+    content = response.json()["detail"]
+    assert content == (
+        "Invalid file type. Got content type of application/pdf "
+        "but must be text/html."
+    )
 
 
 def test_upload_myu_html_no_dates(client: TestClient) -> None:

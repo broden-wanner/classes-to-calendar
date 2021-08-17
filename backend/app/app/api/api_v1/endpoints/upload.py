@@ -24,7 +24,7 @@ async def upload_html_endpoint(
     # Check file is uploaded
     if not calendar_html.content_type:
         logger.error("No file present in request")
-        raise HTTPException(status_code=400, detail="No file present.")
+        raise HTTPException(status_code=422, detail="No file present.")
 
     # Ensure file type is HTML
     if calendar_html.content_type != "text/html":
@@ -35,7 +35,7 @@ async def upload_html_endpoint(
         )
         logger.error(detail)
         raise HTTPException(
-            status_code=400,
+            status_code=422,
             detail=detail,
         )
 

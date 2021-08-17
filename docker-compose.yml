@@ -2,6 +2,7 @@ version: "3.3"
 services:
   backend:
     image: "${DOCKER_IMAGE_BACKEND?Variable not set}:${TAG-latest}"
+    restart: always
     env_file:
       - .env
     environment:
@@ -15,6 +16,7 @@ services:
 
   frontend:
     image: "${DOCKER_IMAGE_FRONTEND?Variable not set}:${TAG-latest}"
+    restart: always
     env_file:
       - .env
     depends_on:

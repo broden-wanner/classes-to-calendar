@@ -66,7 +66,7 @@ class UMNClass:
             else now.date()
         )
 
-        self.days_of_week = days_of_week
+        self.days_of_week = days_of_week.copy()
 
     def __str__(self) -> str:
         """
