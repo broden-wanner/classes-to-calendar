@@ -1,10 +1,10 @@
 import datetime
 import os
 import secrets
-from typing import Any, Dict, List, Union
+from typing import Any, Dict, List
 
 from dotenv import load_dotenv
-from pydantic import AnyHttpUrl, BaseModel, BaseSettings, EmailStr, validator
+from pydantic import AnyHttpUrl, BaseModel, BaseSettings, EmailStr
 from pydantic.tools import parse_obj_as
 
 # Load dotenv environment variables
@@ -24,16 +24,16 @@ class Settings(BaseSettings):
 
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
-    BACKEND_CORS_ORIGINS: List[AnyHttpUrl]
-    BASE_DIR: str = os.path.dirname(os.path.dirname(__file__))
+    BACKEND_CORS_ORIGINS: List[str] = [
+        "http://localhost:3000",
+        "http://localhost:8000",
+        "http://dev.umnclassestocalendar.com",
+        "https://stag.umnclassestocalendar.com",
+        "https://umnclassestocalendar.com",
+        "https://www.umnclassestocalendar.com",
+    ]
 
-    @validator("BACKEND_CORS_ORIGINS", pre=True)
-    def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
-        if isinstance(v, str) and not v.startswith("["):
-            return [i.strip() for i in v.split(",")]
-        elif isinstance(v, (list, str)):
-            return v
-        raise ValueError(v)
+    BASE_DIR: str = os.path.dirname(os.path.dirname(__file__))
 
     # Custom app settings
     DEFAULT_CLASS_START_DATE: datetime.date = datetime.date(year=2021, month=9, day=7)

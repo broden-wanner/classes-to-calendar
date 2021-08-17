@@ -23,7 +23,6 @@ jobs:
         env:
           PROJECT_NAME: "Classes to Calendar Test"
           VERSION: "0.0.1"
-          BACKEND_CORS_ORIGINS: [http://localhost]
           GOOGLE_CLIENT_ID: "thisisntrealatall"
           GOOGLE_CALENDAR_API_KEY: "thisisnteither"
       - name: Upload coverage
