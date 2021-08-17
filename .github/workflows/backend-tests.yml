@@ -24,7 +24,7 @@ jobs:
         if: steps.cache.outputs.cache-hit != 'true'
         run: cd backend/app && poetry install
       - name: Test with pytest
-        run: cd backend/app && bash scripts/test-cov-xml.sh
+        run: cd backend/app && bash scripts/test.sh
         env:
           PROJECT_NAME: "Classes to Calendar Test"
           VERSION: "0.0.1"
