@@ -27,4 +27,4 @@ services:
       args:
         FRONTEND_ENV: ${FRONTEND_ENV-production}
     ports:
-      - 8000:80
+      - 8899:80
