@@ -1,3 +1,5 @@
+from typing import List
+
 from pydantic import BaseModel
 
 
@@ -5,4 +7,4 @@ class GoogleConfig(BaseModel):
     clientId: str
     apiKey: str
     scope: str
-    discoveryDocs: list[str]
+    discoveryDocs: List[str]

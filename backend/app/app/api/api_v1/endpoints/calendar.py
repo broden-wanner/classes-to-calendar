@@ -1,4 +1,4 @@
-import json
+from typing import Any, Dict, List
 
 from fastapi import APIRouter
 
@@ -9,35 +9,55 @@ from app.core.config import settings
 router = APIRouter()
 
 
-@router.post("/events", response_model=list[schemas.CalendarEvent])
-def events_endpoint(classes: list[schemas.UMNClass]):
+@router.post("/events", response_model=List[schemas.CalendarEvent])
+def events_endpoint(classes: List[schemas.UMNClass]) -> List[Dict[str, Any]]:
     """
     Accepts classes in the requests and casts them to gcal event format
     """
-    # Put the days of of the week back into an array
-    classes_processed = [json.loads(c.json()) for c in classes]
-    for c in classes_processed:
-        c["days_of_week"] = c["days_of_week"].split(", ")
-    class_events = [models.UMNClass(**c).to_event_dict() for c in classes_processed]
+    class_events = [
+        models.UMNClass(
+            name=c.name,
+            dept=c.dept,
+            course_num=c.course_num,
+            section=c.section,
+            location=c.location,
+            start_time_str=c.start_time,
+            end_time_str=c.end_time,
+            start_date_str=c.start_date,
+            end_date_str=c.end_date,
+            days_of_week=c.days_of_week.split(", "),
+        ).to_event_dict()
+        for c in classes
+    ]
     return class_events
 
 
 @router.post("/ics", response_model=schemas.ICSExport)
-def ics_endpoint(classes: list[schemas.UMNClass]):
+def ics_endpoint(classes: List[schemas.UMNClass]) -> Dict[str, str]:
     """
     Accepts classes in the request and returns an ics string with all
     the events
     """
-    # Put the days of of the week back into an array
-    classes_processed = [json.loads(c.json()) for c in classes]
-    for c in classes_processed:
-        c["days_of_week"] = c["days_of_week"].split(", ")
-    classes = [models.UMNClass(**c) for c in classes_processed]
-    return {"ics": to_ics_string(classes)}
+    classes_processed = [
+        models.UMNClass(
+            name=c.name,
+            dept=c.dept,
+            course_num=c.course_num,
+            section=c.section,
+            location=c.location,
+            start_time_str=c.start_time,
+            end_time_str=c.end_time,
+            start_date_str=c.start_date,
+            end_date_str=c.end_date,
+            days_of_week=c.days_of_week.split(", "),
+        )
+        for c in classes
+    ]
+    return {"ics": to_ics_string(classes_processed)}
 
 
 @router.get("/google-config", response_model=schemas.GoogleConfig)
-def google_config_endpoint():
+def google_config_endpoint() -> Dict[str, Any]:
     """
     Sends the google calendar api config to the frontend
     """

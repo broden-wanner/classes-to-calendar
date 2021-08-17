@@ -1,24 +1,24 @@
 import datetime
 import logging
 import re
+from typing import Any, Dict, List, Set
 
 from bs4 import BeautifulSoup
 
 from app.models.umn_class import UMNClass
-from app.schemas.umn_class import ClassesResponse
 
 logger = logging.getLogger(__name__)
 
 
 def parse_umn_classes_from_myu_html(
-    html_string: str, start_date: datetime.datetime, end_date: datetime.datetime
-) -> ClassesResponse:
+    html_string: str, start_date: datetime.date, end_date: datetime.date
+) -> Dict[str, Any]:
     """Creates a list of UMNClass objects gathered from the html string
 
     Args:
         html_string (str): The HTML of the page with the calendar
-        start_date (datetime.datetime): Start date for the classes
-        end_date (datetime.datetime): End date for the classes
+        start_date (datetime.date): Start date for the classes
+        end_date (datetime.date): End date for the classes
 
     Returns:
         ClassesResponse: Dictionary containing the list of UMNClass objects and other
@@ -27,7 +27,7 @@ def parse_umn_classes_from_myu_html(
     soup = BeautifulSoup(html_string, "html.parser")
     calendar = soup.find("div", {"class": "myu_calendar"})
     days = calendar.find_all("div", {"class": "myu_calendar-day"})
-    class_set: set[UMNClass] = set()
+    class_set: Set[UMNClass] = set()
 
     try:
         # Iterate through each da found in the calendar
@@ -54,7 +54,7 @@ def parse_umn_classes_from_myu_html(
                 dept_and_num = class_.find(
                     "span", {"class": "myu_calendar-class-name-color-referencer"}
                 )
-                dept_and_num_list = dept_and_num.text.split()
+                dept_and_num_list: List[str] = dept_and_num.text.split()
                 c.dept = dept_and_num_list[0]
                 c.course_num = dept_and_num_list[1]
 
@@ -64,13 +64,14 @@ def parse_umn_classes_from_myu_html(
                 c.name += " " + details.contents[0]
 
                 # Check to see if the next item is the time
+                times: List[str] = []
                 if re.match(r"\d{1,2}:\d{2}", details.contents[2].strip()):
                     times = details.contents[2].split()
                 else:
                     times = details.contents[4].split()
 
-                c.start_time = times[0]
-                c.end_time = times[2] + times[3]
+                c.start_time_str = times[0]
+                c.end_time_str = times[2] + times[3]
                 c.location = details.contents[4].strip()
 
                 # Check to see if the class has already been added
@@ -87,10 +88,10 @@ def parse_umn_classes_from_myu_html(
         # Change each class into a json serializeable dictionary
         class_list = list(class_set)
         class_list.sort(key=lambda c: c.name)
-        class_list = [c.serialize() for c in class_list]
-        logger.error(f"Could not extract all classes: {e}")
+        class_list_serialized = [c.serialize() for c in class_list]
+        logger.exception(f"Could not extract all classes: {e}")
         return {
-            "classes": class_list,
+            "classes": class_list_serialized,
             "extracted_all": False,
             "message": f"Could not get all classes: {e}",
         }
@@ -103,9 +104,9 @@ def parse_umn_classes_from_myu_html(
     # Change each class into a json serializeable dictionary
     class_list = list(class_set)
     class_list.sort(key=lambda c: c.name)
-    class_list = [c.serialize() for c in class_list]
+    class_list_serialized = [c.serialize() for c in class_list]
     return {
-        "classes": class_list,
+        "classes": class_list_serialized,
         "extracted_all": True,
         "message": "Successfully extracted classes",
     }

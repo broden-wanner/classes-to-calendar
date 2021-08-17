@@ -3,7 +3,7 @@ from app.core.config import settings
 from app.tests.utils.utils import load_class_html_str, load_classes_true_json
 
 
-def test_calendar_html():
+def test_calendar_html() -> None:
     """Test to ensure calendar HTML is returned as expected"""
     html_files = [
         "calendar.htm",

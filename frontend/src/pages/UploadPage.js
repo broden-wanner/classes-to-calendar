@@ -94,8 +94,13 @@ function UploadPage(props) {
       })
       .catch((error) => {
         console.error("Error with upload - ", error);
-        console.error("Error response", error.response.data.detail);
-        let msg = `${error.response.statusText}. See console for details.`;
+        let msg;
+        if (error.response) {
+          console.error("Error response", error.response.data.detail);
+          msg = `${error.response.statusText}. See console for details.`;
+        } else {
+          msg = "Error uploading file. See console.";
+        }
         props.openToast(msg, "error");
         setUploadStatus("uploaded");
       });

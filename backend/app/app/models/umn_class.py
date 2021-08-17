@@ -1,9 +1,7 @@
 import datetime
 import re
 import uuid
-
-from app.schemas.calendar import CalendarEvent
-from app.schemas.umn_class import UMNClass as UMNClassSchema
+from typing import Any, Dict, List
 
 DAYS_OF_WEEK = ["MONDAY", "TUESDAY", "WEDNESDAY", "THURSDAY", "FRIDAY"]
 WEEKDAY_DICT = {
@@ -23,39 +21,54 @@ class UMNClass:
     dictionary.
     """
 
-    def __init__(self, **kwargs):
-        self.name = kwargs.get("name")
-        self.dept = kwargs.get("dept")
-        self.course_num = kwargs.get("course_num")
-        self.section = kwargs.get("section")
-        self.location = kwargs.get("location")
+    def __init__(
+        self,
+        name: str = "",
+        dept: str = "",
+        course_num: str = "",
+        section: str = "",
+        location: str = "",
+        start_date_str: str = "",
+        end_date_str: str = "",
+        start_time_str: str = "",
+        end_time_str: str = "",
+        days_of_week: List[str] = [],
+    ) -> None:
+        self.name = name
+        self.dept = dept
+        self.course_num = course_num
+        self.section = section
+        self.location = location
 
-        self.start_time = kwargs.get("start_time")
-        if isinstance(self.start_time, str):
-            self.start_time = datetime.datetime.strptime(
-                self.start_time, "%H:%M:%S"
-            ).time()
+        now = datetime.datetime.now()
+        self.start_time_str = start_time_str
+        self.start_time = (
+            datetime.datetime.strptime(start_time_str, "%H:%M:%S").time()
+            if start_time_str
+            else now.time()
+        )
+        self.end_time_str = end_time_str
+        self.end_time = (
+            datetime.datetime.strptime(end_time_str, "%H:%M:%S").time()
+            if end_time_str
+            else now.time()
+        )
+        self.start_date_str = start_date_str
+        self.start_date = (
+            datetime.datetime.strptime(start_date_str, "%Y-%m-%d").date()
+            if start_date_str
+            else now.date()
+        )
+        self.end_date_str = end_date_str
+        self.end_date = (
+            datetime.datetime.strptime(end_date_str, "%Y-%m-%d").date()
+            if end_date_str
+            else now.date()
+        )
 
-        self.end_time = kwargs.get("end_time")
-        if isinstance(self.end_time, str):
-            self.end_time = datetime.datetime.strptime(self.end_time, "%H:%M:%S").time()
+        self.days_of_week = days_of_week
 
-        self.start_date = kwargs.get("start_date")
-        if isinstance(self.start_date, str):
-            self.start_date = datetime.datetime.strptime(
-                self.start_date, "%Y-%m-%d"
-            ).date()
-
-        self.end_date = kwargs.get("end_date")
-        if isinstance(self.end_date, str):
-            self.end_date = datetime.datetime.strptime(self.end_date, "%Y-%m-%d").date()
-
-        if kwargs.get("days_of_week"):
-            self.days_of_week = kwargs.get("days_of_week")
-        else:
-            self.days_of_week = []
-
-    def __str__(self):
+    def __str__(self) -> str:
         """
         Create a string representation of the class
         """
@@ -70,49 +83,53 @@ class UMNClass:
             + f'Days: {", ".join(self.days_of_week)}\n'
         )
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         """
         Override the unique representation for the class
         """
         return f"{{{self.dept} {self.course_num} {self.section}}}"
 
-    def __eq__(self, other):
+    def __eq__(self, other: object) -> bool:
         """
         Custom equality override for set comparators
         """
-        return (
-            self.dept == other.dept
-            and self.course_num == other.course_num
-            and self.section == other.section
-        )
+        if isinstance(other, UMNClass):
+            return (
+                self.dept == other.dept
+                and self.course_num == other.course_num
+                and self.section == other.section
+            )
+        return False
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         """
         Custom hash method for membership comparison for sets
         """
         return hash(self.dept + self.course_num + self.section)
 
-    def set_times(self):
+    def set_times(self) -> None:
         """
         Convert all the string times into datetime.time objects
         """
-        am_or_pm = self.end_time[-2:]
+        am_or_pm = self.end_time_str[-2:]
 
-        self.end_time = datetime.datetime.strptime(self.end_time, "%I:%M%p")
-        self.start_time = datetime.datetime.strptime(
-            self.start_time + am_or_pm, "%I:%M%p"
+        end_datetime = datetime.datetime.strptime(self.end_time_str, "%I:%M%p")
+        start_datetime = datetime.datetime.strptime(
+            self.start_time_str + am_or_pm, "%I:%M%p"
         )
 
         # Special case when class start time is am and end time is pm
-        if am_or_pm == "PM" and self.start_time > self.end_time:
-            self.start_time = self.start_time - datetime.timedelta(hours=12)
+        if am_or_pm == "PM" and start_datetime > end_datetime:
+            start_datetime -= datetime.timedelta(hours=12)
 
-        self.start_time = self.start_time.time()
-        self.end_time = self.end_time.time()
+        self.start_time = start_datetime.time()
+        self.end_time = end_datetime.time()
 
         assert self.start_time < self.end_time
 
-    def set_class_dates(self, start_date, end_date):
+    def set_class_dates(
+        self, start_date: datetime.date, end_date: datetime.date
+    ) -> None:
         """
         Assigns the dates on the class. End date will not be adjusted since google
         calendar handles the offset issues.
@@ -136,7 +153,7 @@ class UMNClass:
         # Set every class on this end date because gcal will handle the offset
         self.end_date = end_date
 
-    def serialize(self) -> UMNClassSchema:
+    def serialize(self) -> Dict[str, str]:
         """
         Turns the class into a serializable dictionary for json conversion. Generates a
         unique id based on the department, course number, and section
@@ -155,7 +172,7 @@ class UMNClass:
             "days_of_week": ", ".join(self.days_of_week),
         }
 
-    def to_event_dict(self) -> CalendarEvent:
+    def to_event_dict(self) -> Dict[str, Any]:
         """
         Turns the class into a recurring gcal event dictionary as specified by
         the google calendar api. This is a json format conforming to the

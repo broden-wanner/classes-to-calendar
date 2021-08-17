@@ -1,4 +1,5 @@
 from datetime import datetime
+from typing import List
 
 from pydantic import BaseModel
 
@@ -14,7 +15,7 @@ class CalendarEvent(BaseModel):
     description: str
     start: CalendarTime
     end: CalendarTime
-    recurrence: list[str]
+    recurrence: List[str]
 
 
 class ICSExport(BaseModel):

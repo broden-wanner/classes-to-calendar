@@ -5,7 +5,7 @@ let envApiUrl = "";
 if (env === "production") {
   envApiUrl = `https://${process.env.REACT_APP_DOMAIN_PROD}/api/v1`;
 } else if (env === "staging") {
-  envApiUrl = `https://${process.env.REACT_APP_DOMAIN_STAG}/api/v1`;
+  envApiUrl = `http://${process.env.REACT_APP_DOMAIN_STAG}/api/v1`;
 } else {
   envApiUrl = `http://${process.env.REACT_APP_DOMAIN_DEV}/api/v1`;
 }

@@ -1,6 +1,6 @@
 import datetime
 import logging
-from typing import Optional
+from typing import Dict, Optional
 
 from fastapi import APIRouter, File, Form, HTTPException, UploadFile
 
@@ -19,7 +19,7 @@ async def upload_html_endpoint(
     calendar_html: UploadFile = File(...),
     class_start_date_str: Optional[str] = Form(None),
     class_end_date_str: Optional[str] = Form(None),
-):
+) -> Dict[str, str]:
 
     # Check file is uploaded
     if not calendar_html.content_type:
@@ -53,11 +53,15 @@ async def upload_html_endpoint(
 
     # Get the classes in the html
     content = await calendar_html.read()
+    if isinstance(content, bytes):
+        html_string = content.decode("utf-8")
+    else:
+        html_string = str(content)
 
+    # Extract UMN classes
     try:
-        # Extract UMN classes
         result = parse_umn_classes_from_myu_html(
-            html_string=content,
+            html_string=html_string,
             start_date=class_start_date,
             end_date=class_end_date,
         )

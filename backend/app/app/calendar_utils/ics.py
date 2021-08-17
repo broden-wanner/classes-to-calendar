@@ -1,11 +1,13 @@
+from typing import List
+
 from app.models import UMNClass
 
 
 def to_ics_string(
-    classes: list[UMNClass],
-    calendar_name="Class Calendar",
-    timezone="America/Chicago",
-    description="",
+    classes: List[UMNClass],
+    calendar_name: str = "Class Calendar",
+    timezone: str = "America/Chicago",
+    description: str = "",
 ) -> str:
     """
     Converts the classes to icalendar-compliant events and adds them

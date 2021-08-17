@@ -1,4 +1,4 @@
-from typing import Any
+from typing import List
 
 from pydantic import BaseModel
 
@@ -23,7 +23,7 @@ class UMNClass(UMNClassBase):
 
 class ClassesResponseBase(BaseModel):
     extracted_all: bool
-    classes: list[UMNClass]
+    classes: List[UMNClass]
     message: str
 
 

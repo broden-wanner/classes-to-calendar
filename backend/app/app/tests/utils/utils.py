@@ -1,8 +1,7 @@
 import json
-from io import TextIOWrapper
+from typing import Any, Dict, List, TextIO
 
 from app.core.config import settings
-from app.schemas import UMNClass
 
 
 def load_class_html_str(file: str) -> str:
@@ -12,12 +11,12 @@ def load_class_html_str(file: str) -> str:
     return html_string
 
 
-def load_class_html_file(file: str) -> TextIOWrapper:
+def load_class_html_file(file: str) -> TextIO:
     test_html = f"{settings.BASE_DIR}/tests/resources/test-html/{file}"
     return open(test_html, "r+")
 
 
-def load_classes_true_json(file: str) -> list[UMNClass]:
+def load_classes_true_json(file: str) -> List[Dict[str, Any]]:
     true_output_file = (
         f"{settings.BASE_DIR}/tests/resources/true-classes-output/{file}.json"
     )

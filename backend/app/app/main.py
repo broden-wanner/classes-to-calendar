@@ -17,10 +17,10 @@ app = FastAPI(
     openapi_url=f"{settings.API_V1_STR}/openapi.json",
     version=settings.VERSION,
     contact={
-        'url': settings.CONTACT.url,
-        'name': settings.CONTACT.name,
-        'email': settings.CONTACT.email
-    }
+        "url": settings.CONTACT.url,
+        "name": settings.CONTACT.name,
+        "email": settings.CONTACT.email,
+    },
 )
 
 # Set all CORS enabled origins

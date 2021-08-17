@@ -1,19 +1,20 @@
 import datetime
 import os
 import secrets
-from typing import Any, Union
+from typing import Any, Dict, List, Union
 
 from dotenv import load_dotenv
 from pydantic import AnyHttpUrl, BaseModel, BaseSettings, EmailStr, validator
+from pydantic.tools import parse_obj_as
 
 # Load dotenv environment variables
 load_dotenv()
 
 
 class Contact(BaseModel):
-    url: AnyHttpUrl = "https://brodenwanner.com"
+    url: AnyHttpUrl = parse_obj_as(AnyHttpUrl, "https://brodenwanner.com")
     name: str = "Broden Wanner"
-    email: EmailStr = "brodenwanner@gmail.com"
+    email: EmailStr = parse_obj_as(EmailStr, "brodenwanner@gmail.com")
 
 
 class Settings(BaseSettings):
@@ -23,11 +24,11 @@ class Settings(BaseSettings):
 
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
-    BACKEND_CORS_ORIGINS: list[AnyHttpUrl]
+    BACKEND_CORS_ORIGINS: List[AnyHttpUrl]
     BASE_DIR: str = os.path.dirname(os.path.dirname(__file__))
 
     @validator("BACKEND_CORS_ORIGINS", pre=True)
-    def assemble_cors_origins(cls, v: Union[str, list[str]]) -> Union[list[str], str]:
+    def assemble_cors_origins(cls, v: Union[str, List[str]]) -> Union[List[str], str]:
         if isinstance(v, str) and not v.startswith("["):
             return [i.strip() for i in v.split(",")]
         elif isinstance(v, (list, str)):
@@ -42,12 +43,12 @@ class Settings(BaseSettings):
     GOOGLE_CLIENT_ID: str
     GOOGLE_CALENDAR_API_KEY: str
     GOOGLE_SCOPE: str = "https://www.googleapis.com/auth/calendar"
-    GOOGLE_DISCOVERY_DOCS: list[str] = [
+    GOOGLE_DISCOVERY_DOCS: List[str] = [
         "https://www.googleapis.com/discovery/v1/apis/calendar/v3/rest"
     ]
 
     # Logging
-    LOGGING_CONFIG: dict[str, Any] = {
+    LOGGING_CONFIG: Dict[str, Any] = {
         "version": 1,
         "disable_existing_loggers": False,
         "formatters": {
