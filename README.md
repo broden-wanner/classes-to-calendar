@@ -29,4 +29,4 @@ The extension adds a button to MyU so students can add their classes to their ca
 
 - [Chrome extension](https://chrome.google.com/webstore/detail/umn-classes-to-calendar/hgdfmecgpajmoeionaieooohpbkibaen)
 - [Firefox extension](https://addons.mozilla.org/en-US/firefox/addon/umn-classes-to-calendar/)
-- Edge extension (TBA)
+- [Edge extension](https://microsoftedge.microsoft.com/addons/detail/umn-classes-to-calendar/ilbnlffpbbemoigkjpnldhihppmcnhji)
