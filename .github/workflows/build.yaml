@@ -22,15 +22,15 @@ jobs:
           echo "GOOGLE_CLIENT_ID=nothing" >> .env && \
           echo "GOOGLE_CALENDAR_API_KEY=nothing" >> .env
       - name: Build Docker Images
-        run: docker-compose build -f docker-compose.yml
+        run: docker-compose -f docker-compose.yml build
         env:
           TAG: latest
           FRONTEND_ENV: staging
           DOCKER_IMAGE_BACKEND: classes-to-calendar-backend
           DOCKER_IMAGE_FRONTEND: classes-to-calendar-frontend
           DOMAIN: localhost
-      - name: Wait for Images to Spin Up
+      - name: Wait a bit for Images
         run: sleep 30s
         shell: bash
-      - name: List Running Docker Containers
+      - name: List All Docker Containers
         run: docker ps -a
