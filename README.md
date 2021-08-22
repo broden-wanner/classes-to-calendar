@@ -6,13 +6,15 @@
 
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/hgdfmecgpajmoeionaieooohpbkibaen)
 ![Mozilla Add-on](https://img.shields.io/amo/v/%7Bbc5ce2f1-6eda-4ffa-8c8a-aba76a72cc04%7D)
-[![Edge Add-on](https://img.shields.io/badge/dynamic/json?label=edge%20add-on&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Filbnlffpbbemoigkjpnldhihppmcnhji)](	https://microsoftedge.microsoft.com/addons/detail/ilbnlffpbbemoigkjpnldhihppmcnhji)
+[![Edge Add-on](https://img.shields.io/badge/dynamic/json?label=edge%20add-on&prefix=v&query=%24.version&url=https%3A%2F%2Fmicrosoftedge.microsoft.com%2Faddons%2Fgetproductdetailsbycrxid%2Filbnlffpbbemoigkjpnldhihppmcnhji)](https://microsoftedge.microsoft.com/addons/detail/ilbnlffpbbemoigkjpnldhihppmcnhji)
 
 ---
 
 **Website**: <a href="https://umnclassestocalendar.com" target="blank">https://umnclassestocalendar.com</a>
 
 **Source Code:**: <a href="https://github.com/broden-wanner/classes-to-calendar" target="blank">https://github.com/broden-wanner/classes-to-calendar</a>
+
+**API Docs:**: <a href="https://umnclassestocalendar.com/redoc" target="blank">https://umnclassestocalendar.com/redoc</a>
 
 ---
 ## Description

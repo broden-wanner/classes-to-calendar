@@ -38,7 +38,7 @@ function Navbar(props) {
         <Typography variant="h5" className={classes.titleWrapper}>
           <span onClick={() => history.push('/')} className={classes.title}>
             <img className={classes.logo} src="/logo.png" alt="Logo png" />
-            Classes to Calendar
+            UMN Classes to Calendar
           </span>
         </Typography>
         <Button

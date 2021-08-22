@@ -7,8 +7,8 @@ import Grid from "@material-ui/core/Grid";
 import Button from "@material-ui/core/Button";
 import { Link } from "react-router-dom";
 import { Card, CardContent } from "@material-ui/core";
+import Icon from "@material-ui/core/Icon";
 import CloudUploadOutlinedIcon from "@material-ui/icons/CloudUploadOutlined";
-import OpenInNewIcon from "@material-ui/icons/OpenInNew";
 
 const useStyles = makeStyles((theme) => ({
   homeContent: {
@@ -17,9 +17,7 @@ const useStyles = makeStyles((theme) => ({
     alignItems: "center",
     width: "100%",
   },
-  homeButtons: {
-    marginTop: theme.spacing(4),
-  },
+  homeButtons: { marginBottom: 14 },
   card: {
     padding: "50px",
   },
@@ -38,6 +36,14 @@ const useStyles = makeStyles((theme) => ({
     height: "2px",
     backgroundColor: "rgba(0, 0, 0, 0.12)",
     marginBottom: 14,
+  },
+  text: {
+    fontSize: 22,
+    textAlign: "center",
+  },
+  extensionIcon: {
+    marginLeft: theme.spacing(1),
+    marginRight: 0,
   },
 }));
 
@@ -59,16 +65,17 @@ export default function HomePage(props) {
                 gutterBottom
                 className={classes.title}
               >
-                Classes to Calendar
+                UMN Classes to Calendar
                 <img className={classes.logo} src="/logo.png" alt="Logo png" height="100" />
               </Typography>
-              <Typography variant="h5" align="left" color="textSecondary" paragraph>
+              <Typography variant="h5" align="left" color="textSecondary" paragraph className={classes.text}>
                 An online app that takes your UMN class schedule and enters it in Google Calendar, and you can export it
                 to whatever calendar you want.
               </Typography>
               <hr className={classes.divider} />
-              <Typography variant="h5" align="center" color="textSecondary" paragraph>
-                You can either install the browser extension or directly upload your schedule.
+              <Typography variant="h5" align="center" color="textSecondary" paragraph className={classes.text}>
+                Install the browser extension for the best experience. Go to your schedule on MyU and click the "Add to
+                Calendar" button. Or upload your schedule here!
               </Typography>
               <div className={classes.homeButtons}>
                 <Grid container spacing={2} justifyContent="center">
@@ -78,9 +85,31 @@ export default function HomePage(props) {
                       color="primary"
                       href="https://chrome.google.com/webstore/detail/umn-classes-to-calendar/hgdfmecgpajmoeionaieooohpbkibaen"
                       target="blank"
-                      startIcon={<OpenInNewIcon />}
+                      startIcon={<Icon className="fab fa-chrome" />}
                     >
-                      Add Chrome Extension
+                      Chrome Extension 
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      href="https://addons.mozilla.org/en-US/firefox/addon/umn-classes-to-calendar/"
+                      target="blank"
+                      startIcon={<Icon className="fab fa-firefox" />}
+                    >
+                      Firefox Extension
+                    </Button>
+                  </Grid>
+                  <Grid item>
+                    <Button
+                      variant="contained"
+                      color="primary"
+                      href="https://microsoftedge.microsoft.com/addons/detail/umn-classes-to-calendar/ilbnlffpbbemoigkjpnldhihppmcnhji"
+                      target="blank"
+                      startIcon={<Icon className="fab fa-edge" />}
+                    >
+                      Edge Extension
                     </Button>
                   </Grid>
                   <Grid item>
