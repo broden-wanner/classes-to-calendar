@@ -27,6 +27,7 @@ class Settings(BaseSettings):
     BACKEND_CORS_ORIGINS: List[str] = [
         "http://localhost:3000",
         "http://localhost:8000",
+        "http://localhost:8899",
         "http://dev.umnclassestocalendar.com",
         "https://stag.umnclassestocalendar.com",
         "https://umnclassestocalendar.com",
