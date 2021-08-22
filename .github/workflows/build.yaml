@@ -19,6 +19,13 @@ jobs:
         env:
           TAG: latest
           FRONTEND_ENV: staging
+          DOCKER_IMAGE_BACKEND: classes-to-calendar-backend
+          DOCKER_IMAGE_FRONTEND: classes-to-calendar-frontend
+          DOMAIN: localhost
+          PROJECT_NAME: Classes to Calendar
+          VERSION: "0.0.1"
+          GOOGLE_CLIENT_ID: something-fake
+          GOOGLE_CALENDAR_API_KEY: something-even-faker
       - name: Wait for Images to Spin Up
         run: sleep 30s
         shell: bash
