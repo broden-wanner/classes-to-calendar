@@ -12,9 +12,9 @@
 
 **Website**: <a href="https://umnclassestocalendar.com" target="blank">https://umnclassestocalendar.com</a>
 
-**Source Code:**: <a href="https://github.com/broden-wanner/classes-to-calendar" target="blank">https://github.com/broden-wanner/classes-to-calendar</a>
+**Source Code**: <a href="https://github.com/broden-wanner/classes-to-calendar" target="blank">https://github.com/broden-wanner/classes-to-calendar</a>
 
-**API Docs:**: <a href="https://umnclassestocalendar.com/redoc" target="blank">https://umnclassestocalendar.com/redoc</a>
+**API Docs**: <a href="https://umnclassestocalendar.com/redoc" target="blank">https://umnclassestocalendar.com/redoc</a>
 
 ---
 ## Description
