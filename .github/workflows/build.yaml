@@ -15,7 +15,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: Build Docker Images
-        run: docker-compose up --build
+        run: echo "" > .env && docker-compose up --build
         env:
           TAG: latest
           FRONTEND_ENV: staging
