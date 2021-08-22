@@ -17,8 +17,8 @@ jobs:
       - name: Build Docker Images
         run: docker-compose up --build
         env:
-          - TAG: latest
-          - FRONTEND_ENV: staging
+          TAG: latest
+          FRONTEND_ENV: staging
       - name: Wait for Images to Spin Up
         run: sleep 30s
         shell: bash
