@@ -3,11 +3,11 @@ const env = process.env.REACT_APP_ENV;
 // Get the API url for the environment
 let envApiUrl = "";
 if (env === "production") {
-  envApiUrl = `https://${process.env.REACT_APP_DOMAIN_PROD}/api/v1`;
+  envApiUrl = `${process.env.REACT_APP_DOMAIN_PROD}/api/v1`;
 } else if (env === "staging") {
-  envApiUrl = `http://${process.env.REACT_APP_DOMAIN_STAG}/api/v1`;
+  envApiUrl = `${process.env.REACT_APP_DOMAIN_STAG}/api/v1`;
 } else {
-  envApiUrl = `http://${process.env.REACT_APP_DOMAIN_DEV}/api/v1`;
+  envApiUrl = `${process.env.REACT_APP_DOMAIN_DEV}/api/v1`;
 }
 const apiUrl = envApiUrl;
 const appName = process.env.REACT_APP_NAME;
