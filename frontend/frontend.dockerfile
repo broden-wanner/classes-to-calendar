@@ -6,11 +6,7 @@ WORKDIR /app
 # Install NPM packages
 COPY package.json package.json
 COPY package-lock.json package-lock.json
-RUN npm install
-
-# Copy over nginx configuration
-COPY ./nginx.conf /nginx.conf
-COPY ./nginx-backend-not-found.conf /etc/nginx/extra-conf.d/backend-not-found.conf
+RUN npm ci --silent
 
 # Copy app over
 COPY . .
@@ -26,4 +22,4 @@ RUN npm run build
 FROM nginx:latest
 
 COPY --from=build-stage /app/build/ /usr/share/nginx/html
-COPY --from=build-stage /nginx.conf /etc/nginx/conf.d/default.conf
+COPY ./nginx.conf /etc/nginx/conf.d/default.conf

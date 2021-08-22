@@ -3,7 +3,7 @@ FROM tiangolo/uvicorn-gunicorn:python3.8
 WORKDIR /app/
 
 # Install Poetry
-RUN pip install --no-cache-dir poetry
+RUN python -m pip install --upgrade pip && pip install --no-cache-dir poetry
 RUN poetry config virtualenvs.create false
 
 # Copy poetry.lock* in case it doesn't exist in the repo
