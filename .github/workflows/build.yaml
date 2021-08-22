@@ -1,0 +1,26 @@
+name: Build Classes to Calendar Docker
+
+on:
+  push:
+    branches:
+      main
+  pull_request:
+    branches:
+      main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v2
+      - name: Build Docker Images
+        run: docker-compose up --build
+        env:
+          - TAG: latest
+          - FRONTEND_ENV: staging
+      - name: Wait for Images to Spin Up
+        run: sleep 30s
+        shell: bash
+      - name: List Running Docker Containers
+        run: docker ps -a
