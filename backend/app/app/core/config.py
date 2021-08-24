@@ -32,6 +32,10 @@ class Settings(BaseSettings):
         "https://stag.umnclassestocalendar.com",
         "https://umnclassestocalendar.com",
         "https://www.umnclassestocalendar.com",
+        "https://www.myu.umn.edu",
+        "http://www.myu.umn.edu",
+        "https://myu.umn.edu",
+        "http://myu.umn.edu",
     ]
 
     BASE_DIR: str = os.path.dirname(os.path.dirname(__file__))
