@@ -1,7 +1,7 @@
 "use strict";
 
 // Globals
-const apiRoot = `https://umnclassestocalendar.com/api`;
+const apiRoot = `https://umnclassestocalendar.com/api/v1`;
 const redirectUrl = `https://umnclassestocalendar.com/classes`;
 const retryWaitTime = 1500;
 const maxAttempts = 10;
@@ -15,10 +15,10 @@ let currentAttempt = 0;
 function submitCalendarHTML(calendarHTML) {
   // Added the file to the form data for submission
   let submitFormData = new FormData();
-  submitFormData.append("file", new File([calendarHTML], "calendar.html", { type: "text/html" }));
+  submitFormData.append("calendar_html", new File([calendarHTML], "calendar.html", { type: "text/html" }));
 
   // Make the post request with the html string
-  let url = `${apiRoot}/upload-html`;
+  let url = `${apiRoot}/upload/myu-calendar`;
   return fetch(url, {
     method: "POST",
     body: submitFormData,
