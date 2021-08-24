@@ -24,19 +24,7 @@ class Settings(BaseSettings):
 
     API_V1_STR: str = "/api/v1"
     SECRET_KEY: str = secrets.token_urlsafe(32)
-    BACKEND_CORS_ORIGINS: List[str] = [
-        "http://localhost:3000",
-        "http://localhost:8000",
-        "http://localhost:8899",
-        "http://dev.umnclassestocalendar.com",
-        "https://stag.umnclassestocalendar.com",
-        "https://umnclassestocalendar.com",
-        "https://www.umnclassestocalendar.com",
-        "https://www.myu.umn.edu",
-        "http://www.myu.umn.edu",
-        "https://myu.umn.edu",
-        "http://myu.umn.edu",
-    ]
+    BACKEND_CORS_ORIGINS: List[str] = ["*"]
 
     BASE_DIR: str = os.path.dirname(os.path.dirname(__file__))
 
