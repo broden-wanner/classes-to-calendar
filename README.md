@@ -1,7 +1,8 @@
 # UMN Classes to Calendar
 
 [![Backend Tests](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/backend-tests.yml)
-[![Frontend Tests](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/frontend-tests.yml/badge.svg)](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/frontend-tests.yml) 
+[![Frontend Tests](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/frontend-tests.yml/badge.svg)](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/frontend-tests.yml)
+[![Build Classes to Calendar Docker](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/build.yaml/badge.svg)](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/build.yaml)
 [![codecov](https://codecov.io/gh/broden-wanner/classes-to-calendar/branch/master/graph/badge.svg?token=O3743HVAON)](https://codecov.io/gh/broden-wanner/classes-to-calendar)
 
 ![Chrome Web Store](https://img.shields.io/chrome-web-store/v/hgdfmecgpajmoeionaieooohpbkibaen)
