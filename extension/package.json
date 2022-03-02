@@ -1,0 +1,25 @@
+{
+  "name": "classes-to-calendar-extension",
+  "version": "2.0.0",
+  "description": "Add your UMN classes to your Google Calendar through MyU",
+  "main": "index.js",
+  "directories": {
+    "doc": "docs"
+  },
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/broden-wanner/classes-to-calendar.git"
+  },
+  "author": "Broden Wanner",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/broden-wanner/classes-to-calendar/issues"
+  },
+  "homepage": "https://github.com/broden-wanner/classes-to-calendar#readme",
+  "devDependencies": {
+    "typescript": "^4.6.2"
+  }
+}
