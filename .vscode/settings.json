@@ -9,5 +9,12 @@
     "editor.codeActionsOnSave": {
       "source.organizeImports": true
     }
-  }
+  },
+  "editor.codeActionsOnSave": {
+      "source.fixAll.eslint": true
+  },
+  "eslint.validate": [
+    "typescript"
+  ],
+  "prettier.configPath": "extension/.prettierrc.js"
 }
