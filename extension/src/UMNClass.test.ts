@@ -1,4 +1,5 @@
 import fs from 'fs';
+import { calendarOutput } from './resources/true-output/expectedOutput';
 import { UMNClass } from './UMNClass';
 
 const getTestHTML = (file: string) => {
@@ -12,9 +13,16 @@ describe('UMNClass class', () => {
   });
 
   describe('HTML parser for MyU', () => {
-    it('should do stuff', () => {
-      const html = getTestHTML('calendar.html');
-      UMNClass.parseUMNClassesFromHTML(html, new Date(), new Date());
+    it('should parse correct classes', () => {
+      const file = 'calendar.html';
+      const html = getTestHTML(file);
+      const [termStartDate, termEndDate] = [new Date(2022, 0, 18), new Date(2022, 4, 11)];
+      const courses = UMNClass.parseUMNClassesFromHTML(html, termStartDate, termEndDate);
+      const expectedCourses = calendarOutput.get(file);
+      if (!expectedCourses) fail('Expected calendar not found');
+      for (let i = 0; i < courses.length; i++) {
+        expect(courses[i].equals(expectedCourses[i])).toBe(true);
+      }
     });
   });
 });

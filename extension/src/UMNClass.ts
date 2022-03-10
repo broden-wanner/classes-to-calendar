@@ -1,27 +1,28 @@
-import { parse } from 'date-fns';
+import { addDays, getDay, parse } from 'date-fns';
 
 const getHours = (timeStr: string) => {
-  let hours = '';
-  for (const char of timeStr) {
-    if (char === ':') {
-      return parseInt(hours);
-    }
-    hours += char;
-  }
-  return hours;
+  const match = timeStr.match(/(\d{1,2}):\d{2}/g);
+  if (!match) throw new Error('Could not parse time for class');
+  else return parseInt(match[0]);
+};
+
+const weekdayStringToNumber = (weekdayStr: string) => {
+  return ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'].indexOf(
+    weekdayStr
+  );
 };
 
 export class UMNClass {
-  name: string;
-  dept: string;
-  courseNum: string;
-  section: string;
-  location: string;
-  startDateTime: Date;
-  endDateTime: Date;
-  startTimeStr: string;
-  endTimeStr: string;
-  daysOfWeek: Array<string> = [];
+  public name: string;
+  public dept: string;
+  public courseNum: string;
+  public section: string;
+  public location: string;
+  public startDate: Date;
+  public endDate: Date;
+  public startTimeStr: string;
+  public endTimeStr: string;
+  public daysOfWeek: Array<string> = [];
 
   constructor(
     name = '',
@@ -29,8 +30,8 @@ export class UMNClass {
     courseNum = '',
     section = '',
     location = '',
-    startDateTimeStr = '',
-    endDateTimeStr = '',
+    startDateStr = '',
+    endDateStr = '',
     startTimeStr = '',
     endTimeStr = '',
     daysOfWeek: Array<string> = []
@@ -41,22 +42,90 @@ export class UMNClass {
     this.section = section;
     this.location = location;
 
-    this.startDateTime = parse(startDateTimeStr, '%Y-%m-%d %H:%M:%S', new Date());
-    this.endDateTime = parse(endDateTimeStr, '%Y-%m-%d %H:%M:%S', new Date());
+    this.startDate = parse(startDateStr, '%Y-%m-%d', new Date());
+    this.endDate = parse(endDateStr, '%Y-%m-%d', new Date());
     this.startTimeStr = startTimeStr;
     this.endTimeStr = endTimeStr;
     this.daysOfWeek = [...daysOfWeek];
   }
 
+  /**
+   * Returns a human-readable string for debugging purposes.
+   *
+   * @returns human-readable string for debugging purposes.
+   */
   public toString(): string {
-    return `UMNClass(${this.name}, ${this.dept} ${this.courseNum} ${this.section}, ${this.location})`;
+    return `UMNClass(${this.name}, ${this.dept} ${this.courseNum} ${this.section}, ${
+      this.location
+    }, ${this.startTimeStr} to ${this.endTimeStr}, ${this.daysOfWeek.join(',')})`;
   }
 
+  /**
+   * Returns a unique hashable code for the class.
+   *
+   * @returns hash code for the class.
+   */
+  public hashCode(): string {
+    return `${this.name} | ${this.dept}${this.courseNum}${this.section} | ${this.location} | ${this.startTimeStr} to ${this.endTimeStr}`;
+  }
+
+  /**
+   * Checks for equality with another UMNClass
+   *
+   * @param other Other UMNClass to compare against
+   * @returns true if the classes are the same
+   */
+  public equals(other?: UMNClass): boolean {
+    if (!other) return false;
+    return this.toString() === other.toString();
+  }
+
+  /**
+   * Sets the true course dates based on the input term start and end dates and the
+   * days of the week the class is on.
+   *
+   * @param termStartDate
+   * @param termEndDate
+   */
+  public setTrueCourseDates(termStartDate: Date, termEndDate: Date): void {
+    // Get the day of week, 0 representing Sunday to 6 representing Saturday
+    const startWeekdayOfTerm = getDay(termStartDate);
+    let firstWeekdayOfCourse = weekdayStringToNumber(this.daysOfWeek[0]);
+
+    for (const day of this.daysOfWeek) {
+      const weekdayNumber = weekdayStringToNumber(day);
+      // See if any of the other days of the week are on the first week
+      if (weekdayNumber >= startWeekdayOfTerm) {
+        firstWeekdayOfCourse = weekdayNumber;
+        break;
+      }
+    }
+
+    let offset;
+    if (firstWeekdayOfCourse >= startWeekdayOfTerm) {
+      offset = firstWeekdayOfCourse - startWeekdayOfTerm;
+    } else {
+      offset = firstWeekdayOfCourse - startWeekdayOfTerm + 7;
+    }
+
+    this.startDate = addDays(termStartDate, offset);
+    // Set every class on this end date because calendars will handle the offset
+    this.endDate = termEndDate;
+  }
+
+  /**
+   * Parses MyU calendar HTMl into UMNClasses with all relevant information.
+   *
+   * @param htmlSnippet HTML string containing the MyU calendar.
+   * @param termStartDate start date of the term/semester.
+   * @param termEndDate end date of the term/semester.
+   * @returns array of UMN classes parsed from the calendar.
+   */
   public static parseUMNClassesFromHTML(
     htmlSnippet: string,
-    startDate: Date,
-    endDate: Date
-  ): Map<string, UMNClass> {
+    termStartDate: Date,
+    termEndDate: Date
+  ): Array<UMNClass> {
     const parser = new DOMParser();
     const htmlDoc = parser.parseFromString(htmlSnippet, 'text/html');
     const maybeCalendar = htmlDoc.getElementsByClassName('myu_calendar');
@@ -65,6 +134,7 @@ export class UMNClass {
     }
     const calendar = maybeCalendar[0];
     const days = calendar.getElementsByClassName('myu_calendar-day');
+    const courseMap = new Map<string, UMNClass>();
 
     for (const day of days) {
       const dayName = day.getAttribute('data-day')?.toUpperCase();
@@ -95,17 +165,41 @@ export class UMNClass {
           .filter((word) => word !== '' && word !== '-');
 
         // Append the type of time slot to the name
-        c.name += detailWords[0];
+        c.name += ` ${detailWords[0]}`;
 
         // Extract the times
         const amOrPm = detailWords[3];
-        const startTime = detailWords[1];
-        const endTime = detailWords[2];
+        let startTime = detailWords[1];
+        let endTime = detailWords[2];
+        if (amOrPm.toUpperCase() === 'PM' && getHours(startTime) > getHours(endTime)) {
+          // Set the start time to AM if the end time is PM and startTime is greater than endTime
+          startTime += 'AM';
+          endTime += 'PM';
+        } else {
+          // Otherwise, set both times to the same AM/PM value
+          startTime += amOrPm;
+          endTime += amOrPm;
+        }
         c.location = detailWords.slice(4).join(' ');
-        console.log(c.toString());
+        c.startTimeStr = startTime;
+        c.endTimeStr = endTime;
+
+        if (!courseMap.has(c.hashCode())) {
+          // Add the course to the map if it isn't already there
+          courseMap.set(c.hashCode(), c);
+        } else {
+          // Add the day of the week to the class if it is already in the set
+          courseMap.get(c.hashCode())?.daysOfWeek.push(dayName);
+        }
       }
     }
 
-    return new Map<string, UMNClass>();
+    // Set the true course start and end dates
+    for (const [, course] of courseMap.entries()) {
+      course.setTrueCourseDates(termStartDate, termEndDate);
+    }
+
+    // Turn the map into an array and return
+    return [...courseMap.values()];
   }
 }
