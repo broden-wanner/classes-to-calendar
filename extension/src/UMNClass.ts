@@ -1,4 +1,5 @@
-import { addDays, getDay, parse } from 'date-fns';
+import { addDays, format, getDay, parse } from 'date-fns';
+import CalendarEvent from './CalendarEvent';
 
 const getHours = (timeStr: string) => {
   const match = timeStr.match(/(\d{1,2}):\d{2}/g);
@@ -42,8 +43,8 @@ export class UMNClass {
     this.section = section;
     this.location = location;
 
-    this.startDate = parse(startDateStr, '%Y-%m-%d', new Date());
-    this.endDate = parse(endDateStr, '%Y-%m-%d', new Date());
+    this.startDate = parse(startDateStr, 'yyyy-MM-dd', new Date());
+    this.endDate = parse(endDateStr, 'yyyy-MM-dd', new Date());
     this.startTimeStr = startTimeStr;
     this.endTimeStr = endTimeStr;
     this.daysOfWeek = [...daysOfWeek];
@@ -58,6 +59,34 @@ export class UMNClass {
     return `UMNClass(${this.name}, ${this.dept} ${this.courseNum} ${this.section}, ${
       this.location
     }, ${this.startTimeStr} to ${this.endTimeStr}, ${this.daysOfWeek.join(',')})`;
+  }
+
+  public toEvent(): CalendarEvent {
+    const start = parse(
+      `${format(this.startDate, 'yyyy-MM-dd')} ${this.startTimeStr}`,
+      'yyyy-MM-dd h:mmaa',
+      this.startDate
+    );
+    const end = parse(
+      `${format(this.endDate, 'yyyy-MM-dd')} ${this.endTimeStr}`,
+      'yyyy-MM-dd h:mmaa',
+      this.endDate
+    );
+
+    // Setup recurrence
+    const recurrenceDays = this.daysOfWeek.map((d) => d.slice(0, 2)).join(',');
+    const recurrenceEnd = addDays(end, 1).toISOString().replace(/[:-]/g, '');
+    const recurrence = `RRULE:FREQ=WEEKLY;BYDAY=${recurrenceDays};UNTIL=${recurrenceEnd}`;
+
+    // Make the recurrence object
+    return {
+      summary: this.name,
+      location: this.location,
+      description: `${this.dept} ${this.courseNum} ${this.section}`,
+      start: { dateTime: start.toISOString(), timeZone: 'America/Chicago' },
+      end: { dateTime: end.toISOString(), timeZone: 'America/Chicago' },
+      recurrence: [recurrence],
+    };
   }
 
   /**
