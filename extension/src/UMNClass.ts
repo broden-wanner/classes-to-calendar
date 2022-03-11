@@ -1,5 +1,5 @@
 import { addDays, format, getDay, parse } from 'date-fns';
-import CalendarEvent from './CalendarEvent';
+import CalendarEvent from './types/CalendarEvent';
 
 const getHours = (timeStr: string) => {
   const match = timeStr.match(/(\d{1,2}):\d{2}/g);
@@ -61,6 +61,12 @@ export class UMNClass {
     }, ${this.startTimeStr} to ${this.endTimeStr}, ${this.daysOfWeek.join(',')})`;
   }
 
+  /**
+   * Converts the UMNClass instance to a calendar event JSON object that
+   * is to be consumed by Google Calendar.
+   *
+   * @returns calendar event JSON object to be consumed by Google Calendar
+   */
   public toEvent(): CalendarEvent {
     const start = parse(
       `${format(this.startDate, 'yyyy-MM-dd')} ${this.startTimeStr}`,

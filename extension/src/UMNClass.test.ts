@@ -1,5 +1,5 @@
 import fs from 'fs';
-import CalendarEvent from './CalendarEvent';
+import CalendarEvent from './types/CalendarEvent';
 import { calendarOutput } from './resources/true-output/expectedOutput';
 import { UMNClass } from './UMNClass';
 
