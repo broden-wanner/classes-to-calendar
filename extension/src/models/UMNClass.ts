@@ -75,7 +75,7 @@ export default class UMNClass {
       this.endDate
     );
 
-
+    console.log(start, end, recurrenceEndInitial);
     // Setup recurrence
     const recurrenceDays = this.daysOfWeek.map((d) => d.slice(0, 2)).join(',');
     const recurrenceEnd = format(addDays(recurrenceEndInitial, 1), "yyyy-MM-dd'T'HH:mm:ss").replace(/[:-]/g, '');
