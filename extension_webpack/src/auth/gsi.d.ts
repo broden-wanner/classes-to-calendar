@@ -7,7 +7,7 @@ declare namespace google {
 
   export interface OAuth2 {
     initTokenClient(config: TokenClientConfig): OAuth2Client;
-    revoke(token: string, callback: () => void);
+    revoke(token: string, callback: () => void): void;
   }
 
   export interface TokenClientConfig {

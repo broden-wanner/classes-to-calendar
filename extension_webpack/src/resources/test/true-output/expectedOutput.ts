@@ -1,4 +1,4 @@
-import { UMNClass } from '../../UMNClass';
+import UMNClass from '../../../models/UMNClass';
 
 export const calendarOutput = new Map<string, Array<UMNClass>>([
   [

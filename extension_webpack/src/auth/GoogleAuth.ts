@@ -11,7 +11,7 @@ export class GoogleAuth {
       client_id: 'YOUR_CLIENT_ID',
       scope:
         'https://www.googleapis.com/auth/calendar.readonly \
-            https://www.googleapis.com/auth/contacts.readonly',
+              https://www.googleapis.com/auth/contacts.readonly',
       callback: (tokenResponse) => {
         this.access_token = tokenResponse.access_token;
       },

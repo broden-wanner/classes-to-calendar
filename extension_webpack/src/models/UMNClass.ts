@@ -1,19 +1,8 @@
 import { addDays, format, getDay, parse } from 'date-fns';
-import CalendarEvent from './types/CalendarEvent';
+import { getHours, weekdayStringToNumber } from '../utils/date';
+import CalendarEvent from '../types/CalendarEvent';
 
-const getHours = (timeStr: string) => {
-  const match = timeStr.match(/(\d{1,2}):\d{2}/g);
-  if (!match) throw new Error('Could not parse time for class');
-  else return parseInt(match[0]);
-};
-
-const weekdayStringToNumber = (weekdayStr: string) => {
-  return ['SUNDAY', 'MONDAY', 'TUESDAY', 'WEDNESDAY', 'THURSDAY', 'FRIDAY', 'SATURDAY'].indexOf(
-    weekdayStr
-  );
-};
-
-export class UMNClass {
+export default class UMNClass {
   public name: string;
   public dept: string;
   public courseNum: string;
@@ -171,13 +160,13 @@ export class UMNClass {
     const days = calendar.getElementsByClassName('myu_calendar-day');
     const courseMap = new Map<string, UMNClass>();
 
-    for (const day of days) {
+    for (const day of Array.from(days)) {
       const dayName = day.getAttribute('data-day')?.toUpperCase();
       if (!dayName) continue;
       const courseElements = day.getElementsByClassName('myu_calendar-class');
 
       // Iterate through all classes in the day
-      for (const courseElement of courseElements) {
+      for (const courseElement of Array.from(courseElements)) {
         const c = new UMNClass();
         c.daysOfWeek.push(dayName);
 
@@ -196,8 +185,8 @@ export class UMNClass {
         if (!details) continue;
         const detailWords = details
           .split('\n')
-          .flatMap((line) => line.split(' '))
-          .filter((word) => word !== '' && word !== '-');
+          .flatMap((line: string) => line.split(' '))
+          .filter((word: string) => word !== '' && word !== '-');
 
         // Append the type of time slot to the name
         c.name += ` ${detailWords[0]}`;
@@ -230,11 +219,11 @@ export class UMNClass {
     }
 
     // Set the true course start and end dates
-    for (const [, course] of courseMap.entries()) {
+    for (const [, course] of Array.from(courseMap.entries())) {
       course.setTrueCourseDates(termStartDate, termEndDate);
     }
 
     // Turn the map into an array and return
-    return [...courseMap.values()];
+    return [...Array.from(courseMap.values())];
   }
 }

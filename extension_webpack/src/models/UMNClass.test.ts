@@ -1,10 +1,10 @@
-import fs from 'fs';
-import CalendarEvent from './types/CalendarEvent';
-import { calendarOutput } from './resources/true-output/expectedOutput';
-import { UMNClass } from './UMNClass';
+import * as fs from 'fs';
+import CalendarEvent from '../types/CalendarEvent';
+import { calendarOutput } from '../resources/test/true-output/expectedOutput';
+import UMNClass from '../models/UMNClass';
 
 const getTestHTML = (file: string) => {
-  const html = fs.readFileSync(`./src/resources/test-html/${file}`);
+  const html = fs.readFileSync(`./src/resources/test/test-html/${file}`);
   return html.toString();
 };
 

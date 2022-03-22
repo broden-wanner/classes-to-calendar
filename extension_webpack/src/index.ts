@@ -1,5 +1,6 @@
-import { fullClassWeekDate } from './config';
-import { UMNClass } from './UMNClass';
+import UMNClass from './models/UMNClass';
+
+// import { fullClassWeekDate } from './config';
 
 /**
  * Defines behavior for the add to calendar button.
@@ -70,3 +71,18 @@ const onLoad = () => {
     characterData: false,
   });
 };
+
+function component() {
+  const element = document.createElement('div');
+
+  element.innerHTML = ['Hello', 'webpack', 'YEEEEEE'].join(' ');
+
+  const c = new UMNClass();
+  console.log(c);
+
+  return element;
+}
+
+document.body.appendChild(component());
+
+onLoad();
