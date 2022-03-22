@@ -2,6 +2,7 @@
 
 [![Backend Tests](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/backend-tests.yml/badge.svg)](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/backend-tests.yml)
 [![Frontend Tests](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/frontend-tests.yml/badge.svg)](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/frontend-tests.yml)
+[![Browser Extension Tests](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/extension-tests.yml/badge.svg)](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/extension-tests.yml)
 [![Build Classes to Calendar Docker](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/build.yaml/badge.svg)](https://github.com/broden-wanner/classes-to-calendar/actions/workflows/build.yaml)
 [![codecov](https://codecov.io/gh/broden-wanner/classes-to-calendar/branch/master/graph/badge.svg?token=O3743HVAON)](https://codecov.io/gh/broden-wanner/classes-to-calendar)
 
@@ -18,6 +19,7 @@
 **API Docs**: <a href="https://umnclassestocalendar.com/redoc" target="blank">https://umnclassestocalendar.com/redoc</a>
 
 ---
+
 ## Description
 
 This is a web application and browser extension duo designed to take a UMN class schedule
