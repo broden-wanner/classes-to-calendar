@@ -1,4 +1,6 @@
-import UMNClass from './models/UMNClass';
+import { GoogleClient } from './auth/GoogleClient';
+import { addToCalendarButton } from './components/AddToCalendarButton';
+// import UMNClass from './models/UMNClass';
 
 // import { fullClassWeekDate } from './config';
 
@@ -7,6 +9,7 @@ import UMNClass from './models/UMNClass';
  * Gets the calendar HTML, parses it, and submits passes it to the frontend.
  */
 const onAddToCalendarButtonClick = () => {
+  console.log('Add to Calendar button clicked!');
   // Make a GET request from API for calendar HTML
   //   const url = `https://www.myu.umn.edu/psp/psprd/EMPLOYEE/CAMP/s/WEBLIB_IS_DS.ISCRIPT1.FieldFormula.IScript_DrawSection?group=UM_SSS&section=UM_SSS_ACAD_SCHEDULE&pslnk=1&ITG=125034&cmd=smartnav&effdt=${fullClassWeekDate}`;
   //   return fetch(url)
@@ -18,30 +21,12 @@ const onAddToCalendarButtonClick = () => {
 };
 
 /**
- * Makes the "add to calendar" button on the page and sets the on click method.
- */
-const makeAddToCalendarButton = () => {
-  // Make the button
-  const addToCalendarButton = document.createElement('button');
-  addToCalendarButton.setAttribute('id', 'submit-classes-button');
-  addToCalendarButton.innerHTML = `<i class="fa fa-external-link" aria-hidden="true"></i>Add to Google Calendar`;
-  addToCalendarButton.classList.add('btn', 'btn-default', 'myu_fx-150ms');
-  addToCalendarButton.style.cssText = 'color: #fff; background-color: rgba(122,0,25,0.75);';
-  addToCalendarButton.onclick = onAddToCalendarButtonClick;
-  // Add it to the page
-  const buttonContainer = document.querySelector('.myu_btn-group');
-  if (!buttonContainer) {
-    console.error('Classes To Calendar Extension: Could not add button.');
-    return;
-  }
-  buttonContainer.append(addToCalendarButton);
-};
-
-/**
  * Sets up an observer to create the button when the main body is created
  * @param mutationsList - List of mutations made
  */
-const mutationCallback = (mutationsList: MutationRecord[]) => {
+const addToCalendarButtonMutationCallback = (
+  mutationsList: MutationRecord[]
+) => {
   mutationsList.forEach((mutation) => {
     const nodes = Array.from(mutation.addedNodes);
     for (const mutatedNode of nodes) {
@@ -50,7 +35,17 @@ const mutationCallback = (mutationsList: MutationRecord[]) => {
       if (node.matches && node.matches('#ID_UM_SSS_ENRL_SCHEDULE_PGLT > div')) {
         // Check for the button group
         if (node.querySelector('.myu_btn-group')) {
-          makeAddToCalendarButton();
+          // Create the button
+          const button = addToCalendarButton(onAddToCalendarButtonClick);
+          // Add it to the page
+          const buttonContainer = document.querySelector('.myu_btn-group');
+          if (!buttonContainer) {
+            console.error(
+              'Classes To Calendar Extension: Could not add button.'
+            );
+            return;
+          }
+          buttonContainer.append(button);
           return;
         }
       }
@@ -63,26 +58,31 @@ const mutationCallback = (mutationsList: MutationRecord[]) => {
  */
 const onLoad = () => {
   // Create the mutation observer and start observing
-  const observer = new MutationObserver(mutationCallback);
+  const observer = new MutationObserver(addToCalendarButtonMutationCallback);
   observer.observe(document.body, {
     childList: true,
     subtree: true,
     attributes: false,
     characterData: false,
   });
+
+  document.body.appendChild(addToCalendarButton(onAddToCalendarButtonClick));
+
+  const auth = new GoogleClient();
+  const signInButton = document.createElement('button');
+  signInButton.textContent = 'Sign in with Google';
+  auth.initClient();
+  signInButton.onclick = () => {
+    auth.getToken();
+  };
+  document.body.appendChild(signInButton);
+
+  const loadCalendar = document.createElement('button');
+  loadCalendar.textContent = 'Load calendar';
+  loadCalendar.onclick = () => {
+    auth.loadCalendar();
+  };
+  document.body.appendChild(loadCalendar);
 };
-
-function component() {
-  const element = document.createElement('div');
-
-  element.innerHTML = ['Hello', 'webpack', 'YEEEEEE'].join(' ');
-
-  const c = new UMNClass();
-  console.log(c);
-
-  return element;
-}
-
-document.body.appendChild(component());
 
 onLoad();
