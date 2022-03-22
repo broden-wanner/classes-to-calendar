@@ -45,9 +45,11 @@ export default class UMNClass {
    * @returns human-readable string for debugging purposes.
    */
   public toString(): string {
-    return `UMNClass(${this.name}, ${this.dept} ${this.courseNum} ${this.section}, ${
-      this.location
-    }, ${this.startTimeStr} to ${this.endTimeStr}, ${this.daysOfWeek.join(',')})`;
+    return `UMNClass(${this.name}, ${this.dept} ${this.courseNum} ${
+      this.section
+    }, ${this.location}, ${this.startTimeStr} to ${
+      this.endTimeStr
+    }, ${this.daysOfWeek.join(',')})`;
   }
 
   /**
@@ -59,18 +61,24 @@ export default class UMNClass {
   public toEvent(): CalendarEvent {
     const start = parse(
       `${format(this.startDate, 'yyyy-MM-dd')} ${this.startTimeStr}`,
-      'yyyy-MM-dd h:mmaa',
+      'yyyy-MM-dd h:mma',
       this.startDate
     );
     const end = parse(
+      `${format(this.startDate, 'yyyy-MM-dd')} ${this.endTimeStr}`,
+      'yyyy-MM-dd h:mma',
+      this.startDate
+    );
+    const recurrenceEndInitial = parse(
       `${format(this.endDate, 'yyyy-MM-dd')} ${this.endTimeStr}`,
-      'yyyy-MM-dd h:mmaa',
+      'yyyy-MM-dd h:mma',
       this.endDate
     );
 
+
     // Setup recurrence
     const recurrenceDays = this.daysOfWeek.map((d) => d.slice(0, 2)).join(',');
-    const recurrenceEnd = addDays(end, 1).toISOString().replace(/[:-]/g, '');
+    const recurrenceEnd = format(addDays(recurrenceEndInitial, 1), "yyyy-MM-dd'T'HH:mm:ss").replace(/[:-]/g, '');
     const recurrence = `RRULE:FREQ=WEEKLY;BYDAY=${recurrenceDays};UNTIL=${recurrenceEnd}`;
 
     // Make the recurrence object
@@ -78,8 +86,14 @@ export default class UMNClass {
       summary: this.name,
       location: this.location,
       description: `${this.dept} ${this.courseNum} ${this.section}`,
-      start: { dateTime: start.toISOString(), timeZone: 'America/Chicago' },
-      end: { dateTime: end.toISOString(), timeZone: 'America/Chicago' },
+      start: {
+        dateTime: format(start, "yyyy-MM-dd'T'HH:mm:ss"),
+        timeZone: 'America/Chicago',
+      },
+      end: {
+        dateTime: format(end, "yyyy-MM-dd'T'HH:mm:ss"),
+        timeZone: 'America/Chicago',
+      },
       recurrence: [recurrence],
     };
   }
@@ -171,8 +185,9 @@ export default class UMNClass {
         c.daysOfWeek.push(dayName);
 
         // Get the course info from the title
-        const courseTitle =
-          courseElement.getElementsByClassName('myu_calendar-class-name')[0].textContent;
+        const courseTitle = courseElement.getElementsByClassName(
+          'myu_calendar-class-name'
+        )[0].textContent;
         if (!courseTitle) continue;
         const courseNameAndSection = courseTitle.split(' ');
         c.dept = courseNameAndSection[0];
@@ -180,8 +195,9 @@ export default class UMNClass {
         c.section = courseNameAndSection[2];
         c.name = courseNameAndSection.slice(3).join(' ');
 
-        const details = courseElement.getElementsByClassName('myu_calendar-class-details')[0]
-          .textContent;
+        const details = courseElement.getElementsByClassName(
+          'myu_calendar-class-details'
+        )[0].textContent;
         if (!details) continue;
         const detailWords = details
           .split('\n')
@@ -195,7 +211,10 @@ export default class UMNClass {
         const amOrPm = detailWords[3];
         let startTime = detailWords[1];
         let endTime = detailWords[2];
-        if (amOrPm.toUpperCase() === 'PM' && getHours(startTime) > getHours(endTime)) {
+        if (
+          amOrPm.toUpperCase() === 'PM' &&
+          getHours(startTime) > getHours(endTime)
+        ) {
           // Set the start time to AM if the end time is PM and startTime is greater than endTime
           startTime += 'AM';
           endTime += 'PM';

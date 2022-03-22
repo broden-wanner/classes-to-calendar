@@ -17,8 +17,15 @@ describe('UMNClass class', () => {
     it('should parse correct classes', () => {
       const file = 'calendar.html';
       const html = getTestHTML(file);
-      const [termStartDate, termEndDate] = [new Date(2022, 0, 18), new Date(2022, 4, 11)];
-      const courses = UMNClass.parseUMNClassesFromHTML(html, termStartDate, termEndDate);
+      const [termStartDate, termEndDate] = [
+        new Date(2022, 0, 18),
+        new Date(2022, 4, 11),
+      ];
+      const courses = UMNClass.parseUMNClassesFromHTML(
+        html,
+        termStartDate,
+        termEndDate
+      );
       const expectedCourses = calendarOutput.get(file);
       if (!expectedCourses) fail('Expected calendar not found');
       for (let i = 0; i < courses.length; i++) {
@@ -38,9 +45,12 @@ describe('UMNClass class', () => {
         summary: 'Ear-Training II Lecture',
         location: 'Ferguson Hall 225',
         description: 'MUS 1512 (001)',
-        start: { dateTime: '2022-01-24T13:00:00.000Z', timeZone: 'America/Chicago' },
-        end: { dateTime: '2022-05-11T12:50:00.000Z', timeZone: 'America/Chicago' },
-        recurrence: ['RRULE:FREQ=WEEKLY;BYDAY=MO;UNTIL=20220512T125000.000Z'],
+        start: {
+          dateTime: '2022-01-24T08:00:00',
+          timeZone: 'America/Chicago',
+        },
+        end: { dateTime: '2022-01-24T08:50:00', timeZone: 'America/Chicago' },
+        recurrence: ['RRULE:FREQ=WEEKLY;BYDAY=MO;UNTIL=20220512T085000'],
       });
     });
   });
