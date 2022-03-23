@@ -1,4 +1,3 @@
-import { GoogleClient } from './auth/GoogleClient';
 import { AddToCalendarButton } from './components/AddToCalendarButton';
 // import UMNClass from './models/UMNClass';
 
@@ -65,24 +64,6 @@ const onLoad = () => {
     attributes: false,
     characterData: false,
   });
-
-  document.body.appendChild(AddToCalendarButton(onAddToCalendarButtonClick));
-
-  const auth = new GoogleClient();
-  const signInButton = document.createElement('button');
-  signInButton.textContent = 'Sign in with Google';
-  auth.initClient();
-  signInButton.onclick = () => {
-    auth.getToken();
-  };
-  document.body.appendChild(signInButton);
-
-  const loadCalendar = document.createElement('button');
-  loadCalendar.textContent = 'Load calendar';
-  loadCalendar.onclick = () => {
-    auth.loadCalendar();
-  };
-  document.body.appendChild(loadCalendar);
 };
 
 onLoad();

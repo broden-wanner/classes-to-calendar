@@ -1,4 +1,4 @@
-import { GoogleClient } from './auth/GoogleClient';
+import { GoogleClient } from './api/GoogleClient';
 import { AddToCalendarButton } from './components/AddToCalendarButton';
 import { GoogleSignInButton } from './components/GoogleSignInButton';
 // import UMNClass from './models/UMNClass';
@@ -37,7 +37,7 @@ const onLoad = () => {
   const loadCalendar = document.createElement('button');
   loadCalendar.textContent = 'Load calendar';
   loadCalendar.onclick = () => {
-    auth.loadCalendar();
+    auth.listCalendars().then((json) => console.log(json));
   };
   document.body.appendChild(loadCalendar);
 };
