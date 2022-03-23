@@ -1,7 +1,7 @@
 /**
  * Makes the "add to calendar" button on the page and sets the on click method.
  */
-export const addToCalendarButton = (onClickCallback: () => void) => {
+export const AddToCalendarButton = (onClickCallback: () => void) => {
   // Make the button
   const addToCalendarButton = document.createElement('button');
   addToCalendarButton.setAttribute('id', 'submit-classes-button');

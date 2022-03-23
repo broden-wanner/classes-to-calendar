@@ -16,5 +16,5 @@
   "eslint.validate": [
     "typescript"
   ],
-  "prettier.configPath": "extension_webpack/.prettierrc"
+  "prettier.configPath": "extension/.prettierrc"
 }

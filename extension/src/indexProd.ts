@@ -1,5 +1,5 @@
 import { GoogleClient } from './auth/GoogleClient';
-import { addToCalendarButton } from './components/AddToCalendarButton';
+import { AddToCalendarButton } from './components/AddToCalendarButton';
 // import UMNClass from './models/UMNClass';
 
 // import { fullClassWeekDate } from './config';
@@ -36,7 +36,7 @@ const addToCalendarButtonMutationCallback = (
         // Check for the button group
         if (node.querySelector('.myu_btn-group')) {
           // Create the button
-          const button = addToCalendarButton(onAddToCalendarButtonClick);
+          const button = AddToCalendarButton(onAddToCalendarButtonClick);
           // Add it to the page
           const buttonContainer = document.querySelector('.myu_btn-group');
           if (!buttonContainer) {
@@ -66,7 +66,7 @@ const onLoad = () => {
     characterData: false,
   });
 
-  document.body.appendChild(addToCalendarButton(onAddToCalendarButtonClick));
+  document.body.appendChild(AddToCalendarButton(onAddToCalendarButtonClick));
 
   const auth = new GoogleClient();
   const signInButton = document.createElement('button');
