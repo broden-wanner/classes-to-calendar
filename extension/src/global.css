@@ -1,3 +1,39 @@
+.side-panel-wrap {
+  position: fixed;
+  top: 0;
+  bottom: 0;
+  right: 0;
+  width: 30em;
+  transform: translateX(100%);
+  transition: 0.3s ease-out;
+  font-family: 'Roboto', 'Helvetica', 'Arial', sans-serif;
+}
+
+.side-panel-wrap--opened {
+  transform: translateX(0%);
+}
+
+.side-panel-wrap--closed {
+  transform: translateX(100%);
+}
+
+.side-panel {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  background: #333;
+  color: #eee;
+  overflow: auto;
+  padding: 1em;
+}
+
+.google-sign-in-button-container {
+  display: flex;
+  justify-content: center;
+}
+
 .google-sign-in-button {
   background-size: cover;
   background-repeat: no-repeat;

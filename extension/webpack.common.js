@@ -28,5 +28,9 @@ module.exports = {
     filename: '[name].bundle.js',
     path: path.resolve(__dirname, 'dist'),
     clean: true,
+    assetModuleFilename: (pathData) => {
+      const filepath = path.dirname(pathData.filename).split('/').slice(1).join('/');
+      return `${filepath}/[name].[ext][query]`;
+    },
   },
 };

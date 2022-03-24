@@ -1,10 +1,7 @@
 import { GoogleClient } from './api/GoogleClient';
 import { AddToCalendarButton } from './components/AddToCalendarButton';
-import { GoogleSignInButton } from './components/GoogleSignInButton';
-// import UMNClass from './models/UMNClass';
+import { SidePanel } from './components/SidePanel';
 import './global.css';
-
-// import { fullClassWeekDate } from './config';
 
 /**
  * Defines behavior for the add to calendar button.
@@ -28,18 +25,9 @@ const onAddToCalendarButtonClick = () => {
 const onLoad = () => {
   document.body.appendChild(AddToCalendarButton(onAddToCalendarButtonClick));
 
-  const auth = new GoogleClient();
-  auth.initClient();
-
-  const signInButton = GoogleSignInButton(() => auth.getToken());
-  document.body.appendChild(signInButton);
-
-  const loadCalendar = document.createElement('button');
-  loadCalendar.textContent = 'Load calendar';
-  loadCalendar.onclick = () => {
-    auth.listCalendars().then((json) => console.log(json));
-  };
-  document.body.appendChild(loadCalendar);
+  const googleClient = new GoogleClient();
+  const panel = SidePanel(googleClient);
+  document.body.appendChild(panel);
 };
 
 onLoad();
