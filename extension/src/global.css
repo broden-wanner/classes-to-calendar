@@ -23,15 +23,21 @@
   bottom: 0;
   left: 0;
   right: 0;
-  background: #333;
-  color: #eee;
+  background: #eee;
   overflow: auto;
   padding: 1em;
+  box-shadow: rgba(0, 0, 0, 0.35) 0px 0px 30px;
 }
 
-.google-sign-in-button-container {
+
+
+.center-button-container {
   display: flex;
   justify-content: center;
+}
+
+.fa-icon-ctc {
+  margin-right: 6px;
 }
 
 .google-sign-in-button {

@@ -1,6 +1,9 @@
 import { GoogleClient } from './api/GoogleClient';
 import { AddToCalendarButton } from './components/AddToCalendarButton';
 import { SidePanel } from './components/SidePanel';
+import * as bootstrap from 'bootstrap';
+
+import 'bootstrap/dist/css/bootstrap.min.css';
 import './global.css';
 
 /**
@@ -26,8 +29,7 @@ const onLoad = () => {
   document.body.appendChild(AddToCalendarButton(onAddToCalendarButtonClick));
 
   const googleClient = new GoogleClient();
-  const panel = SidePanel(googleClient);
-  document.body.appendChild(panel);
+  SidePanel(googleClient);
 };
 
 onLoad();

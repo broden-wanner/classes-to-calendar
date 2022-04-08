@@ -1,0 +1,47 @@
+<div class="side-panel">
+  <h3>Sign-In with Google</h3>
+  <p>Before you can add the classes to your calendar, you must first sign in with Google.</p>
+  <div class="center-button-container">
+    <div id="google-sign-in" class="google-sign-in-button"></div>
+  </div>
+  <hr />
+
+  <h3>Add to Google Calendar</h3>
+  <p>
+    You can add your classes to Google Calendar by either making a new calendar or adding them to an existing one. (You
+    must be signed in with Google before you can do this.)
+  </p>
+
+  <div class="container">
+    <form id="add-to-calendar-form" action="" class="needs-validation">
+      <fieldset class="row g-2" id="add-to-calendar-form-fields" disabled>
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="whichCalendarRadio" id="newCalendarRadio" checked />
+          <label class="form-check-label" for="newCalendarRadio"> Make a new calendar: </label>
+        </div>
+        <div class="form-floating col-12">
+          <input type="text" class="form-control" id="newCalendarNameInput" placeholder="Class Schedule" required />
+          <label for="newCalendarNameInput" class="form-label">New calendar name</label>
+        </div>
+
+        <div class="form-check">
+          <input class="form-check-input" type="radio" name="whichCalendarRadio" id="addToExistingCalendarRadio" />
+          <label class="form-check-label" for="addToExistingCalendarRadio"> Add to existing calendar: </label>
+        </div>
+        <div class="col-12">
+          <select class="form-select" aria-label="Default select example" id="existingCalendarSelect" disabled></select>
+        </div>
+
+        <div class="col-12 center-button-container">
+          <button class="btn btn-primary" type="submit">
+            <i class="fa fa-calendar-check fa-icon-ctc"></i>Add to Calendar
+          </button>
+        </div>
+      </fieldset>
+    </form>
+  </div>
+
+  <hr />
+
+  <h3>Export to Another Calendar</h3>
+</div>

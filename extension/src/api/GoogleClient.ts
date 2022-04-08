@@ -104,7 +104,7 @@ export class GoogleClient {
   }
 
   /**
-   * Adds a new event to the calendar specified by this.calendar
+   * Adds a new event to the calendar specified by calendar
    * @param event - the event to add to a calendar
    * @param calendarId - the id of the calendar to add the event to
    */
