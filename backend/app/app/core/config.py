@@ -29,8 +29,8 @@ class Settings(BaseSettings):
     BASE_DIR: str = os.path.dirname(os.path.dirname(__file__))
 
     # Custom app settings
-    DEFAULT_CLASS_START_DATE: datetime.date = datetime.date(year=2021, month=9, day=7)
-    DEFAULT_CLASS_END_DATE: datetime.date = datetime.date(year=2021, month=12, day=15)
+    DEFAULT_CLASS_START_DATE: datetime.date = datetime.date.today()
+    DEFAULT_CLASS_END_DATE: DEFAULT_CLASS_START_DATE + datetime.timedelta(weeks=15)
 
     # Google config info
     GOOGLE_CLIENT_ID: str
