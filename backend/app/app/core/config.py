@@ -3,6 +3,7 @@ import os
 import secrets
 from typing import Any, Dict, List
 
+from app.calendar_utils.fetch_date import fetch_current_term_from_api
 from dotenv import load_dotenv
 from pydantic import AnyHttpUrl, BaseModel, BaseSettings, EmailStr
 from pydantic.tools import parse_obj_as
@@ -29,8 +30,9 @@ class Settings(BaseSettings):
     BASE_DIR: str = os.path.dirname(os.path.dirname(__file__))
 
     # Custom app settings
-    DEFAULT_CLASS_START_DATE: datetime.date = datetime.date(year=2021, month=9, day=7)
-    DEFAULT_CLASS_END_DATE: datetime.date = datetime.date(year=2021, month=12, day=15)
+    DEFAULT_CLASS_DATES = fetch_current_term_from_api()
+    DEFAULT_CLASS_START_DATE: datetime.date = DEFAULT_CLASS_DATES["start_date"]
+    DEFAULT_CLASS_END_DATE: datetime.date = DEFAULT_CLASS_DATES["end_date"]
 
     # Google config info
     GOOGLE_CLIENT_ID: str
